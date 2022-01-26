@@ -3,6 +3,7 @@
 // the WPILib BSD license file in the root directory of this project.
 
 package frc.robot;
+import edu.wpi.first.math.util.Units;
 
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
@@ -12,4 +13,27 @@ package frc.robot;
  * <p>It is advised to statically import this class (or one of its inner classes) wherever the
  * constants are needed, to reduce verbosity.
  */
-public final class Constants {}
+public final class Constants {
+    // driveTrain subsystem constants
+    public final static class DriveTrain {
+        // CAN Bus addresses for motors
+        public static int kCANMotorFL = 1;
+        public static int kCANMotorRL = 2;
+        public static int kCANMotorFR = 3;
+        public static int kCANMotorRR = 4;
+        // Encoder Ports
+        public static int[] kLeftEncoderPorts = {0,1};
+        public static int[] kRightEncoderPorts = {2,3};
+
+        public static boolean kLeftEncoderReversed = false;
+        public static boolean kRightEncoderReversed = true;
+
+        public static double kWheelDiameter = Units.inchesToMeters(6.0) ;
+        public static int kEncoderPulsesPerRev = 256;
+        public static double kEncoderMetersPerPulse = kWheelDiameter * Math.PI / kEncoderPulsesPerRev;
+
+
+    }
+
+
+}
