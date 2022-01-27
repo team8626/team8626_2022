@@ -4,12 +4,16 @@
 
 package frc.robot;
 
+// WPI Dependencies
 import edu.wpi.first.wpilibj.GenericHID;
+import edu.wpi.first.wpilibj.PS4Controller;
 import edu.wpi.first.wpilibj.XboxController;
-import frc.robot.commands.ExampleCommand;
-import frc.robot.subsystems.ExampleSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
 
+// Team 8626 Dependencies
+import frc.robot.subsystems.DriveSubsystem;
+import frc.robot.commands.ArcadeDrive;
+import frc.robot.Constants.Controller;
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
  * "declarative" paradigm, very little robot logic should actually be handled in the {@link Robot}
@@ -18,14 +22,25 @@ import edu.wpi.first.wpilibj2.command.Command;
  */
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
-  private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
+  private final DriveSubsystem m_DriveSubsystem = new DriveSubsystem();
 
-  private final ExampleCommand m_autoCommand = new ExampleCommand(m_exampleSubsystem);
+  // private final ArcadeDrive m_autoCommand = new ArcadeDrive(m_DriveSubsystem);
+  // define controllers
+  private final PS4Controller m_joystick = new PS4Controller(Controller.kPS4Port); 
+
+
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     // Configure the button bindings
     configureButtonBindings();
+
+    // set default command for subsystems
+    m_DriveSubsystem.setDefaultCommand(
+      new ArcadeDrive(
+        () -> m_joystick.getLeftY(), 
+        () -> m_joystick.getRightX(),
+        m_DriveSubsystem));
   }
 
   /**
@@ -43,6 +58,7 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // An ExampleCommand will run in autonomous
-    return m_autoCommand;
+   // TODO: AUTONOMOUS COMMAND return m_autoCommand;
+   return null;
   }
 }
