@@ -3,6 +3,7 @@
 // the WPILib BSD license file in the root directory of this project.
 
 package frc.robot;
+import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
 import edu.wpi.first.math.util.Units;
 
 /**
@@ -31,6 +32,23 @@ public final class Constants {
         public static double kWheelDiameter = Units.inchesToMeters(6.0) ;
         public static int kEncoderPulsesPerRev = 256;
         public static double kEncoderMetersPerPulse = kWheelDiameter * Math.PI / kEncoderPulsesPerRev;
+
+        public static final double ksVolts = 0.22;
+        public static final double kvVoltSecondsPerMeter = 1.98;
+        public static final double kaVoltSecondsSquaredPerMeter = 0.2;
+        //TODO update values
+        // Example value only - as above, this must be tuned for your drive!
+        public static final double kPDriveVel = 8.5;
+
+        public static final double kTrackwidthMeters = Units.inchesToMeters(21.75);
+        public static final DifferentialDriveKinematics kDriveKinematics = new DifferentialDriveKinematics(kTrackwidthMeters);
+
+        public static final double kMaxSpeedMetersPerSecond = 3;
+        public static final double kMaxAccelerationMetersPerSecondSquared = 3;
+
+        // Reasonable baseline values for a RAMSETE follower in units of meters and seconds
+        public static final double kRamseteB = 2;
+        public static final double kRamseteZeta = 0.7;
 
 
     }

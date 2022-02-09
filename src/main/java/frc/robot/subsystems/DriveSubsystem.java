@@ -47,6 +47,7 @@ import edu.wpi.first.wpilibj.AnalogGyro;
             DriveTrain.kRightEncoderReversed);
 
       //  Gyro Sensor
+      //TODO Use this Gyrometer?
       private final Gyro m_gyro = new AnalogGyro(0);
       
       // Odometry class for tracking robot location
@@ -89,5 +90,97 @@ import edu.wpi.first.wpilibj.AnalogGyro;
   }
 
 
+  @Override
+  public void periodic() {
+    // Update the odometry in the periodic block
+    m_odometry.update(
+        m_gyro.getRotation2d(), m_leftEncoder.getDistance(), m_rightEncoder.getDistance());
+  }
 
+  /**
+   * Returns the currently-estimated pose of the robot.
+   *
+   * @return The pose.
+   */
+  public Pose2d getPose() {
+    return m_odometry.getPoseMeters();
+
+  }
+  /**
+   * Returns the current wheel speeds of the robot.
+   *
+   * @return The current wheel speeds.
+   */
+  public DifferentialDriveWheelSpeeds getWheelSpeeds() {
+    return new DifferentialDriveWheelSpeeds(m_leftEncoder.getRate(), m_rightEncoder.getRate());
+  }
+
+  /**
+   * Resets the odometry to the specified pose.
+   *
+   * @param pose The pose to which to set the odometry.
+   */
+  public void resetOdometry(Pose2d pose) {
+    resetEncoders();
+    m_odometry.resetPosition(pose, m_gyro.getRotation2d());
+
+  }
+ /**
+   * Gets the average distance of the two encoders.
+   *
+   * @return the average of the two encoder readings
+   */
+  public double getAverageEncoderDistance() {
+    return (m_leftEncoder.getDistance() + m_rightEncoder.getDistance()) / 2.0;
+  }
+
+  /**
+   * Gets the left drive encoder.
+   *
+   * @return the left drive encoder
+   */
+  public Encoder getLeftEncoder() {
+    return m_leftEncoder;
+  }
+
+  /**
+   * Gets the right drive encoder.
+   *
+   * @return the right drive encoder
+   */
+  public Encoder getRightEncoder() {
+    return m_rightEncoder;
+  }
+
+  /**
+   * Sets the max output of the drive. Useful for scaling the drive to drive more slowly.
+   *
+   * @param maxOutput the maximum output to which the drive will be constrained
+   */
+  public void setMaxOutput(double maxOutput) {
+    m_drive.setMaxOutput(maxOutput);
+  }
+
+  /** Zeroes the heading of the robot. */
+  public void zeroHeading() {
+    m_gyro.reset();
+  }
+
+  /**
+   * Returns the heading of the robot.
+   *
+   * @return the robot's heading in degrees, from -180 to 180
+   */
+  public double getHeading() {
+    return m_gyro.getRotation2d().getDegrees();
+  }
+
+  /**
+   * Returns the turn rate of the robot.
+   *
+   * @return The turn rate of the robot, in degrees per second
+   */
+  public double getTurnRate() {
+    return -m_gyro.getRate();
+  }
 }
