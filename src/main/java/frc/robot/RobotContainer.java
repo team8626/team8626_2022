@@ -60,6 +60,8 @@ public class RobotContainer {
   /**
    * Use this method to define your button->command mappings. Buttons can be created by
    * instantiating a {@link GenericHID} or one of its subclasses ({@link
+   * instantiating a {@link GenericHID} or one of its subclasses ({@link
+   * instantiating a {@link GenericHID} or one of its subclasses ({@link
    * edu.wpi.first.wpilibj.Joystick} or {@link XboxController}), and then passing it to a {@link
    * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
@@ -129,4 +131,15 @@ m_DriveSubsystem.resetOdometry(exampleTrajectory.getInitialPose());
 // Run path following command, then stop at the end.
 return ramseteCommand.andThen(() -> m_DriveSubsystem.tankDriveVolts(0, 0));
   }
+
+  String trajectoryJSON = "paths/GoTerminal.wpilib.json";
+  Trajectory terminalTrajectory = new Trajectory();
+
+  // @Override
+  // public void robotInit() {
+  //   try {
+  //     Path trajectoryPath = Filesystem.getDeployDirectory().toPath().resolve(trajectoryJSON);
+  //     terminalTrajectory = TrajectoryUtil.fromPathweaverJson(trajectoryPath);
+  //   } 
+  // }
 }
