@@ -23,7 +23,7 @@ public class StorageUnitSubsystem extends SubsystemBase {
   private final ColorSensorV3 m_colorSensor;
   private final ColorMatch m_colorMatcher = new ColorMatch();
 
-  private Color m_loadedColor;
+  private Color m_loadedColor = null;
 
   // Class Constructor
   public StorageUnitSubsystem(int CANID, I2C.Port I2CPort) {
@@ -40,7 +40,6 @@ public class StorageUnitSubsystem extends SubsystemBase {
     m_colorMatcher.addColorMatch(Cargo.kRed);
 
     readLoadedColor();
-
   }  
 
   // Start conveying
@@ -64,6 +63,16 @@ public class StorageUnitSubsystem extends SubsystemBase {
   // Return Current Loaded Color
   public Color getLoadedColor(){
     return m_loadedColor;
+  }
+
+  // Return Current Loaded Color
+  public boolean isEmpty(){
+    boolean ret_value = true;
+    
+    if(m_loadedColor == null){
+      ret_value = false;
+    }
+    return ret_value;
   }
 
   @Override

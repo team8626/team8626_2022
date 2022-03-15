@@ -24,7 +24,9 @@ import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.math.trajectory.constraint.DifferentialDriveVoltageConstraint;
 // Team 8626 Dependencies
+import frc.robot.subsystems.StorageSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
+import frc.robot.commands.PushCargo;
 import frc.robot.commands.ArcadeDrive;
 import frc.robot.Constants.Controller;
 import frc.robot.Constants.DriveTrain;
@@ -37,6 +39,7 @@ import frc.robot.Constants.DriveTrain;
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private final DriveSubsystem m_DriveSubsystem = new DriveSubsystem();
+  private final StorageSubsystem m_storage = new StorageSubsystem();
 
   // private final ArcadeDrive m_autoCommand = new ArcadeDrive(m_DriveSubsystem);
   // define controllers
@@ -50,6 +53,9 @@ public class RobotContainer {
     configureButtonBindings();
 
     // set default command for subsystems
+    m_storage.setDefaultCommand(
+      new PushCargo(
+        m_storage));
     m_DriveSubsystem.setDefaultCommand(
       new ArcadeDrive(
         () -> m_joystick.getLeftY(), 
