@@ -5,9 +5,9 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
+import edu.wpi.first.wpilibj2.command.PrintCommand;
 
-import com.revrobotics.CANSparkMax;
-import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
 import frc.robot.Constants.Intake;
 
 /* 
@@ -15,7 +15,7 @@ import frc.robot.Constants.Intake;
 */
 public class IntakeSubsystem extends SubsystemBase {
   // Intake Motor
-  private final CANSparkMax m_motorIntake = new CANSparkMax(Intake.kCANMotorIntake, MotorType.kBrushed);
+  private final WPI_VictorSPX m_motorIntake = new WPI_VictorSPX(Intake.kCANMotorIntake);
   private final double m_intakePower = Intake.kMotorIntakePower;
 
   // Pneumatics
@@ -77,6 +77,7 @@ public class IntakeSubsystem extends SubsystemBase {
   // Push the Assembly Out
   private void deploy(){
     // Extend Cylinders
+    new PrintCommand("[INTAKE] Intake Deployed");
     m_cylinderLeft.set(Value.kForward);
     m_cylinderRight.set(Value.kForward);
 
@@ -88,17 +89,20 @@ public class IntakeSubsystem extends SubsystemBase {
   // Pull The Assembly in
   private void retract(){
     // Retract Cylinders
+    new PrintCommand("[INTAKE] Intake Stowed");
     m_cylinderLeft.set(Value.kReverse);
     m_cylinderRight.set(Value.kReverse);
   }
   
   // Start Rotation of the Intake
   private void startSpinning(){
+    new PrintCommand("[INTAKE] Spinning");
     m_motorIntake.set(m_intakePower);
   }
 
   // Stop Rotation of the Intake
   private void stopSpinning(){
+    new PrintCommand("[INTAKE] STOP Spinning");
     m_motorIntake.stopMotor();
   }
 

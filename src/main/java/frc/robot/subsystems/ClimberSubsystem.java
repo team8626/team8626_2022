@@ -3,8 +3,7 @@ package frc.robot.subsystems;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 
-import com.revrobotics.CANSparkMax;
-import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
 
 import frc.robot.Constants.Climber;
 
@@ -13,8 +12,8 @@ import frc.robot.Constants.Climber;
 */
 public class ClimberSubsystem extends SubsystemBase {
   // Climber Motor
-  private final CANSparkMax m_motorClimberLeft  = new CANSparkMax(Climber.kCANMotorClimberLeft, MotorType.kBrushed);
-  private final CANSparkMax m_motorClimberRight = new CANSparkMax(Climber.kCANMotorClimberRight, MotorType.kBrushed);
+  private final WPI_VictorSPX m_motorClimberLeft  = new WPI_VictorSPX(Climber.kCANMotorClimberLeft);
+  private final WPI_VictorSPX m_motorClimberRight = new WPI_VictorSPX(Climber.kCANMotorClimberRight);
   private final MotorControllerGroup m_motors   = new MotorControllerGroup(m_motorClimberLeft, m_motorClimberRight);
  
   // Class Constructor
@@ -26,8 +25,9 @@ public class ClimberSubsystem extends SubsystemBase {
       
   /**
    * Set Motors Power
-   * @newPower new vslue to be applied [0.0 - 1.1]
+   * @newPower new value to be applied [0.0 - 1.1]
    */
+  // TODO Link That to commands/buttons
   public void setPower(double newPower){
     m_motors.set(newPower);
   }

@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 
 // Team8626 Libraries
 import frc.robot.subsystems.StorageUnitSubsystem;
+import frc.robot.Constants.Storage;
 
 /**
  * Have the robot drive arcade style. 
@@ -29,8 +30,8 @@ public class UnloadStorageUnit extends CommandBase {
   public UnloadStorageUnit(StorageUnitSubsystem storageUnit) {
     m_storageUnit = storageUnit;
    
-    // Command will Timeout after 5 seconds.
-    this.withTimeout(5);
+    // Command will Timeout after xxx seconds.
+    this.withTimeout(Storage.kTimeoutStorageBack);
 
     addRequirements(m_storageUnit);
   }

@@ -21,10 +21,10 @@ public final class Constants {
     // driveTrain subsystem constants
     public final static class DriveTrain {
         // CAN Bus addresses for motors
-        public static int kCANMotorFL = 1;
-        public static int kCANMotorRL = 2;
-        public static int kCANMotorFR = 3;
-        public static int kCANMotorRR = 4;
+        public static int kCANMotorFL = 1;  // USING SPARKMAX
+        public static int kCANMotorRL = 2;  // USING SPARKMAX
+        public static int kCANMotorFR = 3;  // USING SPARKMAX
+        public static int kCANMotorRR = 4;  // USING SPARKMAX
         // Encoder Ports
         public static int[] kLeftEncoderPorts = {0,1};
         public static int[] kRightEncoderPorts = {2,3};
@@ -57,7 +57,7 @@ public final class Constants {
     // Intake subsystem constants
     public final static class Intake {
         // CAN Bus Addresses for Motor
-        public static int kCANMotorIntake = 5;
+        public static int kCANMotorIntake = 5;  // USING VICTOR SPX
 
         // Pneumatic Controller Address
         public static int kPneumaticModuleID = 0;
@@ -74,12 +74,16 @@ public final class Constants {
     // Storage subsystem constants
     public final static class Storage {
         // CAN Bus Addresses for Motors
-        public static int kCANMotorStorageFront = 6;
-        public static int kCANMotorStorageBack = 7;
+        public static int kCANMotorStorageFront = 6;  // USING VICTOR SPX
+        public static int kCANMotorStorageBack = 7;   // USING VICTOR SPX
 
         // i2C Addresses for Color Sensors
         public static I2C.Port kI2CColorSensorPortFront = I2C.Port.kOnboard;
         public static I2C.Port kI2CColorSensorPortBack  = I2C.Port.kMXP;
+
+        // Timeout for Storage Units
+        public static int kTimeoutStorageFront = 10;
+        public static int kTimeoutStorageBack  = 5;
     }
 
     // Cargo constants
@@ -92,14 +96,14 @@ public final class Constants {
     // Climber subsystem constants
     public final static class Climber {
         // CAN Bus Addresses for Motors
-        public static int kCANMotorClimberLeft  = 8;
-        public static int kCANMotorClimberRight = 9;
+        public static int kCANMotorClimberLeft  = 8;   // USING VICTOR SPX
+        public static int kCANMotorClimberRight = 9;   // USING VICTOR SPX
     }
 
     // Shooter subsystem constants
     public final static class Shooter {
         // CAN Bus Addresses for Motor
-        public static int kCANMotorShooter  = 10;
+        public static int kCANMotorShooter  = 10;      // USING VICTOR SPX
 
         // Predefined Voltage for Shooter Motor
         public static double kShooterVoltageHighGoal  = 9.0;

@@ -4,11 +4,12 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.util.Color;
 
-import com.revrobotics.CANSparkMax;
 import com.revrobotics.ColorMatch;
 import com.revrobotics.ColorMatchResult;
 import com.revrobotics.ColorSensorV3;
-import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
+
+// Team8626 Libraries
 import frc.robot.Constants.Cargo;
 
 /* 
@@ -16,7 +17,7 @@ import frc.robot.Constants.Cargo;
 */
 public class StorageUnitSubsystem extends SubsystemBase {
   // Storage Motor
-  private final CANSparkMax m_motor;
+  private final WPI_VictorSPX m_motor;
 
   // Color Sensing
   private final I2C.Port m_colorSensorPort;
@@ -29,7 +30,7 @@ public class StorageUnitSubsystem extends SubsystemBase {
   public StorageUnitSubsystem(int CANID, I2C.Port I2CPort) {
 
     // Set motor inverted or not...
-    m_motor = new CANSparkMax(CANID, MotorType.kBrushed);
+    m_motor = new WPI_VictorSPX(CANID);
     m_motor.setInverted(false);
 
     // Set Color Sensor

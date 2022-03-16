@@ -1,10 +1,11 @@
 package frc.robot.subsystems;
   
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj2.command.PrintCommand;
 
-import com.revrobotics.CANSparkMax;
-import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
 
+// Team8626 Libraries
 import frc.robot.Constants.Shooter;
 
 /* 
@@ -12,7 +13,7 @@ import frc.robot.Constants.Shooter;
 */
 public class ShooterSubsystem extends SubsystemBase {
   // Intake Motor
-  private final CANSparkMax m_motor = new CANSparkMax(Shooter.kCANMotorShooter, MotorType.kBrushed);
+  private final WPI_VictorSPX m_motor = new WPI_VictorSPX(Shooter.kCANMotorShooter);
 
   // Internal States
   private double m_motorVoltage = 0.0;
@@ -32,6 +33,7 @@ public class ShooterSubsystem extends SubsystemBase {
   public void activate(double voltage){
     m_motorVoltage = voltage;
     this.activate();
+    new PrintCommand("[SHOOTER] Spinning");
   }
 
   public void activate(){
@@ -42,6 +44,7 @@ public class ShooterSubsystem extends SubsystemBase {
   public void deactivate(){
     m_motor.stopMotor();
     m_activated = false;
+    new PrintCommand("[SHOOTER] STOP Spinning");
   }
 
   public boolean isActive(){

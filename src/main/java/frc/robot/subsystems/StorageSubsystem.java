@@ -28,7 +28,7 @@ public class StorageSubsystem extends SubsystemBase {
   @Override
   public void periodic() {
     // Regularly Check if Cargos need to be forwarded into storage.
-    // TODO: move this to RobotContainer Defauklt Command
+    // TODO: move this to RobotContainer Default Command
     this.storeForward();
   }
 
@@ -52,4 +52,27 @@ public class StorageSubsystem extends SubsystemBase {
       // NOTHING TO DO HERE
     }
   }
+
+  // Is the storage full (2 Cargios loaded)
+  public boolean isFull(){
+    boolean ret_value = false;
+    if (!m_unitFront.isEmpty() && !m_unitBack.isEmpty()){
+      ret_value = true;
+    }
+    return ret_value;
+  }
+
+  // Start Loading
+  public void load(){
+    new PrintCommand("[STORAGE] Ready to Receive Cargo");
+    // TODO: IMPLEMENT THIS FOR LOADING!!!
+  }
+
+  // Stop Loading
+  public void abort(){
+    new PrintCommand("[STORAGE] NOT Ready to Receive Cargo");
+    // TODO: IMPLEMENT THIS FOR STOPPING LOADING!!!
+  }
+
+
 }
