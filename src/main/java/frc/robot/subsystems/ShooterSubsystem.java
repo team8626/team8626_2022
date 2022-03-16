@@ -24,7 +24,7 @@ public class ShooterSubsystem extends SubsystemBase {
     // Set motor inverted or not...
     m_motor.setInverted(false);
 
-    // Initializa states
+    // Initialize states
     m_motorVoltage = Shooter.kShooterVoltageLowGoal;
     this.deactivate();
   }  
