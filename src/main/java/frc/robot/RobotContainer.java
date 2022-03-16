@@ -8,6 +8,8 @@ package frc.robot;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.PS4Controller;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.JoystickButton;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RamseteCommand;
 
@@ -40,7 +42,8 @@ public class RobotContainer {
 
   // private final ArcadeDrive m_autoCommand = new ArcadeDrive(m_DriveSubsystem);
   // define controllers
-  private final PS4Controller m_joystick = new PS4Controller(Controller.kPS4Port); 
+  Joystick m_flightJoystick = new Joystick(Controller.kPS4Port);
+  // private final PS4Controller m_joystick = new PS4Controller(Controller.kPS4Port); 
 
 
 
@@ -52,8 +55,8 @@ public class RobotContainer {
     // set default command for subsystems
     m_DriveSubsystem.setDefaultCommand(
       new ArcadeDrive(
-        () -> m_joystick.getLeftY(), 
-        () -> m_joystick.getRightX(),
+        () -> m_flightJoystick.getY(), 
+        () -> m_flightJoystick.getX(),
         m_DriveSubsystem));
   }
 
@@ -65,13 +68,27 @@ public class RobotContainer {
    * edu.wpi.first.wpilibj.Joystick} or {@link XboxController}), and then passing it to a {@link
    * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
-  private void configureButtonBindings() {}
+  
+   public class JoystickButton extends Button {
+   JoystickButton ButtonTwo = new JoystickButton(m_flightJoystick, 2);
+   
+  }
 
+  private void configureButtonBindings() {
+
+  if (m_flightJoystick.getRawButtonPressed(2)) {
+    setLowSpeed(); // When held low speed mode activates
+ }
+
+ if (m_flightJoystick.getRawButtonReleased(2)) {
+  setHighSpeed(); // When released the speed scales back to its normal high speed
+ }
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
    *
    * @return the command to run in autonomous
    */
+}
   public Command getAutonomousCommand() {
     // An ExampleCommand will run in autonomous
    // TODO: AUTONOMOUS COMMAND return m_autoCommand;
