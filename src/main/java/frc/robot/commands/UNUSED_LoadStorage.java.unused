@@ -12,40 +12,46 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 
 // Team8626 Libraries
 import frc.robot.subsystems.StorageSubsystem;
+import frc.robot.subsystems.StorageUnitSubsystem;
 
 /**
  * Have the robot drive arcade style. 
  * */
-public class StoreCargo extends CommandBase {
+public class LoadStorage extends CommandBase {
   private final StorageSubsystem m_storage;
-  //private final DoubleSupplier m_rotation;
 
   /**
-   * Creates a new StoreCargo command.
+   * Creates a new PushCargo command.
+   * This will push cargo from front unit to back unit.
+   * If Back unit is already in use, nothing will happen.
    * 
    * @param storage The storage system to receive cargo from
    */
-  public StoreCargo(StorageSubsystem storage) {
+  public LoadStorage(StorageSubsystem storage) {
     m_storage = storage;
+    //addCommands()
     addRequirements(m_storage);
   }
 
   // Called repeatedly when this Command is scheduled to run
   @Override
   public void execute() {
-    // TODO: activate intake and get storage ready to accept cargo.
+    //m_storage.startLoading();
   }
 
-  // Make this return true when this Command no longer needs to run execute()
   @Override
   public boolean isFinished() {
-    // TODO: What is the finished condition
-    return false; // Runs until interrupted
+    boolean ret_value = false;
+    // TODO: Define Finish Condition
+    // if(m_storageUnit.isEmpty() == false) {
+    //   ret_value = true;
+    // }
+    return ret_value;
   }
 
   // Called once after isFinished returns true
   @Override
   public void end(boolean interrupted) {
-    // TODO: Anything to do here?
+    m_storage.stopLoading();
   }
 }

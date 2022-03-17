@@ -48,6 +48,6 @@ public class DeliverCargo extends CommandBase {
   // Called once after isFinished returns true
   @Override
   public void end(boolean interrupted) {
-    // TODO: Anythiong to stop or deractivate?
+    // TODO: Anything to stop or deactivate?
   }
 }

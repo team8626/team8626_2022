@@ -82,8 +82,7 @@ public final class Constants {
         public static I2C.Port kI2CColorSensorPortBack  = I2C.Port.kMXP;
 
         // Timeout for Storage Units
-        public static int kTimeoutStorageFront = 10;
-        public static int kTimeoutStorageBack  = 5;
+        public static int kTimeoutStorageUnit= 10;
     }
 
     // Cargo constants
@@ -108,11 +107,15 @@ public final class Constants {
         // Predefined Voltage for Shooter Motor
         public static double kShooterVoltageHighGoal  = 9.0;
         public static double kShooterVoltageLowGoal   = 6.0;
-        public static double kShooterVoltageDiscard   = 4.0;        
+        public static double kShooterVoltageDiscard   = 4.0;
+        
+        // Time for the shooter to reach stable speed.
+        public static int kShooterSpinSeconds = 2;
     }
     
     // Controller station constants
     public final static class Controller {
         public static int kPS4Port = 0;
+        public static int kGamepadPort = 1;
     }
 }

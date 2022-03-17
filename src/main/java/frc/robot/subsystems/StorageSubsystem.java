@@ -26,11 +26,7 @@ public class StorageSubsystem extends SubsystemBase {
   }  
 
   @Override
-  public void periodic() {
-    // Regularly Check if Cargos need to be forwarded into storage.
-    // TODO: move this to RobotContainer Default Command
-    this.storeForward();
-  }
+  public void periodic() {}
 
   // Push all Cargos towards the Back...
   public void storeForward(){
@@ -43,7 +39,7 @@ public class StorageSubsystem extends SubsystemBase {
           new ParallelCommandGroup(
             new PrintCommand("[STORAGE] Moving Cargo Forward"),
             new LoadStorageUnit(m_unitBack),
-            new UnloadStorageUnit(m_unitFront)
+            new UnloadStorageUnit(m_unitFront).withTimeout(Storage.kTimeoutStorageUnit)
           );
         }
     } 
@@ -69,8 +65,8 @@ public class StorageSubsystem extends SubsystemBase {
   }
 
   // Stop Loading
-  public void abort(){
-    new PrintCommand("[STORAGE] NOT Ready to Receive Cargo");
+  public void stopLoading(){
+    new PrintCommand("[STORAGE] Stopped Receiving Cargo");
     // TODO: IMPLEMENT THIS FOR STOPPING LOADING!!!
   }
 

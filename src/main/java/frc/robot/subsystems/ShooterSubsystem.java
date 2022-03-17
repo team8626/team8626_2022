@@ -25,13 +25,13 @@ public class ShooterSubsystem extends SubsystemBase {
     m_motor.setInverted(false);
 
     // Initializa states
-    m_motorVoltage = Shooter.kShooterVoltageLowGoal;
+    this.setVoltage(Shooter.kShooterVoltageLowGoal);
     this.deactivate();
   }  
       
   // Start Spinning
   public void activate(double voltage){
-    m_motorVoltage = voltage;
+    m_motor.setVoltage(voltage);
     this.activate();
     new PrintCommand("[SHOOTER] Spinning");
   }
@@ -49,5 +49,9 @@ public class ShooterSubsystem extends SubsystemBase {
 
   public boolean isActive(){
     return m_activated;
+  }
+
+  public void setVoltage(double voltage){
+    m_motorVoltage = voltage;
   }
 }

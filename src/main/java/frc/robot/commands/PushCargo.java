@@ -14,15 +14,14 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.StorageSubsystem;
 
 /**
- * Have the robot drive arcade style. 
+ * This command will push cargo from front unit to back unit.
+ * If Back unit is already in use, nothing will happen.
  * */
 public class PushCargo extends CommandBase {
   private final StorageSubsystem m_storage;
 
   /**
    * Creates a new PushCargo command.
-   * This will push cargo from front unit to back unit.
-   * If Back unit is already in use, nothing will happen.
    * 
    * @param storage The storage system to receive cargo from
    */

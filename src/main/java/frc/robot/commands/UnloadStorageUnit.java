@@ -15,24 +15,18 @@ import frc.robot.subsystems.StorageUnitSubsystem;
 import frc.robot.Constants.Storage;
 
 /**
- * Have the robot drive arcade style. 
+ * Unload thge Storage Unit (Start Motor until timeout)
  * */
 public class UnloadStorageUnit extends CommandBase {
   private final StorageUnitSubsystem m_storageUnit;
 
   /**
-   * Creates a new PushCargo command.
-   * This will push cargo from front unit to back unit.
-   * If Back unit is already in use, nothing will happen.
-   * 
+   * Creates a new UnloadStorageUnit command.
    * @param storage The storage system to receive cargo from
    */
   public UnloadStorageUnit(StorageUnitSubsystem storageUnit) {
     m_storageUnit = storageUnit;
    
-    // Command will Timeout after xxx seconds.
-    this.withTimeout(Storage.kTimeoutStorageBack);
-
     addRequirements(m_storageUnit);
   }
 
