@@ -30,7 +30,7 @@ import edu.wpi.first.wpilibj.AnalogGyro;
     private final MotorControllerGroup m_motorControllerLeft = new MotorControllerGroup(m_motorFrontLeft, m_motorRearLeft);
     private final MotorControllerGroup m_motorControllerRight = new MotorControllerGroup(m_motorFrontRight, m_motorRearRight);
   
-    private final DifferentialDrive m_drive = new DifferentialDrive (m_motorControllerLeft, m_motorControllerRight);
+    private final DifferentialDrive m_drive = new DifferentialDrive(m_motorControllerLeft, m_motorControllerRight);
   
     // The left-side drive encoder
     private final Encoder m_leftEncoder =
@@ -182,5 +182,15 @@ import edu.wpi.first.wpilibj.AnalogGyro;
    */
   public double getTurnRate() {
     return -m_gyro.getRate();
+  }
+
+  /**
+   * 
+   */
+  public void setLowSpeed() {
+    m_drive.setMaxOutput(0.5);
+  }
+  public void setHighSpeed() {
+    m_drive.setMaxOutput(1);
   }
 }

@@ -4,8 +4,11 @@
       "/FMSInfo": "FMSInfo",
       "/LiveWindow/DriveSubsystem": "Subsystem",
       "/LiveWindow/ExampleSubsystem": "Subsystem",
+<<<<<<< HEAD
       "/LiveWindow/StorageSubsystem": "Subsystem",
       "/LiveWindow/StorageUnitSubsystem": "Subsystem",
+=======
+>>>>>>> 5b492e75726ad269b8ae75e67368a8c8e7772e10
       "/LiveWindow/Ungrouped/AnalogGyro[0]": "Gyro",
       "/LiveWindow/Ungrouped/DifferentialDrive[1]": "DifferentialDrive",
       "/LiveWindow/Ungrouped/Scheduler": "Scheduler"
