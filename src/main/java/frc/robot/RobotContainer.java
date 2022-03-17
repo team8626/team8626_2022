@@ -8,8 +8,12 @@ package frc.robot;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.PS4Controller;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.XboxController.Button;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.RamseteCommand;
+import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
 import java.util.List;
 
@@ -24,10 +28,18 @@ import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.math.trajectory.constraint.DifferentialDriveVoltageConstraint;
 // Team 8626 Dependencies
+import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.StorageSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
+import frc.robot.subsystems.ShooterSubsystem;
+import frc.robot.subsystems.ClimberSubsystem;
+
 import frc.robot.commands.PushCargo;
 import frc.robot.commands.ArcadeDrive;
+import frc.robot.commands.PrepareToCollect;
+import frc.robot.commands.StopCollecting;
+import frc.robot.commands.LaunchCargo;
+
 import frc.robot.Constants.Controller;
 import frc.robot.Constants.DriveTrain;
 /**
@@ -40,10 +52,14 @@ public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private final DriveSubsystem m_DriveSubsystem = new DriveSubsystem();
   private final StorageSubsystem m_storage = new StorageSubsystem();
+  private final IntakeSubsystem m_intake = new IntakeSubsystem();
+  private final ShooterSubsystem m_shooter = new ShooterSubsystem();
+  private final ClimberSubsystem m_climber = new ClimberSubsystem();
 
   // private final ArcadeDrive m_autoCommand = new ArcadeDrive(m_DriveSubsystem);
   // define controllers
   private final PS4Controller m_joystick = new PS4Controller(Controller.kPS4Port); 
+  private final XboxController m_gameController = new XboxController(Controller.kGamepadPort); 
 
 
 
@@ -52,11 +68,13 @@ public class RobotContainer {
     // Configure the button bindings
     configureButtonBindings();
 
-    // set default command for subsystems
-    m_storage.setDefaultCommand(
+    // Set default command for subsystems
+    //
+    m_storage.setDefaultCommand(        // Always push Cargo Forward....
       new PushCargo(
         m_storage));
-    m_DriveSubsystem.setDefaultCommand(
+
+    m_DriveSubsystem.setDefaultCommand( // Always Read Joystick and control the drivetrain
       new ArcadeDrive(
         () -> m_joystick.getLeftY(), 
         () -> m_joystick.getRightX(),
@@ -71,7 +89,42 @@ public class RobotContainer {
    * edu.wpi.first.wpilibj.Joystick} or {@link XboxController}), and then passing it to a {@link
    * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
-  private void configureButtonBindings() {}
+  private void configureButtonBindings() {
+
+    // Activate the intake Mecanism
+    (new JoystickButton(m_gameController, Button.kY.value))
+      .whenPressed(new PrepareToCollect(m_intake, m_storage));
+
+    // Deactivate the intake Mechanism
+   (new JoystickButton(m_gameController, Button.kB.value))
+      .whenPressed(new StopCollecting(m_intake, m_storage));
+
+    // Start Shooting Sequence
+   (new JoystickButton(m_gameController, Button.kStart.value))
+      .whenPressed(new LaunchCargo(m_storage, m_shooter));
+
+  // TODO: Stop Shooting Sequence (Or make it stop automatically)
+  //  (new JoystickButton(m_gameController, Button.kStart.value))
+  //  .whenHeldPressed(new InstantCommand(m_climber, m_shooter));
+
+
+  // TODO: Bind Climber to Buttons
+    // Climber Activated if Left Bumper is held. 
+    // Reads Right Stick on Gamepad for reading direction.
+    // (new JoystickButton(m_gameController, Button.kLeftBumper.value))
+    //   .whenHeld(new InstantCommand(m_climber::setPower, m_climber)
+    //     () -> 1.0);
+    // (new JoystickButton(m_gameController, Button.kLeftBumper.value))
+    //   .whenPressed(new ConditionalCommand(m_climber::setPower(() -> 1.0), m_climber));
+    //   ConditionalCommand(commandOnTrue, commandOnFalse, m_limitSwitch::get)
+      //(m_climber::setPower, m_climber));
+
+     
+
+  // new JoystickButton(m_gameController, B)
+  //   .and(new JoystickButton(exampleController, XboxController.Button.kY.value))
+  //   .whenActive(new ExampleCommand());
+ }
 
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
