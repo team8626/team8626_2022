@@ -20,9 +20,8 @@ public class LoadStorageUnit extends CommandBase {
   private final StorageUnitSubsystem m_storageUnit;
 
   /**
-   * Creates a new PushCargo command.
-   * This will push cargo from front unit to back unit.
-   * If Back unit is already in use, nothing will happen.
+   * Creates a new LoadStorageUnit command.
+   * This will start the storage unit until cancelled of cargo has been loaded.
    * 
    * @param storage The storage system to receive cargo from
    */

@@ -15,7 +15,8 @@ import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.Constants.Shooter;
 
 /**
- * Have the robot drive arcade style. 
+ * Prepare to shoot (Activate the shooter)
+ * This command does not deliver balls from storage.
  * */
 public class PrepareToShoot extends CommandBase {
   private final ShooterSubsystem m_shooter;
@@ -23,7 +24,7 @@ public class PrepareToShoot extends CommandBase {
 
   /**
    * Creates a new PrepareToShoot command.
-   * Since this doesn't receive target goal, tyhis command is going for default (low goal shooting)
+   * Since this doesn't receive target goal, this command is going for default (low goal shooting)
    * 
    * @param shooter The shooter
    */
@@ -34,22 +35,23 @@ public class PrepareToShoot extends CommandBase {
     addRequirements(m_shooter);
   }
 
+    /**
+   * Creates a new PrepareToShoot command.
+   * Applies the voltage received to the shooter.
+   * 
+   * @param shooter The shooter
+   * @param shooterVoltage Adjust the voltage for the shooter
+   */
+  public PrepareToShoot(ShooterSubsystem shooter, double shooterVoltage) {
+    m_shooter = shooter;
+    m_shooterVoltage = shooterVoltage;
+
+    addRequirements(m_shooter);
+  }
+
   // Called repeatedly when this Command is scheduled to run
   @Override
   public void execute() {
     m_shooter.activate(m_shooterVoltage);
-  }
-
-  // Make this return true when this Command no longer needs to run execute()
-  @Override
-  public boolean isFinished() {
-    // TODO: What is the finished condition
-    return false; // Runs until interrupted
-  }
-
-  // Called once after isFinished returns true
-  @Override
-  public void end(boolean interrupted) {
-    m_shooter.deactivate();
   }
 }

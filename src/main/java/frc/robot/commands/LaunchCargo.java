@@ -8,8 +8,9 @@ package frc.robot.commands;
 // import java.util.function.DoubleSupplier;
 
 // WPI Library dependencies
-import edu.wpi.first.wpilibj2.command.CommandBase;
-
+import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 // Team8626 Libraries
 import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.StorageSubsystem;
@@ -18,45 +19,39 @@ import frc.robot.Constants.Shooter;
 /**
  * Have the robot drive arcade style. 
  * */
-public class Shoot extends CommandBase {
+public class LaunchCargo extends SequentialCommandGroup {
   private final ShooterSubsystem m_shooter;
   private final StorageSubsystem m_storage;
-  private final double m_shooterVoltage;
-  //private final DoubleSupplier m_rotation;
 
   /**
-   * Creates a new Shoot command.
-   * Since this doesn't receive target goal, tyhis command is going for default (low goal shooting)
+   * Creates a new LaunchCargo command.
+   * Since this doesn't receive target goal (high/Low), this command is going for default (low goal shooting)
    * 
    * @param shooter The shooter
    * @param storage The storage system to receive cargo from
    */
-  public Shoot(ShooterSubsystem shooter, StorageSubsystem storage) {
+  public LaunchCargo(StorageSubsystem storage, ShooterSubsystem shooter) {
     m_shooter = shooter;
     m_storage = storage;
-    m_shooterVoltage = Shooter.kShooterVoltageLowGoal;
+    
+    m_shooter.setVoltage(Shooter.kShooterVoltageLowGoal);
 
+    addCommands(
+      new InstantCommand(m_shooter::activate, m_shooter),
+      new WaitUntilCommand(Shooter.kShooterSpinSeconds),
+      new DeliverCargo(storage)
+    );
     addRequirements(m_shooter, m_storage);
   }
 
   // Called repeatedly when this Command is scheduled to run
   @Override
   public void execute() {
-    m_shooter.activate(m_shooterVoltage);
-    // TODO: call storade delivery.
-
   }
 
-  // Make this return true when this Command no longer needs to run execute()
-  @Override
-  public boolean isFinished() {
-    // TODO: What is thefinshed condition
-    return false; // Runs until interrupted
-  }
-
-  // Called once after isFinished returns true
+  // Called on finished or interrupted.
   @Override
   public void end(boolean interrupted) {
-    m_shooter.deactivate();
+    new InstantCommand(m_shooter::deactivate, m_shooter);
   }
 }

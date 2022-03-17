@@ -16,13 +16,13 @@ import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.StorageSubsystem;
 
 /**
- * Get the robot ready to collect Cargo.
- *      - Get Intake Out
- *      - Start Loading the Front Storage Unit
+ * Stop the Cargo Collecting
+ *      - Get Intake Uop
+ *      - Force stop Front Storage Unit
  * 
  * If the Front Storage is already in use, this will do nothing.
  **/
-public class PrepareToCollect extends ParallelCommandGroup {
+public class StopCollecting extends ParallelCommandGroup {
   // @SuppressWarnings({ "PMD.UnusedPrivateField", "PMD.SingularField" })
   private final IntakeSubsystem  m_intake;
   private final StorageSubsystem m_storage;
@@ -33,15 +33,15 @@ public class PrepareToCollect extends ParallelCommandGroup {
    * @param intake  The Intake
    * @param storage The Storage
    */
-  public PrepareToCollect(IntakeSubsystem intake, StorageSubsystem storage) {
+  public StopCollecting(IntakeSubsystem intake, StorageSubsystem storage) {
     m_intake = intake;
     m_storage = storage;
 
     addCommands(
         // Activate the Intake
-        new InstantCommand(m_intake::activate, m_intake),
+        new InstantCommand(m_intake::deactivate, m_intake),
 
         // Activate the Front Storage Unit
-        new InstantCommand(m_storage::load, m_storage));
+        new InstantCommand(m_storage::stopLoading, m_storage));
   }
 }

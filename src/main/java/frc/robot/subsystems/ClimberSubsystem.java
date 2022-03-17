@@ -25,7 +25,7 @@ public class ClimberSubsystem extends SubsystemBase {
       
   /**
    * Set Motors Power
-   * @newPower new value to be applied [0.0 - 1.1]
+   * @newPower new value to be applied [-1.0 ; 1.0]
    */
   // TODO Link That to commands/buttons
   public void setPower(double newPower){
