@@ -17,10 +17,10 @@ public class DashBoard {
     }
 
     enum AutoSelec {
-        EXIT, EXAMPLE
+        EXIT, TEST, EXAMPLE
     }
 
-    }
+    
 
     private static final Notifier m_thread = new Notifier(new dashboardThread());
 	
@@ -178,9 +178,9 @@ public class DashBoard {
      
      switch (autoStrat) {
          
-        case EXIT: System.out.println("Exit (Universal)")
+        case EXIT: System.out.println("Exit (Universal)");
          
-        return new SequentialCommandGroup  (new FollowTrajectory("json", m_drivetrain)
+        return new SequentialCommandGroup  (new FollowTrajectory("json", m_drivetrain));
             
 
 
@@ -191,18 +191,18 @@ public class DashBoard {
 
 
         
-        BREAK;
+        break;
     
          case EXAMPLE: switch (startPosition) {
                
-            case TARMAC_1: System.out.println("Do example; Tarmac 1")
-            BREAK;
+            case TARMAC_1: System.out.println("Do example; Tarmac 1");
+            break;
 
-            case TARMAC_2: System.out.println("Do example; Tarmac 2")
-            BREAK;
+            case TARMAC_2: System.out.println("Do example; Tarmac 2");
+            break;
 
-            case TARMAC_3: System.out.println("Do example; Tarmac 3")
-            BREAK;
+            case TARMAC_3: System.out.println("Do example; Tarmac 3");
+            break;
 
             
 

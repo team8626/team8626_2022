@@ -9,7 +9,7 @@ import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.PS4Controller;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.Joystick;
-import edu.wpi.first.wpilibj.JoystickButton;
+import edu.wpi.first.wpilibj.buttons.JoystickButton;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RamseteCommand;
 
@@ -32,6 +32,8 @@ import frc.robot.commands.PushCargo;
 import frc.robot.commands.ArcadeDrive;
 import frc.robot.Constants.Controller;
 import frc.robot.Constants.DriveTrain;
+import frc.robot.Constants.Autonomous;
+import frc.robot.Constants.Dashboard;
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
  * "declarative" paradigm, very little robot logic should actually be handled in the {@link Robot}
@@ -48,6 +50,9 @@ public class RobotContainer {
   Joystick m_flightJoystick = new Joystick(Controller.kPS4Port);
   // private final PS4Controller m_joystick = new PS4Controller(Controller.kPS4Port); 
 
+  // Autonomous Mode
+  private final DashBoard m_dashboard = new Dashboard();
+  private final Autonomous m_autoControl = new Autonomous(m_dashboard, m_drivetrain);
 
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
@@ -63,6 +68,7 @@ public class RobotContainer {
       new ArcadeDrive(
         () -> m_flightJoystick.getY(), 
         () -> m_flightJoystick.getX(),
+        () -> m_flightJoystick.getZ(),
         m_DriveSubsystem));
   }
 
@@ -82,87 +88,27 @@ public class RobotContainer {
 
   private void configureButtonBindings() {
 
-  if (m_flightJoystick.getRawButtonPressed(2)) {
-    setLowSpeed(); // When held low speed mode activates
- }
+    if (m_flightJoystick.getRawButtonPressed(2)) {
+      setLowSpeed(); // When held low speed mode activates
+    }
 
- if (m_flightJoystick.getRawButtonReleased(2)) {
-  setHighSpeed(); // When released the speed scales back to its normal high speed
- }
-  /**
-   * Use this to pass the autonomous command to the main {@link Robot} class.
-   *
-   * @return the command to run in autonomous
-   */
-}
-  public Command getAutonomousCommand() {
-    // An ExampleCommand will run in autonomous
-   // TODO: AUTONOMOUS COMMAND return m_autoCommand;
+    if (m_flightJoystick.getRawButtonReleased(2)) {
+      setHighSpeed(); // When released the speed scales back to its normal high speed
+    }
 
-   // Create a voltage constraint to ensure we don't accelerate too fast
-   var autoVoltageConstraint =
-   new DifferentialDriveVoltageConstraint(
-       new SimpleMotorFeedforward(
-           DriveTrain.ksVolts,
-           DriveTrain.kvVoltSecondsPerMeter,
-           DriveTrain.kaVoltSecondsSquaredPerMeter),
-           DriveTrain.kDriveKinematics,
-       10);
-
-// Create config for trajectory
-TrajectoryConfig config =
-   new TrajectoryConfig(
-    DriveTrain.kMaxSpeedMetersPerSecond,
-    DriveTrain.kMaxAccelerationMetersPerSecondSquared)
-       // Add kinematics to ensure max speed is actually obeyed
-       .setKinematics(DriveTrain.kDriveKinematics)
-       // Apply the voltage constraint
-       .addConstraint(autoVoltageConstraint);
-
-// An example trajectory to follow.  All units in meters.
-Trajectory exampleTrajectory =
-   TrajectoryGenerator.generateTrajectory(
-       // Start at the origin facing the +X direction
-       new Pose2d(0, 0, new Rotation2d(0)),
-       // Pass through these two interior waypoints, making an 's' curve path
-       List.of(new Translation2d(1, 1), new Translation2d(2, -1)),
-       // End 3 meters straight ahead of where we started, facing forward
-       new Pose2d(3, 0, new Rotation2d(0)),
-       // Pass config
-       config);
-
-RamseteCommand ramseteCommand =
-   new RamseteCommand(
-       exampleTrajectory,
-       m_DriveSubsystem::getPose,
-       new RamseteController(DriveTrain.kRamseteB, DriveTrain.kRamseteZeta),
-       new SimpleMotorFeedforward(
-           DriveTrain.ksVolts,
-           DriveTrain.kvVoltSecondsPerMeter,
-           DriveTrain.kaVoltSecondsSquaredPerMeter),
-       DriveTrain.kDriveKinematics,
-       m_DriveSubsystem::getWheelSpeeds,
-       new PIDController(DriveTrain.kPDriveVel, 0, 0),
-       new PIDController(DriveTrain.kPDriveVel, 0, 0),
-       // RamseteCommand passes volts to the callback
-       m_DriveSubsystem::tankDriveVolts,
-       m_DriveSubsystem);
-
-// Reset odometry to the starting pose of the trajectory.
-m_DriveSubsystem.resetOdometry(exampleTrajectory.getInitialPose());
-
-// Run path following command, then stop at the end.
-return ramseteCommand.andThen(() -> m_DriveSubsystem.tankDriveVolts(0, 0));
+    // TODO: Bind Buttons to Shooting
+    // if (m_flightJoystick.getTriggerPressed() && m_flightJoystick.getRawButtonPressed(3)) {
+    //   setDefaultCommand =
+    // }
   }
 
-  String trajectoryJSON = "paths/GoTerminal.wpilib.json";
-  Trajectory terminalTrajectory = new Trajectory();
+  /**
+   * Get Start command from the autonomous controller (Dashboard)
+   */
+  public Command getAutonomousCommand() {
+    return m_autoControl.getStartCommand();
+  }
+ 
 
-  // @Override
-  // public void robotInit() {
-  //   try {
-  //     Path trajectoryPath = Filesystem.getDeployDirectory().toPath().resolve(trajectoryJSON);
-  //     terminalTrajectory = TrajectoryUtil.fromPathweaverJson(trajectoryPath);
-  //   } 
-  // }
+
 }

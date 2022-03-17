@@ -15,7 +15,7 @@ import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.math.trajectory.constraint.DifferentialDriveVoltageConstraint;
 import edu.wpi.first.math.controller.RamseteController;
-import edu.wpi.first.math.controller.SimpleMotorFeedforward;
+import edu.wpi.first.math.controller.SimpleMotorFeedforward; 
 
 // Team8626 Libraries
 import frc.robot.subsystems.DriveSubsystem;
@@ -49,19 +49,17 @@ public class FollowTrajectory extends CommandBase {
           DriveTrain.ksVolts,
           DriveTrain.kvVoltSecondsPerMeter,
           DriveTrain.kaVoltSecondsSquaredPerMeter),
-          DriveTrain.kDriveKinematics,
-      10));
+      DriveTrain.kDriveKinematics,
+      10); // TODO: maxVoltage???
 
     // Create config for trajectory
     m_config = new TrajectoryConfig(
       DriveTrain.kMaxSpeedMetersPerSecond,
-      DriveTrain.kMaxAccelerationMetersPerSecondSquared,
+      DriveTrain.kMaxAccelerationMetersPerSecondSquared)
         // Add kinematics to ensure max speed is actually obeyed
         .setKinematics(DriveTrain.kDriveKinematics)
         // Apply the voltage constraint
         .addConstraint(m_voltageConstants);
-
-        
     }
     
 
@@ -94,21 +92,15 @@ public class FollowTrajectory extends CommandBase {
 
   // Make this return true when this Command no longer needs to run execute()
   @Override
- 
-  
+  public boolean isFinished() {
+    // TODO: Under what condition is that finished ?
+    // If current position is ytarget position then return true
+    return false; 
+  }
 
   // Called once after isFinished returns true
   @Override
   public void end(boolean interrupted) {
   }
-  
-  
-
-     // Reset odometry to the starting pose of the trajectory.
-     m_DriveSubsystem.resetOdometry(exampleTrajectory.getInitialPose());
-
-     // Run path following command, then stop at the end.
-     return ramseteCommand.andThen(() -> m_DriveSubsystem.tankDriveVolts(0, 0));
- 
  }
  

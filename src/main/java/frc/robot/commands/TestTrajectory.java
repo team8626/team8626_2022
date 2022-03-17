@@ -8,7 +8,7 @@ package frc.robot.commands;
 import java.util.function.DoubleSupplier;
 
 // WPI Library dependencies
-import edu.wpi.first.wpilibj2.command.CommandBase
+import edu.wpi.first.wpilibj2.command.CommandBase;
 // Team8626 Libraries
 import frc.robot.subsystems.DriveSubsystem;
 
@@ -38,12 +38,12 @@ public class TestTrajectory extends CommandBase {
         DriveTrain.kvVoltSecondsPerMeter,
         DriveTrain.kaVoltSecondsSquaredPerMeter),
         DriveTrain.kDriveKinematics,
-    10));
+    10);
 
   // Create config for trajectory
   m_config = new TrajectoryConfig(
     DriveTrain.kMaxSpeedMetersPerSecond,
-    DriveTrain.kMaxAccelerationMetersPerSecondSquared,
+    DriveTrain.kMaxAccelerationMetersPerSecondSquared)
       // Add kinematics to ensure max speed is actually obeyed
       .setKinematics(DriveTrain.kDriveKinematics)
       // Apply the voltage constraint
@@ -53,7 +53,7 @@ public class TestTrajectory extends CommandBase {
       TrajectoryGenerator.generateTrajectory(
           // Start at the origin facing the +X direction
           new Pose2d(0, 0, new Rotation2d(0)),
-          // Pass through these two interior waypoints, making an 's' curve path
+          // Pass through the se two interior waypoints, making an 's' curve path
           List.of(new Translation2d(1, 1), new Translation2d(2, -1)),
           // End 3 meters straight ahead of where we started, facing forward
           new Pose2d(3, 0, new Rotation2d(0)),
@@ -86,33 +86,15 @@ public class TestTrajectory extends CommandBase {
   // Make this return true when this Command no longer needs to run execute()
   @Override
   public boolean isFinished() {
-    if( /*TODO: Find condition Finished trajectory*/ ){
+    if( 0/*TODO: Find condition Finished trajectory*/ ) {
       return true;
     }
-    }
+    return false;
+  }
   
-
   // Called once after isFinished returns true
   @Override
-  if (isTestFinished == true) {
-  
- 
-
-}
-}
-
-
-
-// An example trajectory to follow.  All units in meters.
-// Trajectory exampleTrajectory =
-//    TrajectoryGenerator.generateTrajectory(
-//        // Start at the origin facing the +X direction
-//        new Pose2d(0, 0, new Rotation2d(0)),
-//        // Pass through these two interior waypoints, making an 's' curve path
-//        List.of(new Translation2d(1, 1), new Translation2d(2, -1)),
-//        // End 3 meters straight ahead of where we started, facing forward
-//        new Pose2d(3, 0, new Rotation2d(0)),
-//        // Pass config
-//        config);
-
+  public void end(boolean interrupted) {
   }
+
+}
