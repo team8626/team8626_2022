@@ -76,6 +76,14 @@ public class StorageUnitSubsystem extends SubsystemBase {
     return ret_value;
   }
 
+  /** 
+   * Set Motor Power. Used for manual control of the unit
+   * @newPower new value to be applied [-1.0 ; 1.0]
+   */ 
+  public void setPower(double newPower){
+      m_motor.set(newPower);
+  }
+
   @Override
   public void periodic() {
   }

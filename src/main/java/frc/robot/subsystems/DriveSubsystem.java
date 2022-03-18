@@ -32,20 +32,17 @@ import edu.wpi.first.wpilibj.AnalogGyro;
   
     // The left-side drive encoder
     private final Encoder m_leftEncoder =
-          new Encoder(
-              DriveTrain.kLeftEncoderPorts[0],
-              DriveTrain.kLeftEncoderPorts[1],
-              DriveTrain.kLeftEncoderReversed);
+      new Encoder(
+          DriveTrain.kLeftEncoderPorts[0],
+          DriveTrain.kLeftEncoderPorts[1],
+          DriveTrain.kLeftEncoderReversed);
 
-      // The right-side drive encoder
-      private final Encoder m_rightEncoder =
-          new Encoder(
-            DriveTrain.kRightEncoderPorts[0],
-            DriveTrain.kRightEncoderPorts[1],
-            DriveTrain.kRightEncoderReversed);
-
-      // Set initial Power for he drivetrain
-      this.setHighSpeed();
+    // The right-side drive encoder
+    private final Encoder m_rightEncoder =
+      new Encoder(
+        DriveTrain.kRightEncoderPorts[0],
+        DriveTrain.kRightEncoderPorts[1],
+        DriveTrain.kRightEncoderReversed);
 
       //  Gyro Sensor
       //TODO Use this Gyrometer?
@@ -61,7 +58,9 @@ import edu.wpi.first.wpilibj.AnalogGyro;
 
         resetEncoders();
         m_odometry = new DifferentialDriveOdometry(m_gyro.getRotation2d());
-        
+
+        // Set initial Power for he drivetrain
+        this.setHighSpeed();
       }  
       
       private void resetEncoders() {

@@ -5,7 +5,6 @@
 package frc.robot.commands;
 
 // Java Libraries
-import java.util.function.DoubleSupplier;
 import java.io.IOException;
 import java.nio.file.Path;
 

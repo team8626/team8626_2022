@@ -16,6 +16,8 @@ public class ClimberSubsystem extends SubsystemBase {
   private final WPI_VictorSPX m_motorClimberRight = new WPI_VictorSPX(Climber.kCANMotorClimberRight);
   private final MotorControllerGroup m_motors   = new MotorControllerGroup(m_motorClimberLeft, m_motorClimberRight);
  
+  private boolean m_enabled = false;
+
   // Class Constructor
   public ClimberSubsystem() {
     // Set motor inverted or not...
@@ -27,9 +29,20 @@ public class ClimberSubsystem extends SubsystemBase {
    * Set Motors Power
    * @newPower new value to be applied [-1.0 ; 1.0]
    */
-  // TODO Link That to commands/buttons
   public void setPower(double newPower){
-    m_motors.set(newPower);
+    if(m_enabled){
+      m_motors.set(newPower);
+    }
+  }
+
+  // Activate The Climber
+  public void setEnabled(){
+    m_enabled = true;
+  }
+
+  // Deactivate The Climber
+  public void setDisabled(){
+    m_enabled = false;
   }
 }
 

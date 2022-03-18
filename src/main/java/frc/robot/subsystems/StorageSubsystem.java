@@ -70,5 +70,13 @@ public class StorageSubsystem extends SubsystemBase {
     // TODO: IMPLEMENT THIS FOR STOPPING LOADING!!!
   }
 
+  // Get Reference to the Front Unit
+  public StorageUnitSubsystem getFrontUnit(){
+    return m_unitFront;
+  }
 
+  // Get Reference to the Back Unit
+  public StorageUnitSubsystem getBackUnit(){
+    return m_unitBack;
+  }
 }

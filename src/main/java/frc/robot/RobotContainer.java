@@ -7,11 +7,10 @@ package frc.robot;
 // WPI Dependencies
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.XboxController.Button;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.ConditionalCommand;
-import edu.wpi.first.wpilibj2.command.RamseteCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
 import java.io.IOException;
@@ -28,10 +27,8 @@ import frc.robot.commands.ArcadeDrive;
 import frc.robot.commands.PrepareToCollect;
 import frc.robot.commands.StopCollecting;
 import frc.robot.commands.LaunchCargo;
-
-import frc.robot.DashBoard;
-import frc.robot.Autonomous;
-
+import frc.robot.commands.ControlClimber;
+import frc.robot.commands.ControlStorageUnit;
 import frc.robot.Constants.Controller;
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -61,18 +58,44 @@ public class RobotContainer {
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     configureButtonBindings();
+    configureDefaultCommands();
+  }
 
-    // Set default command for subsystems
-    //
-    m_storage.setDefaultCommand(        // Always push Cargo Forward....
+  /**
+   * Set Default Commands for Subsystems if required...
+   */
+  private void configureDefaultCommands(){
+    // Always push Cargo Forward....
+    m_storage.setDefaultCommand(        
       new PushCargo(
         m_storage));
 
-    m_drivetrain.setDefaultCommand(     // Always Read Joystick and control the drivetrain
+     // Always Read Joystick and control the drivetrain
+    m_drivetrain.setDefaultCommand(    
       new ArcadeDrive(
         () -> m_flightJoystick.getY(), 
         () -> m_flightJoystick.getX(),
         m_drivetrain));
+    
+    // Always Read Joystick and control the climber arm
+    // Note by default Climber arm is Disabled, will be enabled only when holding an extra button (see configureButtonBindings)
+    m_climber.setDefaultCommand(        
+      new ControlClimber(
+        () -> m_gameController.getRightY(),
+        m_climber));
+
+    // Always Read Joystick and control the storage units
+    // Front Storage Controlled by Left Joystick on Gamepad (X Axis)
+    // Back Storage Controlled by Left Joystick on Gamepad (X Axis)
+    m_storage.getFrontUnit().setDefaultCommand(        
+      new ControlStorageUnit(
+        () -> m_gameController.getLeftX(),
+        m_storage.getFrontUnit()));
+
+    m_storage.getBackUnit().setDefaultCommand(        
+      new ControlStorageUnit(
+        () -> m_gameController.getRightX(),
+        m_storage.getBackUnit()));
   }
 
   /**
@@ -85,13 +108,40 @@ public class RobotContainer {
    */
   private void configureButtonBindings() {
 
+    // TODO @ned123 This wont word as this is not periodic. 
+    // Need to use Trigger and InstantCommand(m_drivetrain::setLowSpeed(), m_drivetrain)
+    // Adjust speed if button is held down
     if (m_flightJoystick.getRawButtonPressed(2)) {
-      //setLowSpeed(); // TODO:  When held low speed mode activates
+      m_drivetrain.setLowSpeed();
+    }
+    // TODO @ned123 This wont word as this is not periodic. 
+    // Need to use Trigger and InstantCommand(m_drivetrain::setHighSpeed(), m_drivetrain)
+    if (m_flightJoystick.getRawButtonReleased(2)) {
+      m_drivetrain.setHighSpeed();
     }
 
-    if (m_flightJoystick.getRawButtonReleased(2)) {
-      //setHighSpeed(); // TOOD: When released the speed scales back to its normal high speed
-    }
+    // Activate the intake Mecanism
+    (new JoystickButton(m_gameController, Button.kY.value))
+    .whenPressed(new PrepareToCollect(m_intake, m_storage));
+
+    // Deactivate the intake Mechanism
+    (new JoystickButton(m_gameController, Button.kB.value))
+    .whenPressed(new StopCollecting(m_intake, m_storage));
+
+    // Start Shooting Sequence
+    (new JoystickButton(m_gameController, Button.kStart.value))
+    .whenPressed(new LaunchCargo(m_storage, m_shooter));
+
+// TODO: Stop Shooting Sequence (Or make it stop automatically)
+//  (new JoystickButton(m_gameController, Button.kStart.value))
+//  .whenHeldPressed(new InstantCommand(m_climber, m_shooter));
+
+  // Climber Activated if Left Bumper is held. 
+  // When Released, it will deactivate.
+  (new JoystickButton(m_gameController, Button.kLeftBumper.value))
+    .whileHeld(new InstantCommand(m_climber::setEnabled, m_climber))
+    .whenReleased(new InstantCommand(m_climber::setDisabled, m_climber));
+
 
     // TODO: Bind Buttons to Shooting
     // if (m_flightJoystick.getTriggerPressed() && m_flightJoystick.getRawButtonPressed(3)) {
