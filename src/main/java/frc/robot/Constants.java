@@ -25,6 +25,7 @@ public final class Constants {
         public static int kCANMotorRL = 2;  // USING SPARKMAX
         public static int kCANMotorFR = 3;  // USING SPARKMAX
         public static int kCANMotorRR = 4;  // USING SPARKMAX
+
         // Encoder Ports
         public static int[] kLeftEncoderPorts = {0,1};
         public static int[] kRightEncoderPorts = {2,3};
@@ -32,6 +33,11 @@ public final class Constants {
         public static boolean kLeftEncoderReversed = false;
         public static boolean kRightEncoderReversed = true;
 
+        // P{ower Moultiplicators
+        public static double kPowerRatioLowSpeed = 0.5;
+        public static double kPowerRatioHighSpeed = 1.0;
+
+        // Drivetrain Characteristics
         public static double kWheelDiameter = Units.inchesToMeters(6.0) ;
         public static int kEncoderPulsesPerRev = 256;
         public static double kEncoderMetersPerPulse = kWheelDiameter * Math.PI / kEncoderPulsesPerRev;
