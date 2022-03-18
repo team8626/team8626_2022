@@ -1,29 +1,46 @@
-import edu.wpi.first.wpilibj2.command.CommandBase;
-import edu.wpi.first.wpilibj2.command.WaitCommand​;
+// Copyright (c) FIRST and other WPILib contributors.
+// Open Source Software; you can modify and/or share it under the terms of
+// the WPILib BSD license file in the root directory of this project.
+
+package frc.robot;
+
+import java.io.IOException;
+
+// WPI Libraries
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
+
+// Team8626 Libraries
+import frc.robot.DashBoard.AutoSelec;
+import frc.robot.DashBoard.StartPosition;
 import frc.robot.subsystems.DriveSubsystem;
-import java.util.function.DoubleSupplier;
+import frc.robot.commands.FollowTrajectory;
+import frc.robot.commands.TestTrajectory;
 
 public class Autonomous {
 
     private final DashBoard m_dashboard;
     private final DriveSubsystem m_drivetrain;
-    public boolean m_isFollowFinished = false;
+
+    public StartPosition m_startPosition;
+    public AutoSelec m_autoStart;
 
     public Autonomous(DashBoard dashboard, DriveSubsystem drivetrain){
         m_dashboard = dashboard;
         m_drivetrain = drivetrain;
     }
 
-    public Command getStartCommand() {
+    public Command getStartCommand() throws IOException {
         Command startCommand = null;
-        startPosition = dashboard.getStartPosition(); 
-        autoStrat = dashboard.getAutoMode();
+        m_startPosition = m_dashboard.getStartPosition(); 
+        m_autoStart = m_dashboard.getAutoMode();
          
-        switch (autoStrat) {
+        switch (m_autoStart) {
             default: 
             case EXIT: 
                 System.out.println("Exit (Universal)");
-                startCommand = new FollowTrajectory(Exit.json, m_drivetrain);
+                startCommand = new FollowTrajectory("Exit.json", m_drivetrain);
                 break;
              
             case TEST: System.out.println("Running Test Trajectory)");
@@ -34,10 +51,10 @@ public class Autonomous {
                 startCommand = 
                     new SequentialCommandGroup(
                         new FollowTrajectory("example.json", m_drivetrain),
-                        WaitCommand​(5)); 
+                        new WaitCommand(5)); 
 
             case GOAL_FIRST:
-                switch (startPosition) { 
+                switch (m_startPosition) { 
                     case TARMAC_1: 
                         System.out.println("GOAL FIRST from Tarmac 1");
                         // return new  Sequential Command Group: new FollowTrajectory(mytrajectory.json, m_drivetrain)()   ////./, new Shoot, new Intake on+ new Fiolklow(Traj1_2, drivetrain)
@@ -53,7 +70,7 @@ public class Autonomous {
                 }
     
             case COLLECT_FIRST:
-                switch (startPosition) { 
+                switch (m_startPosition) { 
                     case TARMAC_1: 
                         System.out.println("COLLECT FIRST from Tarmac 1");
                         break;
@@ -68,5 +85,5 @@ public class Autonomous {
                 }
          }
         return startCommand;
-        }  
+    }  
 }

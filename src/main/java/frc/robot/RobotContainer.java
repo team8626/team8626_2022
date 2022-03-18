@@ -6,28 +6,16 @@ package frc.robot;
 
 // WPI Dependencies
 import edu.wpi.first.wpilibj.GenericHID;
-import edu.wpi.first.wpilibj.PS4Controller;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.Joystick;
-import edu.wpi.first.wpilibj.buttons.JoystickButton;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.RamseteCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
-import java.util.List;
+import java.io.IOException;
 
-import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.math.controller.RamseteController;
-import edu.wpi.first.math.controller.SimpleMotorFeedforward;
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.math.trajectory.Trajectory;
-import edu.wpi.first.math.trajectory.TrajectoryConfig;
-import edu.wpi.first.math.trajectory.TrajectoryGenerator;
-import edu.wpi.first.math.trajectory.constraint.DifferentialDriveVoltageConstraint;
 // Team 8626 Dependencies
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.StorageSubsystem;
@@ -41,10 +29,10 @@ import frc.robot.commands.PrepareToCollect;
 import frc.robot.commands.StopCollecting;
 import frc.robot.commands.LaunchCargo;
 
+import frc.robot.DashBoard;
+import frc.robot.Autonomous;
+
 import frc.robot.Constants.Controller;
-import frc.robot.Constants.DriveTrain;
-import frc.robot.Constants.Autonomous;
-import frc.robot.Constants.Dashboard;
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
  * "declarative" paradigm, very little robot logic should actually be handled in the {@link Robot}
@@ -53,25 +41,25 @@ import frc.robot.Constants.Dashboard;
  */
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
-  private final DriveSubsystem m_DriveSubsystem = new DriveSubsystem();
+  private final DriveSubsystem m_drivetrain = new DriveSubsystem();
   private final StorageSubsystem m_storage = new StorageSubsystem();
   private final IntakeSubsystem m_intake = new IntakeSubsystem();
   private final ShooterSubsystem m_shooter = new ShooterSubsystem();
   private final ClimberSubsystem m_climber = new ClimberSubsystem();
 
   // private final ArcadeDrive m_autoCommand = new ArcadeDrive(m_DriveSubsystem);
-  // define controllers
-  private final PS4Controller m_joystick = new PS4Controller(Controller.kPS4Port); 
+ 
+  // Define controllers
+  private final Joystick m_flightJoystick = new Joystick(Controller.kJoystickPort);
   private final XboxController m_gameController = new XboxController(Controller.kGamepadPort); 
 
   // Autonomous Mode
-  private final DashBoard m_dashboard = new Dashboard();
+  private final DashBoard m_dashboard = new DashBoard();
   private final Autonomous m_autoControl = new Autonomous(m_dashboard, m_drivetrain);
 
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
-    // Configure the button bindings
     configureButtonBindings();
 
     // Set default command for subsystems
@@ -80,12 +68,11 @@ public class RobotContainer {
       new PushCargo(
         m_storage));
 
-    m_DriveSubsystem.setDefaultCommand( // Always Read Joystick and control the drivetrain
+    m_drivetrain.setDefaultCommand(     // Always Read Joystick and control the drivetrain
       new ArcadeDrive(
         () -> m_flightJoystick.getY(), 
         () -> m_flightJoystick.getX(),
-        () -> m_flightJoystick.getZ(),
-        m_DriveSubsystem));
+        m_drivetrain));
   }
 
   /**
@@ -99,11 +86,11 @@ public class RobotContainer {
   private void configureButtonBindings() {
 
     if (m_flightJoystick.getRawButtonPressed(2)) {
-      setLowSpeed(); // When held low speed mode activates
+      //setLowSpeed(); // TODO:  When held low speed mode activates
     }
 
     if (m_flightJoystick.getRawButtonReleased(2)) {
-      setHighSpeed(); // When released the speed scales back to its normal high speed
+      //setHighSpeed(); // TOOD: When released the speed scales back to its normal high speed
     }
 
     // TODO: Bind Buttons to Shooting
@@ -116,6 +103,13 @@ public class RobotContainer {
    * Get Start command from the autonomous controller (Dashboard)
    */
   public Command getAutonomousCommand() {
-    return m_autoControl.getStartCommand();
+    Command retval = null;
+    try {
+      retval = m_autoControl.getStartCommand();
+    } catch (IOException e) {
+      // TODO Auto-generated catch block
+      e.printStackTrace();
+    }
+    return retval;
   }
 }

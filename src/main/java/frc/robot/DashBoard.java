@@ -1,14 +1,13 @@
+// Copyright (c) FIRST and other WPILib contributors.
+// Open Source Software; you can modify and/or share it under the terms of
+// the WPILib BSD license file in the root directory of this project.
+
 package frc.robot;
 
-// import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.Notifier;
 import edu.wpi.first.wpilibj.Timer;
-// import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
-// import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
-//import frc.lib.util.Util;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.Command;
 
 public class DashBoard {
 
@@ -17,10 +16,8 @@ public class DashBoard {
     }
 
     enum AutoSelec {
-        EXIT, TEST, EXAMPLE
+        EXIT, TEST, EXAMPLE, GOAL_FIRST, COLLECT_FIRST
     }
-
-    
 
     private static final Notifier m_thread = new Notifier(new dashboardThread());
 	
@@ -28,8 +25,8 @@ public class DashBoard {
 	
     // private DesiredMode mCachedDesiredMode = null;
     // private StartingPosition mCachedStartingPosition = null;
-
-    
+    SendableChooser<StartPosition> m_startPositionChooser = new SendableChooser<>();
+    SendableChooser<AutoSelec> m_autonomousModeChooser = new SendableChooser<>();
 
     static final double kShortInterval = .02;
     static final double kLongInterval = .5;
@@ -53,8 +50,6 @@ public class DashBoard {
         m_thread.startPeriodic(kShortInterval);       
     }
 
-    SendableChooser<StartPosition> m_startPositionChooser = new SendableChooser<>();
-
     /** 
      * Initialize Robot Starting Position
      */
@@ -65,22 +60,21 @@ public class DashBoard {
         m_startPositionChooser.addOption("Bottom Tarmac, Left", StartPosition.TARMAC_3);
 
         SmartDashboard.putData("Starting Position", m_startPositionChooser);
-
-        
-
     }
 
-
     /** 
-     * Holds Robot Start Position
+     * Returns Selected Robot Start Position
      */
-    public StartPosition startPosition() {
+    public StartPosition getStartPosition() {
         return m_startPositionChooser.getSelected();
-      }
-
-
-
-    SendableChooser<AutoSelec> m_autonomousModeChooser = new SendableChooser<>();
+    }
+ 
+    /** 
+     * Returns Selected Robot Autonomous Startup Mode
+     */  
+    public AutoSelec getAutoMode() {
+        return m_autonomousModeChooser.getSelected();
+    }
 
     /** 
      * Initialize Robot Autonomous Strategy 
@@ -91,17 +85,8 @@ public class DashBoard {
         m_autonomousModeChooser.addOption("Example", AutoSelec.EXAMPLE);
 
         SmartDashboard.putData("Auto Mode", m_autonomousModeChooser);
-        
         SmartDashboard.putNumber("Some Number", 1.45);
-
-        
-          }
-
-         
-          
-    
-       
-
+    }
  
     public static void updateDashboard() {
         double time = Timer.getFPGATimestamp();
@@ -130,7 +115,7 @@ public class DashBoard {
         // RobotContainer.indexer.dashboard();
         // RobotContainer.climber.dashboard();
         // SmartDashboard.putBoolean("Pressure SW",
-        //         RobotContainer.compressor.getPressureSwitchValue());
+        // RobotContainer.compressor.getPressureSwitchValue());
     }
 
     /**
@@ -157,68 +142,48 @@ public class DashBoard {
     //     t++;
     // }
 
-    private static class dashboardThread implements Runnable {
-        
+    private static class dashboardThread implements Runnable {  
         @Override
         public void run() {
             updateDashboard();
         }
     }
 
-      /**
-   * Use this to pass the autonomous command to the main {@link Robot} class.
-   *
-   * @return the command to run in autonomous
-   */
-  public Command getStartCommand() {
-    Command startCommand = null;
-    startPosition = m_startPositionChooser.getselected();
-    autoStrat = m_autonomousModeChooser.getselected();
+ // MOVED TO AUTOMOMOUS... CAN BE DELETED?
+    // /**
+    // * Use this to pass the autonomous command to the main {@link Robot} class.
+    // *
+    // * @return the command to run in autonomous
+    // */
+    // public Command getStartCommand() {
+    //     Command startCommand = null;
+    //     startPosition = m_startPositionChooser.getselected();
+    //     autoStart = m_autonomousModeChooser.getselected();
           
      
-     switch (autoStrat) {
-         
-        case EXIT: System.out.println("Exit (Universal)");
-         
-        return new SequentialCommandGroup  (new FollowTrajectory("json", m_drivetrain));
-            
-
-
-
-
-
-
-
-
+    //     switch (autoStart) {
+    //         case EXIT: 
+    //             System.out.println("Exit (Universal)");
+    //             return new SequentialCommandGroup  (new FollowTrajectory("json", m_drivetrain));
+    //             break;
         
-        break;
-    
-         case EXAMPLE: switch (startPosition) {
-               
-            case TARMAC_1: System.out.println("Do example; Tarmac 1");
-            break;
+    //         case EXAMPLE: switch (startPosition) {
+    //             case TARMAC_1: 
+    //                 System.out.println("Do example; Tarmac 1");
+    //                 break;
 
-            case TARMAC_2: System.out.println("Do example; Tarmac 2");
-            break;
+    //             case TARMAC_2: 
+    //                 System.out.println("Do example; Tarmac 2");
+    //                 break;
 
-            case TARMAC_3: System.out.println("Do example; Tarmac 3");
-            break;
+    //             case TARMAC_3: 
+    //                 System.out.println("Do example; Tarmac 3");
+    //                 break;
+    //         }
+    //     }
+    //     return startCommand;
 
-            
-
-    return startCommand;
-  }
   
-     }
+    // }
 
-} 
-
-        public StartPosition getStartPosition() {
-            return m_startPositionChooser.getselected();
-            
-        }
-      
-      public AutoSelec getAutoMode() {
-      m_autonomousModeChooser.getselected();
-      }
-  }
+}

@@ -6,42 +6,49 @@ package frc.robot.commands;
 
 // Java Libraries
 import java.util.function.DoubleSupplier;
+import java.io.IOException;
+import java.nio.file.Path;
+
 
 // WPI Library dependencies
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpilibj2.command.RamseteCommand;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrajectoryConfig;
-import edu.wpi.first.math.trajectory.TrajectoryGenerator;
+import edu.wpi.first.math.trajectory.TrajectoryUtil;
 import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.math.trajectory.constraint.DifferentialDriveVoltageConstraint;
+import edu.wpi.first.wpilibj.Filesystem;
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.RamseteController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward; 
 
 // Team8626 Libraries
 import frc.robot.subsystems.DriveSubsystem;
+import frc.robot.Constants.DriveTrain;;
 
 /**
  * Have the robot drive arcade style. 
  * */
 public class FollowTrajectory extends CommandBase {
   private final DriveSubsystem m_drivetrain;
-  private final Trajectory m_trajectory;
-  private final TrajectoryConfig m_config;
   private final DifferentialDriveVoltageConstraint m_voltageConstants;
-  // private final Trajectory m_trajectory;
-  // private final TrajectoryConfig m_trajectoryConfig;
-
+  private final Trajectory m_trajectory;
+  private final TrajectoryConfig m_trajectoryConfig;
+  private final Path m_trajectoryPath;
+  
   /**
-   * Creates a new ArcadeDrive command.
+   * Creates a new FollowTrajectory command.
    * @param filename JSON file containing the trajectory
    * @param drivetrain The drivetrain subsystem to drive
+   * @throws IOException
    */
-  public FollowTrajectory(string filename, DriveSubsystem drivetrain) {
+  public FollowTrajectory(String filename, DriveSubsystem drivetrain) throws IOException {
     m_drivetrain = drivetrain;
 
     // Read JSON files (deploy/filename) and Create  Trajectory
-    Path trajectoryPath = Filesystem.getDeployDirectory().toPath().resolve(filename);
-    m_trajectory = TrajectoryUtil.fromPathweaverJson(trajectoryPath);   
+    m_trajectoryPath = Filesystem.getDeployDirectory().toPath().resolve(filename);
+    m_trajectory = TrajectoryUtil.fromPathweaverJson(m_trajectoryPath);   
     
     // Create a voltage constraint to ensure we don't accelerate too fast
     m_voltageConstants = new DifferentialDriveVoltageConstraint(
@@ -53,7 +60,7 @@ public class FollowTrajectory extends CommandBase {
       10); // TODO: maxVoltage???
 
     // Create config for trajectory
-    m_config = new TrajectoryConfig(
+    m_trajectoryConfig = new TrajectoryConfig(
       DriveTrain.kMaxSpeedMetersPerSecond,
       DriveTrain.kMaxAccelerationMetersPerSecondSquared)
         // Add kinematics to ensure max speed is actually obeyed
@@ -61,7 +68,6 @@ public class FollowTrajectory extends CommandBase {
         // Apply the voltage constraint
         .addConstraint(m_voltageConstants);
     }
-    
 
   // Called repeatedly when this Command is scheduled to run
   @Override
@@ -94,7 +100,7 @@ public class FollowTrajectory extends CommandBase {
   @Override
   public boolean isFinished() {
     // TODO: Under what condition is that finished ?
-    // If current position is ytarget position then return true
+    // If current position is target position then return true
     return false; 
   }
 
@@ -102,5 +108,5 @@ public class FollowTrajectory extends CommandBase {
   @Override
   public void end(boolean interrupted) {
   }
- }
+}
  
