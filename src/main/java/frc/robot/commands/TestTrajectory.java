@@ -48,7 +48,7 @@ public class TestTrajectory extends CommandBase {
           DriveTrain.kvVoltSecondsPerMeter,
           DriveTrain.kaVoltSecondsSquaredPerMeter),
         DriveTrain.kDriveKinematics,
-      10); // TODO:: Why 10? Plus move that to Constants
+      DriveTrain.kMaxAvailableVoltage);
 
     // Create config for trajectory
     m_trajectoryConfig = new TrajectoryConfig(

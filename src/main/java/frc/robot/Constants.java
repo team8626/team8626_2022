@@ -45,7 +45,9 @@ public final class Constants {
         public static final double ksVolts = 0.22;
         public static final double kvVoltSecondsPerMeter = 1.98;
         public static final double kaVoltSecondsSquaredPerMeter = 0.2;
-        //TODO update placeholder values
+        public static final double kMaxAvailableVoltage = 10.5; // Assumes Battery "sag" for PID/Ramsete Controllers
+
+        // TODO update placeholder values
         // Example value only - as above, this must be tuned for your drive!
         public static final double kPDriveVel = 8.5;
 

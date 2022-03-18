@@ -14,5 +14,10 @@
       "/SmartDashboard/Auto Mode": "String Chooser",
       "/SmartDashboard/Starting Position": "String Chooser"
     }
+  },
+  "NetworkTables": {
+    "SmartDashboard": {
+      "open": true
+    }
   }
 }
