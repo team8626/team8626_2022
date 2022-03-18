@@ -51,7 +51,5 @@ public class ArcadeDrive extends CommandBase {
   @Override
   public void end(boolean interrupted) {
     m_drivetrain.arcadeDrive(0, 0);
-
-    // TODO: Stop motors?
   }
 }
