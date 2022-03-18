@@ -44,6 +44,9 @@ import edu.wpi.first.wpilibj.AnalogGyro;
             DriveTrain.kRightEncoderPorts[1],
             DriveTrain.kRightEncoderReversed);
 
+      // Set initial Power for he drivetrain
+      this.setHighSpeed();
+
       //  Gyro Sensor
       //TODO Use this Gyrometer?
       private final Gyro m_gyro = new AnalogGyro(0);
@@ -183,12 +186,16 @@ import edu.wpi.first.wpilibj.AnalogGyro;
   }
 
   /**
-   * 
+   * Set Low Speed Power for the drivetrain.
    */
   public void setLowSpeed() {
-    m_drive.setMaxOutput(0.5);
+    m_drive.setMaxOutput(DriveTrain.kPowerRatioLowSpeed);
   }
+
+  /**
+   * Set High Speed Power for the drivetrain.
+   */
   public void setHighSpeed() {
-    m_drive.setMaxOutput(1);
+    m_drive.setMaxOutput(DriveTrain.kPowerRatioHighSpeed);
   }
 }
