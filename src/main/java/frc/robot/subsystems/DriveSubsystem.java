@@ -1,18 +1,18 @@
 package frc.robot.subsystems;
   
-  import edu.wpi.first.math.geometry.Pose2d;
-  import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
-  import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
- import edu.wpi.first.wpilibj.Encoder;
- import edu.wpi.first.wpilibj.drive.DifferentialDrive;
- // import edu.wpi.first.wpilibj.examples.ramsetecommand.Constants.DriveConstants;
- import edu.wpi.first.wpilibj.interfaces.Gyro;
- import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
- import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
+import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
+import edu.wpi.first.wpilibj.Encoder;
+import edu.wpi.first.wpilibj.drive.DifferentialDrive;
+import edu.wpi.first.wpilibj.interfaces.Gyro;
+import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj.ADXRS450_Gyro;
+
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import frc.robot.Constants.DriveTrain;
-import edu.wpi.first.wpilibj.AnalogGyro;
 
 /* Main class for handling Drivetrain 
 **
@@ -44,9 +44,8 @@ import edu.wpi.first.wpilibj.AnalogGyro;
         DriveTrain.kRightEncoderPorts[1],
         DriveTrain.kRightEncoderReversed);
 
-      //  Gyro Sensor
-      //TODO Use this Gyrometer?
-      private final Gyro m_gyro = new AnalogGyro(0);
+      //  Gyro Sensor (Unsing NAVx Module)
+      private final Gyro m_gyro = new ADXRS450_Gyro();
       
       // Odometry class for tracking robot location
       private final DifferentialDriveOdometry m_odometry;
