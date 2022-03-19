@@ -57,19 +57,7 @@ public class StorageSubsystem extends SubsystemBase {
     }
     return ret_value;
   }
-
-  // Start Loading
-  public void load(){
-    new PrintCommand("[STORAGE] Ready to Receive Cargo");
-    // TODO: IMPLEMENT THIS FOR LOADING!!!
-  }
-
-  // Stop Loading
-  public void stopLoading(){
-    new PrintCommand("[STORAGE] Stopped Receiving Cargo");
-    // TODO: IMPLEMENT THIS FOR STOPPING LOADING!!!
-  }
-
+  
   // Get Reference to the Front Unit
   public StorageUnitSubsystem getFrontUnit(){
     return m_unitFront;

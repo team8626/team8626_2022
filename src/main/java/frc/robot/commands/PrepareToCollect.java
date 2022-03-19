@@ -10,10 +10,10 @@ package frc.robot.commands;
 // WPI Library dependencies
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
-
 // Team8626 Libraries
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.StorageSubsystem;
+//import frc.robot.commands.StoreCargo;
 
 /**
  * Get the robot ready to collect Cargo.
@@ -41,7 +41,23 @@ public class PrepareToCollect extends ParallelCommandGroup {
         // Activate the Intake
         new InstantCommand(m_intake::activate, m_intake),
 
-        // Activate the Front Storage Unit
-        new InstantCommand(m_storage::load, m_storage));
+        // Activate the Storage for loading
+        new StoreCargo(m_storage));
+  }
+
+  @Override
+  public boolean isFinished() {
+    boolean ret_value = false;
+    if(m_storage.isFull() == true) {
+      ret_value = true;
+    }
+    return ret_value;
+  }
+
+  // Called once after isFinished returns true
+  @Override
+  public void end(boolean interrupted) {
+    // Deactivate the Intake
+    new InstantCommand(m_intake::deactivate, m_intake);
   }
 }

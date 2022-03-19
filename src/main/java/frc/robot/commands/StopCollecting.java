@@ -38,10 +38,10 @@ public class StopCollecting extends ParallelCommandGroup {
     m_storage = storage;
 
     addCommands(
-        // Activate the Intake
+        // Deactivate the Intake
         new InstantCommand(m_intake::deactivate, m_intake),
 
-        // Activate the Front Storage Unit
-        new InstantCommand(m_storage::stopLoading, m_storage));
+        // Deactivate the Storage Unit
+        new InstantCommand(m_storage.getFrontUnit()::stop, m_storage.getFrontUnit()));
   }
 }
