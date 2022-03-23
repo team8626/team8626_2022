@@ -30,6 +30,7 @@ import frc.robot.commands.LaunchCargo;
 import frc.robot.commands.ControlClimber;
 import frc.robot.commands.ControlStorageUnit;
 import frc.robot.Constants.Controller;
+import frc.robot.Constants.Storage;
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
  * "declarative" paradigm, very little robot logic should actually be handled in the {@link Robot}
@@ -66,9 +67,11 @@ public class RobotContainer {
    */
   private void configureDefaultCommands(){
     // Always push Cargo Forward....
-    m_storage.setDefaultCommand(        
+    if(Storage.kIsUsingColorSensors){
+      m_storage.setDefaultCommand(        
       new PushCargo(
         m_storage));
+    }
 
      // Always Read Joystick and control the drivetrain
     m_drivetrain.setDefaultCommand(    
@@ -132,21 +135,15 @@ public class RobotContainer {
     (new JoystickButton(m_gameController, Button.kStart.value))
     .whenPressed(new LaunchCargo(m_storage, m_shooter));
 
-// TODO: Stop Shooting Sequence (Or make it stop automatically)
-//  (new JoystickButton(m_gameController, Button.kStart.value))
-//  .whenHeldPressed(new InstantCommand(m_climber, m_shooter));
+    // TODO Implement Manual Shooting (X)
+    // TODO Implement Stop Manual Shooting (A)
 
-  // Climber Activated if Left Bumper is held. 
-  // When Released, it will deactivate.
-  (new JoystickButton(m_gameController, Button.kLeftBumper.value))
-    .whileHeld(new InstantCommand(m_climber::setEnabled, m_climber))
-    .whenReleased(new InstantCommand(m_climber::setDisabled, m_climber));
+    // Climber Activated if Left Bumper is held. 
+    // When Released, it will deactivate.
+    (new JoystickButton(m_gameController, Button.kLeftBumper.value))
+      .whileHeld(new InstantCommand(m_climber::setEnabled, m_climber))
+      .whenReleased(new InstantCommand(m_climber::setDisabled, m_climber));
 
-
-    // TODO: Bind Buttons to Shooting
-    // if (m_flightJoystick.getTriggerPressed() && m_flightJoystick.getRawButtonPressed(3)) {
-    //   setDefaultCommand =
-    // }
   }
 
   /**
@@ -155,7 +152,7 @@ public class RobotContainer {
   public Command getAutonomousCommand() {
     Command retval = null;
     try {
-      retval = m_autoControl.getStartCommand();
+      retval = m_autoControl.getStartCommand(); // TODO: Ready for that or just shoot and drive 2 seconds?
     } catch (IOException e) {
       // TODO Auto-generated catch block
       e.printStackTrace();

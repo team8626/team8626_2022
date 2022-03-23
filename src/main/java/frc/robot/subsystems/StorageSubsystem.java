@@ -49,7 +49,7 @@ public class StorageSubsystem extends SubsystemBase {
     }
   }
 
-  // Is the storage full (2 Cargios loaded)
+  // Is the storage full (2 Cargos loaded)
   public boolean isFull(){
     boolean ret_value = false;
     if (!m_unitFront.isEmpty() && !m_unitBack.isEmpty()){
@@ -57,7 +57,16 @@ public class StorageSubsystem extends SubsystemBase {
     }
     return ret_value;
   }
-  
+
+  // Is the storage empty (no more cargo)
+  public boolean isEmpty(){
+    boolean ret_value = false;
+    if (!m_unitFront.isEmpty() || !m_unitBack.isEmpty()){
+      ret_value = true;
+    }
+    return ret_value;
+  }  
+
   // Get Reference to the Front Unit
   public StorageUnitSubsystem getFrontUnit(){
     return m_unitFront;

@@ -47,7 +47,7 @@ public final class Constants {
         public static final double kaVoltSecondsSquaredPerMeter = 0.2;
         public static final double kMaxAvailableVoltage = 10.5; // Assumes Battery "sag" for PID/Ramsete Controllers
 
-        // TODO update placeholder values
+        // TODO update placeholder values _ NEED TO DO CHARACTERIZATION
         // Example value only - as above, this must be tuned for your drive!
         public static final double kPDriveVel = 8.5;
 
@@ -91,6 +91,9 @@ public final class Constants {
 
         // Timeout for Storage Units
         public static int kTimeoutStorageUnit= 10;
+
+        // USing Color Sensors
+        public static boolean kIsUsingColorSensors = false;
     }
 
     // Cargo constants

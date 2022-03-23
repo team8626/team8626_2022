@@ -74,6 +74,7 @@ public class StorageUnitSubsystem extends SubsystemBase {
       ret_value = false;
     }
     return ret_value;
+    // TODO: whne is m_loadedCOlor set to null?
   }
 
   /** 

@@ -36,7 +36,7 @@ public class DeliverCargo extends CommandBase {
   @Override
   public void execute() {
     // Unload the BACK UNIT
-    new UnloadStorageUnit(m_storage.getBackUnit()).withTimeout(Storage.kTimeoutStorageUnit)
+    new UnloadStorageUnit(m_storage.getBackUnit()).withTimeout(Storage.kTimeoutStorageUnit);
   }
 
   // Make this return true when this Command no longer needs to run execute()
@@ -52,6 +52,6 @@ public class DeliverCargo extends CommandBase {
   // Called once after isFinished returns true
   @Override
   public void end(boolean interrupted) {
-    // TODO: Anything to stop or deactivate?
+    // TODO: Do we need to stop the motors or storage units? NO WE ASSUME TIMEOUT WILL DO IT!
   }
 }

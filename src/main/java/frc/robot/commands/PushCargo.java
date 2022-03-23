@@ -45,6 +45,6 @@ public class PushCargo extends CommandBase {
   // Called once after isFinished returns true
   @Override
   public void end(boolean interrupted) {
-    // TODO: Anything to stop or deactivate?
+    // TODO: Do we need to stop the motors or storage units? NO WE ASSUME TIMEOUT WILL DO IT!
   }
 }
