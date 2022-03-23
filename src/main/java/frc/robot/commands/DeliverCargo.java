@@ -9,7 +9,7 @@ package frc.robot.commands;
 
 // WPI Library dependencies
 import edu.wpi.first.wpilibj2.command.CommandBase;
-
+import frc.robot.Constants.Storage;
 // Team8626 Libraries
 import frc.robot.subsystems.StorageSubsystem;
 
@@ -35,14 +35,18 @@ public class DeliverCargo extends CommandBase {
   // Called repeatedly when this Command is scheduled to run
   @Override
   public void execute() {
-    // TODO: Let the magic happen...
+    // Unload the BACK UNIT
+    new UnloadStorageUnit(m_storage.getBackUnit()).withTimeout(Storage.kTimeoutStorageUnit)
   }
 
   // Make this return true when this Command no longer needs to run execute()
   @Override
   public boolean isFinished() {
-    // TODO: What is the finshed condition
-    return false; // Runs until interrupted
+    boolean ret_value = false;
+    if(m_storage.isEmpty() == false) {
+      ret_value = true;
+    }
+    return ret_value;
   }
 
   // Called once after isFinished returns true
