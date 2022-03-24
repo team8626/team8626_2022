@@ -20,8 +20,7 @@ public class IntakeSubsystem extends SubsystemBase {
 
   // Pneumatics
   //private final Compressor m_compressor = new Compressor(Intake.kPneumaticModuleID, PneumaticsModuleType.CTREPCM);
-  private final DoubleSolenoid m_cylinderLeft = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, Intake.kcylinderLeftExtend, Intake.kcylinderLeftRetract);
-  private final DoubleSolenoid m_cylinderRight = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, Intake.kcylinderRightExtend, Intake.kcylinderRightRetract);
+  private final DoubleSolenoid m_Cylinder = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, Intake.kCylinderExtend, Intake.kCylinderRetract);
   
   // Internal States
   private boolean m_activated;
@@ -78,20 +77,17 @@ public class IntakeSubsystem extends SubsystemBase {
   private void deploy(){
     // Extend Cylinders
     new PrintCommand("[INTAKE] Intake Deployed");
-    m_cylinderLeft.set(Value.kForward);
-    m_cylinderRight.set(Value.kForward);
+    m_Cylinder.set(Value.kForward);
 
     // Stop pushing on cylinders (keep the assembly "loose")
-    m_cylinderLeft.set(Value.kOff);
-    m_cylinderRight.set(Value.kOff);
+    m_Cylinder.set(Value.kOff);
   }
   
   // Pull The Assembly in
   private void retract(){
     // Retract Cylinders
     new PrintCommand("[INTAKE] Intake Stowed");
-    m_cylinderLeft.set(Value.kReverse);
-    m_cylinderRight.set(Value.kReverse);
+    m_Cylinder.set(Value.kReverse);
   }
   
   // Start Rotation of the Intake

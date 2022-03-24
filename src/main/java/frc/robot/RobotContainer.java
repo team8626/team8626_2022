@@ -114,14 +114,14 @@ public class RobotContainer {
     // TODO @ned123 This wont word as this is not periodic. 
     // Need to use Trigger and InstantCommand(m_drivetrain::setLowSpeed(), m_drivetrain)
     // Adjust speed if button is held down
-    if (m_flightJoystick.getRawButtonPressed(2)) {
-      m_drivetrain.setLowSpeed();
-    }
+    // if (m_flightJoystick.getRawButtonPressed(2)) {
+     // m_drivetrain.setLowSpeed();
+    //}
     // TODO @ned123 This wont word as this is not periodic. 
     // Need to use Trigger and InstantCommand(m_drivetrain::setHighSpeed(), m_drivetrain)
-    if (m_flightJoystick.getRawButtonReleased(2)) {
-      m_drivetrain.setHighSpeed();
-    }
+    // if (m_flightJoystick.getRawButtonReleased(2)) {
+      // m_drivetrain.setHighSpeed();
+  //  }
 
     // Activate the intake Mecanism
     (new JoystickButton(m_gameController, Button.kY.value))

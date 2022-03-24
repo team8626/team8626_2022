@@ -47,7 +47,8 @@ public class DashBoard {
             initAutonomousStrategy();
 
         }
-        m_thread.startPeriodic(kShortInterval);       
+        m_thread.startPeriodic(kShortInterval);    
+        SmartDashboard.putString("Robot Status", "empty");   
     }
 
     /** 
@@ -87,7 +88,12 @@ public class DashBoard {
         SmartDashboard.putData("Auto Mode", m_autonomousModeChooser);
         SmartDashboard.putNumber("Some Number", 1.45);
     }
- 
+
+    public void initShooterVoltage(){
+        SmartDashboard.putNumber("Shooter_Voltage", 1.00);
+    }
+
+
     public static void updateDashboard() {
         double time = Timer.getFPGATimestamp();
         if (kEnableDashBoard) {
