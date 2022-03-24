@@ -4,6 +4,8 @@
 
 package frc.robot;
 
+import java.io.IOException;
+
 // WPI Dependencies
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
@@ -12,8 +14,6 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-
-import java.io.IOException;
 
 // Team 8626 Dependencies
 import frc.robot.subsystems.IntakeSubsystem;
@@ -39,7 +39,7 @@ import frc.robot.Constants.Storage;
  */
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
-  private final DriveSubsystem m_drivetrain = new DriveSubsystem();
+  private final static DriveSubsystem m_drivetrain = new DriveSubsystem();
   private final StorageSubsystem m_storage = new StorageSubsystem();
   private final IntakeSubsystem m_intake = new IntakeSubsystem();
   private final ShooterSubsystem m_shooter = new ShooterSubsystem();
@@ -52,8 +52,8 @@ public class RobotContainer {
   private final XboxController m_gameController = new XboxController(Controller.kGamepadPort); 
 
   // Autonomous Mode
-  private final DashBoard m_dashboard = new DashBoard();
-  private final Autonomous m_autoControl = new Autonomous(m_dashboard, m_drivetrain);
+  private final static DashBoard m_dashboard = new DashBoard();
+  private final static Autonomous m_autoControl = new Autonomous(m_dashboard, m_drivetrain);
 
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
@@ -74,18 +74,27 @@ public class RobotContainer {
     }
 
      // Always Read Joystick and control the drivetrain
-    m_drivetrain.setDefaultCommand(    
+     m_drivetrain.setDefaultCommand(    
       new ArcadeDrive(
-        () -> m_flightJoystick.getY(), 
-        () -> m_flightJoystick.getX(),
+        () -> -m_flightJoystick.getX(), 
+        () -> m_flightJoystick.getY(),
+        // () -> m_gameController.getRightY(), 
+        // () -> m_gameController.getRightX(),
         m_drivetrain));
-    
+
+      // m_drivetrain.setDefaultCommand(    
+      // new TankDrive(
+      //   () -> m_gameController.getLeftY(), 
+      //   () -> m_gameController.getRightY(),
+      //   m_drivetrain));  
+
     // Always Read Joystick and control the climber arm
     // Note by default Climber arm is Disabled, will be enabled only when holding an extra button (see configureButtonBindings)
     m_climber.setDefaultCommand(        
       new ControlClimber(
         () -> m_gameController.getRightY(),
         m_climber));
+    //new InstantCommand(m_climber::setEnabled, m_climber);
 
     // Always Read Joystick and control the storage units
     // Front Storage Controlled by Left Joystick on Gamepad (X Axis)
@@ -135,21 +144,33 @@ public class RobotContainer {
     (new JoystickButton(m_gameController, Button.kStart.value))
     .whenPressed(new LaunchCargo(m_storage, m_shooter));
 
-    // TODO Implement Manual Shooting (X)
-    // TODO Implement Stop Manual Shooting (A)
+    // Start Manual Shooting
+    (new JoystickButton(m_gameController, Button.kX.value))
+    .whenPressed(new InstantCommand(m_shooter::activate, m_shooter));
 
+    // Stop Manual Shooting
+    (new JoystickButton(m_gameController, Button.kA.value))
+    .whenPressed(new InstantCommand(m_shooter::deactivate, m_shooter));
+
+    // Adjust Shooting power
+    (new JoystickButton(m_gameController, Button.kLeftBumper.value))
+        .whenPressed(new InstantCommand(m_shooter::speedDown, m_shooter));
+    (new JoystickButton(m_gameController, Button.kRightBumper.value))
+        .whenPressed(new InstantCommand(m_shooter::speedUp, m_shooter));
+    
+    
     // Climber Activated if Left Bumper is held. 
     // When Released, it will deactivate.
-    (new JoystickButton(m_gameController, Button.kLeftBumper.value))
-      .whileHeld(new InstantCommand(m_climber::setEnabled, m_climber))
-      .whenReleased(new InstantCommand(m_climber::setDisabled, m_climber));
+    // (new JoystickButton(m_gameController, Button.kLeftBumper.value))
+    //   .whileHeld(new InstantCommand(m_climber::setEnabled, m_climber))
+    //   .whenReleased(new InstantCommand(m_climber::setDisabled, m_climber));
 
   }
 
   /**
    * Get Start command from the autonomous controller (Dashboard)
    */
-  public Command getAutonomousCommand() {
+  public static  Command getAutonomousCommand() {
     Command retval = null;
     try {
       retval = m_autoControl.getStartCommand(); // TODO: Ready for that or just shoot and drive 2 seconds?

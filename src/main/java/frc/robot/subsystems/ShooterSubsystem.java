@@ -47,6 +47,16 @@ public class ShooterSubsystem extends SubsystemBase {
     new PrintCommand("[SHOOTER] STOP Spinning");
   }
 
+  public void speedUp(){
+    m_motorVoltage+= 0.1;
+    m_motor.setVoltage(m_motorVoltage);
+  }
+
+  public void speedDown(){
+    m_motorVoltage-= 0.1;
+    m_motor.setVoltage(m_motorVoltage);
+  }
+
   public boolean isActive(){
     return m_activated;
   }

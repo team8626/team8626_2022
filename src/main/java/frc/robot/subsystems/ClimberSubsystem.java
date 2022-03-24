@@ -1,7 +1,6 @@
 package frc.robot.subsystems;
   
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 
 import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
 
@@ -12,17 +11,14 @@ import frc.robot.Constants.Climber;
 */
 public class ClimberSubsystem extends SubsystemBase {
   // Climber Motor
-  private final WPI_VictorSPX m_motorClimberLeft  = new WPI_VictorSPX(Climber.kCANMotorClimberLeft);
-  //private final WPI_VictorSPX m_motorClimberRight = new WPI_VictorSPX(Climber.kCANMotorClimberRight);
-  private final MotorControllerGroup m_motors   = new MotorControllerGroup(m_motorClimberLeft); //, m_motorClimberRight);
- 
-  private boolean m_enabled = false;
+  private final WPI_VictorSPX m_motor  = new WPI_VictorSPX(Climber.kCANMotorClimber);
+
+  private boolean m_enabled = true;
 
   // Class Constructor
   public ClimberSubsystem() {
     // Set motor inverted or not...
-    m_motorClimberLeft.setInverted(false);
-    //m_motorClimberRight.setInverted(true);
+    m_motor.setInverted(false);
   }  
       
   /**
@@ -31,7 +27,7 @@ public class ClimberSubsystem extends SubsystemBase {
    */
   public void setPower(double newPower){
     if(m_enabled){
-      m_motors.set(newPower);
+      m_motor.set(newPower);
     }
   }
 
