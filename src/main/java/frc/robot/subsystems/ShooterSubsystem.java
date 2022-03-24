@@ -1,8 +1,7 @@
 package frc.robot.subsystems;
   
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import edu.wpi.first.wpilibj2.command.PrintCommand;
-
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
 
 // Team8626 Libraries
@@ -16,7 +15,7 @@ public class ShooterSubsystem extends SubsystemBase {
   private final WPI_VictorSPX m_motor = new WPI_VictorSPX(Shooter.kCANMotorShooter);
 
   // Internal States
-  private double m_motorVoltage = 0.0;
+  private double m_motorVoltage = SmartDashboard.getNumber("Shooter_Voltage", 1.00);
   private boolean m_activated;
 
   // Class Constructor
@@ -33,7 +32,7 @@ public class ShooterSubsystem extends SubsystemBase {
   public void activate(double voltage){
     m_motor.setVoltage(voltage);
     this.activate();
-    new PrintCommand("[SHOOTER] Spinning");
+    SmartDashboard.putString("Robot Status", "[SHOOTER] Spinning");
   }
 
   public void activate(){
@@ -44,7 +43,7 @@ public class ShooterSubsystem extends SubsystemBase {
   public void deactivate(){
     m_motor.stopMotor();
     m_activated = false;
-    new PrintCommand("[SHOOTER] STOP Spinning");
+    SmartDashboard.putString("Robot Status", "[SHOOTER] STOP Spinning");
   }
 
   public boolean isActive(){

@@ -144,6 +144,13 @@ public class RobotContainer {
       .whileHeld(new InstantCommand(m_climber::setEnabled, m_climber))
       .whenReleased(new InstantCommand(m_climber::setDisabled, m_climber));
 
+      (new JoystickButton(m_gameController, Button.kRightBumper.value))
+      .whileHeld(new InstantCommand(m_shooter::activate, m_shooter))
+      .whenReleased(new InstantCommand(m_shooter::deactivate, m_shooter));
+
+      // TODO: Get rid of this; temporary for updating SmartDashboard shooter voltage slider
+    (new JoystickButton(m_gameController, Button.kX.value))
+    .whenPressed(new InstantCommand(m_shooter::activate, m_shooter));
   }
 
   /**
