@@ -66,15 +66,26 @@ import frc.robot.Constants.DriveTrain;
         m_leftEncoder.reset();
         m_rightEncoder.reset();  
       }
-/**   * Drives the robot using arcade controls.
+  /**
+   * Drives the robot using arcade controls.
    *
    * @param fwd the commanded forward movement
    * @param rot the commanded rotation
    */
   public void arcadeDrive(double fwd, double rot) {
     m_drive.arcadeDrive(fwd, rot);
-
   }
+
+  /**   
+   * Drives the robot using tank controls.
+   *
+   * @param leftSpeed  Left Side Speed
+   * @param RightSpeed Right Side Speed
+   */
+  public void tankDrive(double leftSpeed, double RightSpeed) {
+    m_drive.tankDrive(leftSpeed, RightSpeed);
+  }
+
 
   /**
    * Controls the left and right sides of the drive directly with voltages.

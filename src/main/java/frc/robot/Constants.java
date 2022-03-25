@@ -80,8 +80,8 @@ public final class Constants {
     // Storage subsystem constants
     public final static class Storage {
         // CAN Bus Addresses for Motors
-        public static int kCANMotorStorageFront = 10;  // USING VICTOR SPX
-        public static int kCANMotorStorageBack = 6;   // USING VICTOR SPX
+        public static int kCANMotorStorageFront = 6;   // USING VICTOR SPX
+        public static int kCANMotorStorageBack = 10;   // USING VICTOR SPX
 
         // i2C Addresses for Color Sensors
         public static I2C.Port kI2CColorSensorPortFront = I2C.Port.kOnboard;
@@ -104,7 +104,7 @@ public final class Constants {
     // Climber subsystem constants
     public final static class Climber {
         // CAN Bus Addresses for Motors
-        public static int kCANMotorClimberLeft  = 11;   // USING VICTOR SPX
+        public static int kCANMotorClimber  = 11;   // USING VICTOR SPX
         //public static int kCANMotorClimberRight = 11;   // USING VICTOR SPX
     }
 
@@ -115,7 +115,7 @@ public final class Constants {
 
         // Predefined Voltage for Shooter Motor
         public static double kShooterVoltageHighGoal  = 9.0;
-        public static double kShooterVoltageLowGoal   = 6.0;
+        public static double kShooterVoltageLowGoal   = 5.5;
         public static double kShooterVoltageDiscard   = 4.0;
         
         // Time for the shooter to reach stable speed.
