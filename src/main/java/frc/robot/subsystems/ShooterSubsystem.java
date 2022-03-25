@@ -15,7 +15,7 @@ public class ShooterSubsystem extends SubsystemBase {
   private final WPI_VictorSPX m_motor = new WPI_VictorSPX(Shooter.kCANMotorShooter);
 
   // Internal States
-  private double m_motorVoltage = SmartDashboard.getNumber("Shooter_Voltage", 1.00);
+  private double m_motorVoltage = Shooter.kShooterVoltageLowGoal;
   private boolean m_activated;
 
   // Class Constructor
@@ -24,10 +24,17 @@ public class ShooterSubsystem extends SubsystemBase {
     m_motor.setInverted(false);
 
     // Initializa states
-    this.setVoltage(Shooter.kShooterVoltageLowGoal);
+    this.setVoltage(m_motorVoltage);
     this.deactivate();
   }  
-      
+
+  // Periodic Updates
+  @Override
+  public void periodic(){
+    m_motorVoltage = SmartDashboard.getNumber("Shooter_Voltage", Shooter.kShooterVoltageLowGoal);
+    m_motor.setVoltage(m_motorVoltage);
+  }
+
   // Start Spinning
   public void activate(double voltage){
     m_motor.setVoltage(voltage);
