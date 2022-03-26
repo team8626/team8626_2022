@@ -18,8 +18,8 @@ import frc.robot.subsystems.DriveSubsystem;
  * */
 public class ArcadeDrive extends CommandBase {
   private final DriveSubsystem m_drivetrain;
-  private final DoubleSupplier m_speed;
-  private final DoubleSupplier m_rotation;
+  private final double m_speed;
+  private final double m_rotation;
 
   /**
    * Creates a new ArcadeDrive command.
@@ -30,6 +30,13 @@ public class ArcadeDrive extends CommandBase {
    */
   public ArcadeDrive(DoubleSupplier speed, DoubleSupplier rotation, DriveSubsystem drivetrain) {
     m_drivetrain = drivetrain;
+    m_speed = speed.getAsDouble();
+    m_rotation = rotation.getAsDouble();
+    addRequirements(m_drivetrain);
+  }
+
+  public ArcadeDrive(double speed, double rotation, DriveSubsystem drivetrain) {
+    m_drivetrain = drivetrain;
     m_speed = speed;
     m_rotation = rotation;
     addRequirements(m_drivetrain);
@@ -38,7 +45,7 @@ public class ArcadeDrive extends CommandBase {
   // Called repeatedly when this Command is scheduled to run
   @Override
   public void execute() {
-    m_drivetrain.arcadeDrive(m_speed.getAsDouble(), m_rotation.getAsDouble());
+    m_drivetrain.arcadeDrive(m_speed, m_rotation);
   }
 
   // Make this return true when this Command no longer needs to run execute()

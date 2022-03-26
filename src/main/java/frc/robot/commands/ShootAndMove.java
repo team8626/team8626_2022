@@ -10,22 +10,28 @@ package frc.robot.commands;
 // WPI Library dependencies
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
+import frc.robot.Constants.Shooter;
+import frc.robot.Constants.Storage;
+import frc.robot.subsystems.DriveSubsystem;
 // Team8626 Libraries
-import frc.robot.subsystems.IntakeSubsystem;
+import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.StorageSubsystem;
 //import frc.robot.commands.StoreCargo;
 
 /**
- * Get the robot ready to collect Cargo.
- *      - Get Intake Out
- *      - Start Loading the Front Storage Unit
- * 
- * If the Front Storage is already in use, this will do nothing.
+ * Quick Autonomous mode routine
+ * Shoot and drive backwards
  **/
-public class PrepareToCollect extends ParallelCommandGroup {
+public class ShootAndMove extends ParallelCommandGroup {
   // @SuppressWarnings({ "PMD.UnusedPrivateField", "PMD.SingularField" })
-  private final IntakeSubsystem  m_intake;
+  private final DriveSubsystem  m_drivetrain;
+  private final ShooterSubsystem  m_shooter;
   private final StorageSubsystem m_storage;
+
+  private double m_driveSpeed = -1.0;
+  private double m_driveRotation = 0.0;
 
   /**
    * Creates a new PrepareToCollect command.
@@ -33,31 +39,33 @@ public class PrepareToCollect extends ParallelCommandGroup {
    * @param intake  The Intake
    * @param storage The Storage
    */
-  public PrepareToCollect(IntakeSubsystem intake, StorageSubsystem storage) {
-    m_intake = intake;
+  public ShootAndMove(DriveSubsystem drivetrain, StorageSubsystem storage, ShooterSubsystem shooter) {
+    m_drivetrain = drivetrain;
+    m_shooter = shooter;
     m_storage = storage;
 
     addCommands(
-        // Activate the Intake
-        new InstantCommand(m_intake::activate, m_intake),
+        new SequentialCommandGroup(
+            new InstantCommand(m_shooter::activate, m_shooter),
+            new WaitUntilCommand(Shooter.kShooterSpinSeconds),
+            new UnloadStorageUnit(m_storage.getBackUnit()).withTimeout(Storage.kTimeoutStorageUnit),
+            new InstantCommand(m_shooter::deactivate, m_shooter),
 
-        // Activate the Storage for loading
-        new StoreCargo(m_storage));
+            // Drive Back until Timeout
+            new ArcadeDrive(m_driveSpeed, m_driveRotation, m_drivetrain)
+              .withTimeout(1.2)
+        )
+    );
   }
 
   @Override
   public boolean isFinished() {
-    boolean ret_value = false;
-    if(m_storage.isFull() == true) {
-      ret_value = true;
-    }
-    return ret_value;
+    return false;
   }
 
   // Called once after isFinished returns true
   @Override
   public void end(boolean interrupted) {
-    // Deactivate the Intake
-    new InstantCommand(m_intake::deactivate, m_intake);
+    // Nothing to be done, all commands have timeouts
   }
 }
