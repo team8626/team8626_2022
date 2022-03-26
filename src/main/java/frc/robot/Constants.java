@@ -88,7 +88,7 @@ public final class Constants {
         public static I2C.Port kI2CColorSensorPortBack  = I2C.Port.kMXP;
 
         // Timeout for Storage Units
-        public static int kTimeoutStorageUnit= 10;
+        public static int kTimeoutStorageUnit= 5;
 
         // USing Color Sensors
         public static boolean kIsUsingColorSensors = false;
@@ -119,7 +119,7 @@ public final class Constants {
         public static double kShooterVoltageDiscard   = 4.0;
         
         // Time for the shooter to reach stable speed.
-        public static int kShooterSpinSeconds = 2;
+        public static int kShooterSpinSeconds = 5;
     }
     
     // Controller station constants
