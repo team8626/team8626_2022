@@ -7,9 +7,10 @@ package frc.robot.commands;
 // Java Libraries
 import java.util.function.DoubleSupplier;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 // WPI Library dependencies
 import edu.wpi.first.wpilibj2.command.CommandBase;
-
+import frc.robot.DashBoard;
 // Team8626 Libraries
 import frc.robot.subsystems.DriveSubsystem;
 
@@ -17,9 +18,9 @@ import frc.robot.subsystems.DriveSubsystem;
  * Have the robot drive arcade style. 
  * */
 public class ArcadeDrive extends CommandBase {
-  private final DriveSubsystem m_drivetrain;
-  private final double m_speed;
-  private final double m_rotation;
+  private DriveSubsystem m_drivetrain;
+  private DoubleSupplier m_speed;
+  private DoubleSupplier m_rotation;
 
   /**
    * Creates a new ArcadeDrive command.
@@ -30,22 +31,25 @@ public class ArcadeDrive extends CommandBase {
    */
   public ArcadeDrive(DoubleSupplier speed, DoubleSupplier rotation, DriveSubsystem drivetrain) {
     m_drivetrain = drivetrain;
-    m_speed = speed.getAsDouble();
-    m_rotation = rotation.getAsDouble();
-    addRequirements(m_drivetrain);
-  }
-
-  public ArcadeDrive(double speed, double rotation, DriveSubsystem drivetrain) {
-    m_drivetrain = drivetrain;
     m_speed = speed;
     m_rotation = rotation;
     addRequirements(m_drivetrain);
   }
 
+  // public ArcadeDrive(double speed, double rotation, DriveSubsystem drivetrain) {
+  //   m_drivetrain = drivetrain;
+  //   m_speed = speed;
+  //   m_rotation = rotation;
+  //   addRequirements(m_drivetrain);
+  // }
+
   // Called repeatedly when this Command is scheduled to run
   @Override
   public void execute() {
-    m_drivetrain.arcadeDrive(m_speed, m_rotation);
+    SmartDashboard.putNumber("Speed",m_speed.getAsDouble());
+    SmartDashboard.putNumber("Rot",m_rotation.getAsDouble());
+    
+    m_drivetrain.arcadeDrive(m_speed.getAsDouble(), m_rotation.getAsDouble());
   }
 
   // Make this return true when this Command no longer needs to run execute()
@@ -57,6 +61,6 @@ public class ArcadeDrive extends CommandBase {
   // Called once after isFinished returns true
   @Override
   public void end(boolean interrupted) {
-    m_drivetrain.arcadeDrive(0, 0);
+    //m_drivetrain.arcadeDrive(0, 0);
   }
 }

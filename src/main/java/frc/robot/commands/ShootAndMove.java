@@ -48,12 +48,13 @@ public class ShootAndMove extends ParallelCommandGroup {
         new SequentialCommandGroup(
             new InstantCommand(m_shooter::activate, m_shooter),
             new WaitUntilCommand(Shooter.kShooterSpinSeconds),
-            new UnloadStorageUnit(m_storage.getBackUnit()).withTimeout(Storage.kTimeoutStorageUnit),
-            new InstantCommand(m_shooter::deactivate, m_shooter),
+            new UnloadStorageUnit(m_storage.getBackUnit())
+              .withTimeout(Storage.kTimeoutStorageUnit),
+            new InstantCommand(m_shooter::deactivate, m_shooter)
 
             // Drive Back until Timeout
-            new ArcadeDrive(m_driveSpeed, m_driveRotation, m_drivetrain)
-              .withTimeout(1.2)
+            //new ArcadeDrive(m_driveSpeed, m_driveRotation, m_drivetrain)
+            //  .withTimeout(1.2)
         )
     );
   }

@@ -125,6 +125,6 @@ public final class Constants {
     // Controller station constants
     public final static class Controller {
         public static int kJoystickPort = 0;
-        public static int kGamepadPort = 1;
+        public static int kGamepadPort  = 1;
     }
 }

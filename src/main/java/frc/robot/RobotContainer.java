@@ -150,18 +150,18 @@ public class RobotContainer {
     
     // Climber Activated if Left Bumper is held. 
     // When Released, it will deactivate.
-    (new JoystickButton(m_gameController, Button.kStart.value))
-       .whileHeld(new InstantCommand(m_climber::setEnabled, m_climber))
-       .whenReleased(new InstantCommand(m_climber::setDisabled, m_climber));
+    // (new JoystickButton(m_gameController, Button.kStart.value))
+    //    .whileHeld(new InstantCommand(m_climber::setEnabled, m_climber))
+    //    .whenReleased(new InstantCommand(m_climber::setDisabled, m_climber));
 
   }
 
   /**
    * Get Start command from the autonomous controller (Dashboard)
    */
-  public static  Command getAutonomousCommand() {
+  public Command getAutonomousCommand() {
     Command retval = null;
-    retval = new ShootAndMove(m_drivetrain, m_storage, m_shooter);
+    //retval = new ShootAndMove(m_drivetrain, m_storage, m_shooter);
     // try {
     //   retval = m_autoControl.getStartCommand(); // TODO: Ready for that or just shoot and drive 2 seconds?
     // } catch (IOException e) {

@@ -31,8 +31,8 @@ public class ShooterSubsystem extends SubsystemBase {
   // Periodic Updates
   @Override
   public void periodic(){
-    m_motorVoltage = SmartDashboard.getNumber("Shooter_Voltage", Shooter.kShooterVoltageLowGoal);
-    m_motor.setVoltage(m_motorVoltage);
+    //m_motorVoltage = SmartDashboard.getNumber("Shooter_Voltage", Shooter.kShooterVoltageLowGoal);
+    //m_motor.setVoltage(m_motorVoltage);
   }
 
   // Start Spinning
