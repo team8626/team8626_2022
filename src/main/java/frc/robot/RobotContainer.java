@@ -120,18 +120,6 @@ public class RobotContainer {
    */
   private void configureButtonBindings() {
 
-    // TODO @ned123 This wont word as this is not periodic. 
-    // Need to use Trigger and InstantCommand(m_drivetrain::setLowSpeed(), m_drivetrain)
-    // Adjust speed if button is held down
-    // if (m_flightJoystick.getRawButtonPressed(2)) {
-     // m_drivetrain.setLowSpeed();
-    //}
-    // TODO @ned123 This wont word as this is not periodic. 
-    // Need to use Trigger and InstantCommand(m_drivetrain::setHighSpeed(), m_drivetrain)
-    // if (m_flightJoystick.getRawButtonReleased(2)) {
-      // m_drivetrain.setHighSpeed();
-  //  }
-
     // Activate the intake Mecanism
     (new JoystickButton(m_gameController, Button.kY.value))
     .whenPressed(new PrepareToCollect(m_intake, m_storage));
@@ -140,9 +128,9 @@ public class RobotContainer {
     (new JoystickButton(m_gameController, Button.kB.value))
     .whenPressed(new StopCollecting(m_intake, m_storage));
 
-    // Start Shooting Sequence
-    (new JoystickButton(m_gameController, Button.kStart.value))
-    .whenPressed(new LaunchCargo(m_storage, m_shooter));
+    // Start Automatic Shooting Sequence
+    // (new JoystickButton(m_gameController, Button.kStart.value))
+    // .whenPressed(new LaunchCargo(m_storage, m_shooter));
 
     // Start Manual Shooting
     (new JoystickButton(m_gameController, Button.kX.value))
@@ -153,25 +141,18 @@ public class RobotContainer {
     .whenPressed(new InstantCommand(m_shooter::deactivate, m_shooter));
 
     // Adjust Shooting power
-    (new JoystickButton(m_gameController, Button.kLeftBumper.value))
-        .whenPressed(new InstantCommand(m_shooter::speedDown, m_shooter));
-    (new JoystickButton(m_gameController, Button.kRightBumper.value))
-        .whenPressed(new InstantCommand(m_shooter::speedUp, m_shooter));
+    // (new JoystickButton(m_gameController, Button.kLeftBumper.value))
+    //     .whenPressed(new InstantCommand(m_shooter::speedDown, m_shooter));
+    // (new JoystickButton(m_gameController, Button.kRightBumper.value))
+    //     .whenPressed(new InstantCommand(m_shooter::speedUp, m_shooter));
     
     
     // Climber Activated if Left Bumper is held. 
     // When Released, it will deactivate.
-    // (new JoystickButton(m_gameController, Button.kLeftBumper.value))
-    //   .whileHeld(new InstantCommand(m_climber::setEnabled, m_climber))
-    //   .whenReleased(new InstantCommand(m_climber::setDisabled, m_climber));
+    (new JoystickButton(m_gameController, Button.kStart.value))
+       .whileHeld(new InstantCommand(m_climber::setEnabled, m_climber))
+       .whenReleased(new InstantCommand(m_climber::setDisabled, m_climber));
 
-      (new JoystickButton(m_gameController, Button.kRightBumper.value))
-      .whileHeld(new InstantCommand(m_shooter::activate, m_shooter))
-      .whenReleased(new InstantCommand(m_shooter::deactivate, m_shooter));
-
-      // TODO: Get rid of this; temporary for updating SmartDashboard shooter voltage slider
-    (new JoystickButton(m_gameController, Button.kX.value))
-    .whenPressed(new InstantCommand(m_shooter::activate, m_shooter));
   }
 
   /**
