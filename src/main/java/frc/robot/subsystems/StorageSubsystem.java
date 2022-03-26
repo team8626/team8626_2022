@@ -5,6 +5,7 @@ package frc.robot.subsystems;
 
 // WPI Library dependencies
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.PrintCommand;
 
@@ -26,7 +27,10 @@ public class StorageSubsystem extends SubsystemBase {
   }  
 
   @Override
-  public void periodic() {}
+  public void periodic() {
+    SmartDashboard.putString("Front Storage", m_unitFront.getColorAsString());
+    SmartDashboard.putString("Back Storage", m_unitBack.getColorAsString());
+  }
 
   // Push all Cargos towards the Back...
   public void storeForward(){

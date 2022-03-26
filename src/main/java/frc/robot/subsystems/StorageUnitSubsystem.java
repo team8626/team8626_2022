@@ -25,6 +25,7 @@ public class StorageUnitSubsystem extends SubsystemBase {
   private final ColorMatch m_colorMatcher = new ColorMatch();
 
   private Color m_loadedColor = null;
+  private String m_loadedColorString = "Not Initialized";
 
   // Class Constructor
   public StorageUnitSubsystem(int CANID, I2C.Port I2CPort) {
@@ -43,6 +44,13 @@ public class StorageUnitSubsystem extends SubsystemBase {
     readLoadedColor();
   }  
 
+   // Periodic Updates
+   @Override
+   public void periodic(){
+    // Update Loaded Color
+    readLoadedColor();
+  }
+
   // Start conveying
   public void start(){
     m_motor.set(1.0);
@@ -57,8 +65,17 @@ public class StorageUnitSubsystem extends SubsystemBase {
   private void readLoadedColor(){
     //Run the color match algorithm on our detected color
     ColorMatchResult match = m_colorMatcher.matchClosestColor(m_colorSensor.getColor());
-
     m_loadedColor = match.color;
+    
+    if(m_loadedColor == Cargo.kBlue){
+      m_loadedColorString = "BLUE";
+    }
+    else if(m_loadedColor == Cargo.kRed){
+      m_loadedColorString = "RED";
+    }
+    else{
+      m_loadedColorString = "EMPTY";
+    }         
   }
 
   // Return Current Loaded Color
@@ -70,11 +87,10 @@ public class StorageUnitSubsystem extends SubsystemBase {
   public boolean isEmpty(){
     boolean ret_value = true;
     
-    if(m_loadedColor == null){
+    if((m_loadedColor == Cargo.kBlue) || (m_loadedColor == Cargo.kRed)){
       ret_value = false;
     }
     return ret_value;
-    // TODO: whne is m_loadedCOlor set to null?
   }
 
   /** 
@@ -85,8 +101,7 @@ public class StorageUnitSubsystem extends SubsystemBase {
       m_motor.set(newPower);
   }
 
-  @Override
-  public void periodic() {
+  public String getColorAsString(){
+    return m_loadedColorString;
   }
-
 }
