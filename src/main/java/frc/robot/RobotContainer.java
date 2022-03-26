@@ -23,6 +23,7 @@ import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.ClimberSubsystem;
 
 import frc.robot.commands.PushCargo;
+import frc.robot.commands.ShootAndMove;
 import frc.robot.commands.ArcadeDrive;
 import frc.robot.commands.PrepareToCollect;
 import frc.robot.commands.StopCollecting;
@@ -40,9 +41,9 @@ import frc.robot.Constants.Storage;
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private final static DriveSubsystem m_drivetrain = new DriveSubsystem();
-  private final StorageSubsystem m_storage = new StorageSubsystem();
+  private final static StorageSubsystem m_storage = new StorageSubsystem();
   private final IntakeSubsystem m_intake = new IntakeSubsystem();
-  private final ShooterSubsystem m_shooter = new ShooterSubsystem();
+  private final static ShooterSubsystem m_shooter = new ShooterSubsystem();
   private final ClimberSubsystem m_climber = new ClimberSubsystem();
 
   // private final ArcadeDrive m_autoCommand = new ArcadeDrive(m_DriveSubsystem);
@@ -160,12 +161,13 @@ public class RobotContainer {
    */
   public static  Command getAutonomousCommand() {
     Command retval = null;
-    try {
-      retval = m_autoControl.getStartCommand(); // TODO: Ready for that or just shoot and drive 2 seconds?
-    } catch (IOException e) {
-      // TODO Auto-generated catch block
-      e.printStackTrace();
-    }
+    retval = new ShootAndMove(m_drivetrain, m_storage, m_shooter);
+    // try {
+    //   retval = m_autoControl.getStartCommand(); // TODO: Ready for that or just shoot and drive 2 seconds?
+    // } catch (IOException e) {
+    //   // TODO Auto-generated catch block
+    //   e.printStackTrace();
+    // }
     return retval;
   }
 }
