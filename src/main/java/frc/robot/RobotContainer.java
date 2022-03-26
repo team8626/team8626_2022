@@ -102,12 +102,12 @@ public class RobotContainer {
     // Back Storage Controlled by Left Joystick on Gamepad (X Axis)
     m_storage.getFrontUnit().setDefaultCommand(        
       new ControlStorageUnit(
-        () -> m_gameController.getLeftX(),
+        () -> -m_gameController.getLeftX(),
         m_storage.getFrontUnit()));
 
     m_storage.getBackUnit().setDefaultCommand(        
       new ControlStorageUnit(
-        () -> m_gameController.getRightX(),
+        () -> -m_gameController.getRightX(),
         m_storage.getBackUnit()));
   }
 
@@ -161,7 +161,7 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     Command retval = null;
-    //retval = new ShootAndMove(m_drivetrain, m_storage, m_shooter);
+    retval = new ShootAndMove(m_drivetrain, m_storage, m_shooter);
     // try {
     //   retval = m_autoControl.getStartCommand(); // TODO: Ready for that or just shoot and drive 2 seconds?
     // } catch (IOException e) {

@@ -32,7 +32,7 @@ public class StorageUnitSubsystem extends SubsystemBase {
 
     // Set motor inverted or not...
     m_motor = new WPI_VictorSPX(CANID);
-    m_motor.setInverted(false);
+    m_motor.setInverted(true);
 
     // Set Color Sensor
     m_colorSensorPort = I2CPort;

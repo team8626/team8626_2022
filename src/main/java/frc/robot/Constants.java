@@ -104,8 +104,8 @@ public final class Constants {
     // Climber subsystem constants
     public final static class Climber {
         // CAN Bus Addresses for Motors
-        public static int kCANMotorClimber  = 11;   // USING VICTOR SPX
-        //public static int kCANMotorClimberRight = 11;   // USING VICTOR SPX
+        public static int kCANMotorClimberLeft  = 11;   // USING VICTOR SPX
+        public static int kCANMotorClimberRight = 22;   // USING VICTOR SPX
     }
 
     // Shooter subsystem constants

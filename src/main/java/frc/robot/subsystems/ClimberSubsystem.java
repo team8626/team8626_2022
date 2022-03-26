@@ -11,14 +11,16 @@ import frc.robot.Constants.Climber;
 */
 public class ClimberSubsystem extends SubsystemBase {
   // Climber Motor
-  private final WPI_VictorSPX m_motor  = new WPI_VictorSPX(Climber.kCANMotorClimber);
+  private final WPI_VictorSPX m_motorLeft  = new WPI_VictorSPX(Climber.kCANMotorClimberLeft);
+  private final WPI_VictorSPX m_motorRight  = new WPI_VictorSPX(Climber.kCANMotorClimberRight);
 
   private boolean m_enabled = true;
 
   // Class Constructor
   public ClimberSubsystem() {
     // Set motor inverted or not...
-    m_motor.setInverted(false);
+    m_motorLeft.setInverted(false);
+    m_motorRight.setInverted(true);
   }  
       
   /**
@@ -27,7 +29,8 @@ public class ClimberSubsystem extends SubsystemBase {
    */
   public void setPower(double newPower){
     if(m_enabled){
-      m_motor.set(newPower);
+      m_motorLeft.set(newPower);
+      m_motorRight.set(newPower);
     }
   }
 

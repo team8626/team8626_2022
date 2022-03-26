@@ -4,6 +4,8 @@
 
 package frc.robot.commands;
 
+import java.util.function.DoubleSupplier;
+
 // Java Libraries
 // import java.util.function.DoubleSupplier;
 
@@ -11,6 +13,7 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import frc.robot.Constants.Shooter;
 import frc.robot.Constants.Storage;
@@ -24,13 +27,13 @@ import frc.robot.subsystems.StorageSubsystem;
  * Quick Autonomous mode routine
  * Shoot and drive backwards
  **/
-public class ShootAndMove extends ParallelCommandGroup {
+public class ShootAndMove extends SequentialCommandGroup {
   // @SuppressWarnings({ "PMD.UnusedPrivateField", "PMD.SingularField" })
   private final DriveSubsystem  m_drivetrain;
   private final ShooterSubsystem  m_shooter;
   private final StorageSubsystem m_storage;
 
-  private double m_driveSpeed = -1.0;
+  private double m_driveSpeed = 1.0;
   private double m_driveRotation = 0.0;
 
   /**
@@ -47,14 +50,17 @@ public class ShootAndMove extends ParallelCommandGroup {
     addCommands(
         new SequentialCommandGroup(
             new InstantCommand(m_shooter::activate, m_shooter),
-            new WaitUntilCommand(Shooter.kShooterSpinSeconds),
-            new UnloadStorageUnit(m_storage.getBackUnit())
-              .withTimeout(Storage.kTimeoutStorageUnit),
-            new InstantCommand(m_shooter::deactivate, m_shooter)
+            new WaitCommand(Shooter.kShooterSpinSeconds),
+            new UnloadStorageUnit(m_storage.getFrontUnit())
+             .withTimeout(Storage.kTimeoutStorageUnit),
+                // new DeliverCargo(m_storage)
+                //   .withTimeout(Storage.kTimeoutStorageUnit),
+
+            //new InstantCommand(m_shooter::deactivate, m_shooter),
 
             // Drive Back until Timeout
-            //new ArcadeDrive(m_driveSpeed, m_driveRotation, m_drivetrain)
-            //  .withTimeout(1.2)
+            new TankDrive(() -> m_driveSpeed, () -> -m_driveSpeed, m_drivetrain)
+              .withTimeout(1.2)
         )
     );
   }
