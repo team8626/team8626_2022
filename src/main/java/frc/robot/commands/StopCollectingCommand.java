@@ -22,7 +22,7 @@ import frc.robot.subsystems.StorageSubsystem;
  * 
  * If the Front Storage is already in use, this will do nothing.
  **/
-public class StopCollecting extends ParallelCommandGroup {
+public class StopCollectingCommand extends ParallelCommandGroup {
   // @SuppressWarnings({ "PMD.UnusedPrivateField", "PMD.SingularField" })
   private final IntakeSubsystem  m_intake;
   private final StorageSubsystem m_storage;
@@ -33,7 +33,7 @@ public class StopCollecting extends ParallelCommandGroup {
    * @param intake  The Intake
    * @param storage The Storage
    */
-  public StopCollecting(IntakeSubsystem intake, StorageSubsystem storage) {
+  public StopCollectingCommand(IntakeSubsystem intake, StorageSubsystem storage) {
     m_intake = intake;
     m_storage = storage;
 

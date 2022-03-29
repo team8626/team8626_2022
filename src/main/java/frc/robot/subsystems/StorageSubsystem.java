@@ -10,8 +10,8 @@ import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.PrintCommand;
 
 // Team8626 Libraries
-import frc.robot.commands.LoadStorageUnit;
-import frc.robot.commands.UnloadStorageUnit;
+import frc.robot.commands.LoadStorageUnitCommand;
+import frc.robot.commands.UnloadStorageUnitCommand;
 import frc.robot.Constants.Storage;
 
 /* 
@@ -42,8 +42,8 @@ public class StorageSubsystem extends SubsystemBase {
           // Push the Cargo "Forward"
           new ParallelCommandGroup(
             new PrintCommand("[STORAGE] Moving Cargo Forward"),
-            new LoadStorageUnit(m_unitBack),
-            new UnloadStorageUnit(m_unitFront).withTimeout(Storage.kTimeoutStorageUnit)
+            new LoadStorageUnitCommand(m_unitBack),
+            new UnloadStorageUnitCommand(m_unitFront).withTimeout(Storage.kTimeoutStorageUnit)
           );
         }
     } 

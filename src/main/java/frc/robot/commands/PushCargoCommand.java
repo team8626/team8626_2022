@@ -11,39 +11,40 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
 // Team8626 Libraries
-import frc.robot.subsystems.StorageUnitSubsystem;
+import frc.robot.subsystems.StorageSubsystem;
 
 /**
- * Unload thge Storage Unit (Start Motor until timeout)
- **/
-public class UnloadStorageUnit extends CommandBase {
-  private final StorageUnitSubsystem m_storageUnit;
+ * This command will push cargo from front unit to back unit.
+ * If Back unit is already in use, nothing will happen.
+ * */
+public class PushCargoCommand extends CommandBase {
+  private final StorageSubsystem m_storage;
 
   /**
-   * Creates a new UnloadStorageUnit command.
+   * Creates a new PushCargo command.
+   * 
    * @param storage The storage system to receive cargo from
    */
-  public UnloadStorageUnit(StorageUnitSubsystem storageUnit) {
-    m_storageUnit = storageUnit;
-   
-    addRequirements(m_storageUnit);
+  public PushCargoCommand(StorageSubsystem storage) {
+    m_storage = storage;
+
+    addRequirements(m_storage);
   }
 
   // Called repeatedly when this Command is scheduled to run
   @Override
   public void execute() {
-    m_storageUnit.start();
+    m_storage.storeForward();
   }
 
   @Override
   public boolean isFinished() {
-    // Stops on Timeout...
-    return false;
+    return false; // Never Stops, always try to push Cargo...
   }
 
   // Called once after isFinished returns true
   @Override
   public void end(boolean interrupted) {
-    m_storageUnit.stop();
+    // TODO: Do we need to stop the motors or storage units? NO WE ASSUME TIMEOUT WILL DO IT!
   }
 }

@@ -11,10 +11,8 @@ import java.util.function.DoubleSupplier;
 
 // WPI Library dependencies
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
-import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import frc.robot.Constants.Shooter;
 import frc.robot.Constants.Storage;
 import frc.robot.subsystems.DriveSubsystem;
@@ -27,7 +25,7 @@ import frc.robot.subsystems.StorageSubsystem;
  * Quick Autonomous mode routine
  * Shoot and drive backwards
  **/
-public class ShootAndMove extends SequentialCommandGroup {
+public class ShootAndMoveCommand extends SequentialCommandGroup {
   // @SuppressWarnings({ "PMD.UnusedPrivateField", "PMD.SingularField" })
   private final DriveSubsystem  m_drivetrain;
   private final ShooterSubsystem  m_shooter;
@@ -42,7 +40,7 @@ public class ShootAndMove extends SequentialCommandGroup {
    * @param intake  The Intake
    * @param storage The Storage
    */
-  public ShootAndMove(DriveSubsystem drivetrain, StorageSubsystem storage, ShooterSubsystem shooter) {
+  public ShootAndMoveCommand(DriveSubsystem drivetrain, StorageSubsystem storage, ShooterSubsystem shooter) {
     m_drivetrain = drivetrain;
     m_shooter = shooter;
     m_storage = storage;
@@ -51,7 +49,7 @@ public class ShootAndMove extends SequentialCommandGroup {
         new SequentialCommandGroup(
             new InstantCommand(m_shooter::activate, m_shooter),
             new WaitCommand(Shooter.kShooterSpinSeconds),
-            new UnloadStorageUnit(m_storage.getFrontUnit())
+            new UnloadStorageUnitCommand(m_storage.getFrontUnit())
              .withTimeout(Storage.kTimeoutStorageUnit),
                 // new DeliverCargo(m_storage)
                 //   .withTimeout(Storage.kTimeoutStorageUnit),
@@ -59,7 +57,7 @@ public class ShootAndMove extends SequentialCommandGroup {
             //new InstantCommand(m_shooter::deactivate, m_shooter),
 
             // Drive Back until Timeout
-            new TankDrive(() -> m_driveSpeed, () -> -m_driveSpeed, m_drivetrain)
+            new TankDriveCommand(() -> m_driveSpeed, () -> -m_driveSpeed, m_drivetrain)
               .withTimeout(1.2)
         )
     );

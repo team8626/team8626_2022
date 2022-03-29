@@ -15,8 +15,8 @@ import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.DashBoard.AutoSelec;
 import frc.robot.DashBoard.StartPosition;
 import frc.robot.subsystems.DriveSubsystem;
-import frc.robot.commands.FollowTrajectory;
-import frc.robot.commands.TestTrajectory;
+import frc.robot.commands.FollowTrajectoryCommand;
+import frc.robot.commands.TestTrajectoryCommand;
 
 public class Autonomous {
 
@@ -40,17 +40,17 @@ public class Autonomous {
             default: 
             case EXIT: 
                 System.out.println("Exit (Universal)");
-                startCommand = new FollowTrajectory("Exit.json", m_drivetrain);
+                startCommand = new FollowTrajectoryCommand("Exit.json", m_drivetrain);
                 break;
              
             case TEST: System.out.println("Running Test Trajectory)");
-                startCommand = new TestTrajectory(m_drivetrain);            
+                startCommand = new TestTrajectoryCommand(m_drivetrain);            
                 break;
 
             case EXAMPLE: 
                 startCommand = 
                     new SequentialCommandGroup(
-                        new FollowTrajectory("example.json", m_drivetrain),
+                        new FollowTrajectoryCommand("example.json", m_drivetrain),
                         new WaitCommand(5)); 
 
             case GOAL_FIRST:

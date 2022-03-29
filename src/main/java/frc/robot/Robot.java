@@ -4,8 +4,11 @@
 
 package frc.robot;
 
+import java.io.IOException;
+
 import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.cscore.UsbCamera;
+import edu.wpi.first.cscore.VideoException;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
@@ -36,8 +39,13 @@ public class Robot extends TimedRobot {
     m_robotContainer = new RobotContainer();
 
     // Start the Camera Server
-    UsbCamera camera = CameraServer.startAutomaticCapture();
-    camera.setResolution(640, 480);
+    try {
+      UsbCamera camera = CameraServer.startAutomaticCapture(0);
+      camera.setResolution(640, 480);
+    } catch (VideoException e) {
+      // TODO Auto-generated catch block
+     e.printStackTrace();
+    }
   }
 
   /**
