@@ -16,7 +16,7 @@ import frc.robot.subsystems.StorageSubsystem;
 /**
  * Have the robot drive arcade style. 
  * */
-public class DeliverCargoCommand extends CommandBase {
+public class DeliverCargo extends CommandBase {
   private final StorageSubsystem m_storage;
 
   /**
@@ -26,7 +26,7 @@ public class DeliverCargoCommand extends CommandBase {
    * 
    * @param storage The storage system to receive cargo from
    */
-  public DeliverCargoCommand(StorageSubsystem storage) {
+  public DeliverCargo(StorageSubsystem storage) {
     m_storage = storage;
 
     addRequirements(m_storage);
@@ -36,7 +36,7 @@ public class DeliverCargoCommand extends CommandBase {
   @Override
   public void execute() {
     // Unload the BACK UNIT
-    new UnloadStorageUnitCommand(m_storage.getBackUnit()).withTimeout(Storage.kTimeoutStorageUnit);
+    new UnloadStorageUnit(m_storage.getBackUnit()).withTimeout(Storage.kTimeoutStorageUnit);
   }
 
   // Make this return true when this Command no longer needs to run execute()

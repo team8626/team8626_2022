@@ -22,7 +22,7 @@ import frc.robot.subsystems.StorageSubsystem;
  * 
  * If the Front Storage is already in use, this will do nothing.
  **/
-public class PrepareToCollectCommand extends ParallelCommandGroup {
+public class PrepareToCollect extends ParallelCommandGroup {
   // @SuppressWarnings({ "PMD.UnusedPrivateField", "PMD.SingularField" })
   private final IntakeSubsystem  m_intake;
   private final StorageSubsystem m_storage;
@@ -33,7 +33,7 @@ public class PrepareToCollectCommand extends ParallelCommandGroup {
    * @param intake  The Intake
    * @param storage The Storage
    */
-  public PrepareToCollectCommand(IntakeSubsystem intake, StorageSubsystem storage) {
+  public PrepareToCollect(IntakeSubsystem intake, StorageSubsystem storage) {
     m_intake = intake;
     m_storage = storage;
 
@@ -42,7 +42,7 @@ public class PrepareToCollectCommand extends ParallelCommandGroup {
         new InstantCommand(m_intake::activate, m_intake),
 
         // Activate the Storage for loading
-        new StoreCargoCommand(m_storage));
+        new StoreCargo(m_storage));
   }
 
   @Override

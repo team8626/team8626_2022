@@ -11,31 +11,34 @@ import java.util.function.DoubleSupplier;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
 // Team8626 Libraries
-import frc.robot.subsystems.ClimberSubsystem;
+import frc.robot.subsystems.DriveSubsystem;
 
 /**
- * Have the robot drive arcade style. 
+ * Have the robot drive tank style. 
  * */
-public class ControlClimberCommand extends CommandBase {
-  private final ClimberSubsystem m_climber;
-  private final DoubleSupplier m_speed;
+public class TankDrive extends CommandBase {
+  private final DriveSubsystem m_drivetrain;
+  private final DoubleSupplier m_LeftSpeed;
+  private final DoubleSupplier m_RightSpeed;
 
   /**
-   * Creates a new Climb command.
+   * Creates a new ArcadeDrive command.
    *
-   * @param speed The control input for the speed of the climber
-   * @param climber The climber subsystem to drive
+   * @param speed The control input for the speed of the drive
+   * @param leftSpeed Left Side Speed
+   * @param rightSpeed Right Side Speed
    */
-  public ControlClimberCommand(DoubleSupplier speed, ClimberSubsystem climber) {
-    m_climber = climber;
-    m_speed = speed;
-    addRequirements(m_climber);
+  public TankDrive(DoubleSupplier leftSpeed, DoubleSupplier rightSpeed, DriveSubsystem drivetrain) {
+    m_drivetrain = drivetrain;
+    m_LeftSpeed = leftSpeed;
+    m_RightSpeed = rightSpeed;
+    addRequirements(m_drivetrain);
   }
 
   // Called repeatedly when this Command is scheduled to run
   @Override
   public void execute() {
-    m_climber.setPower(m_speed.getAsDouble());
+    m_drivetrain.tankDrive(m_LeftSpeed.getAsDouble(), m_RightSpeed.getAsDouble());
   }
 
   // Make this return true when this Command no longer needs to run execute()
@@ -47,6 +50,6 @@ public class ControlClimberCommand extends CommandBase {
   // Called once after isFinished returns true
   @Override
   public void end(boolean interrupted) {
-    m_climber.setPower(0);
+    m_drivetrain.tankDrive(0, 0);
   }
 }

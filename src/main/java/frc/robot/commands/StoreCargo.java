@@ -16,7 +16,7 @@ import frc.robot.subsystems.StorageSubsystem;
 /**
  * Have the robot drive arcade style. 
  * */
-public class StoreCargoCommand extends CommandBase {
+public class StoreCargo extends CommandBase {
   private final StorageSubsystem m_storage;
 
   /**
@@ -25,10 +25,10 @@ public class StoreCargoCommand extends CommandBase {
    * 
    * @param storage The storage system to receive cargo from
    */
-  public StoreCargoCommand(StorageSubsystem storage) {
+  public StoreCargo(StorageSubsystem storage) {
     m_storage = storage;
 
-    new LoadStorageUnitCommand(m_storage.getFrontUnit());
+    new LoadStorageUnit(m_storage.getFrontUnit());
     addRequirements(m_storage);
   }
 

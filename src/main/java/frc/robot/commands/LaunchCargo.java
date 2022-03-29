@@ -19,7 +19,7 @@ import frc.robot.Constants.Shooter;
 /**
  * Have the robot drive arcade style. 
  * */
-public class LaunchCargoCommand extends SequentialCommandGroup {
+public class LaunchCargo extends SequentialCommandGroup {
   private final ShooterSubsystem m_shooter;
   private final StorageSubsystem m_storage;
 
@@ -30,7 +30,7 @@ public class LaunchCargoCommand extends SequentialCommandGroup {
    * @param shooter The shooter
    * @param storage The storage system to receive cargo from
    */
-  public LaunchCargoCommand(StorageSubsystem storage, ShooterSubsystem shooter) {
+  public LaunchCargo(StorageSubsystem storage, ShooterSubsystem shooter) {
     m_shooter = shooter;
     m_storage = storage;
     
@@ -39,7 +39,7 @@ public class LaunchCargoCommand extends SequentialCommandGroup {
     addCommands(
       new InstantCommand(m_shooter::activate, m_shooter),
       new WaitUntilCommand(Shooter.kShooterSpinSeconds),
-      new DeliverCargoCommand(storage)
+      new DeliverCargo(storage)
     );
     addRequirements(m_shooter, m_storage);
   }

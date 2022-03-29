@@ -22,14 +22,14 @@ import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.ClimberSubsystem;
 
-import frc.robot.commands.PushCargoCommand;
-import frc.robot.commands.ShootAndMoveCommand;
-import frc.robot.commands.ArcadeDriveCommand;
-import frc.robot.commands.PrepareToCollectCommand;
-import frc.robot.commands.StopCollectingCommand;
-import frc.robot.commands.LaunchCargoCommand;
-import frc.robot.commands.ControlClimberCommand;
-import frc.robot.commands.ControlStorageUnitCommand;
+import frc.robot.commands.PushCargo;
+import frc.robot.commands.ShootAndMove;
+import frc.robot.commands.ArcadeDrive;
+import frc.robot.commands.PrepareToCollect;
+import frc.robot.commands.StopCollecting;
+import frc.robot.commands.LaunchCargo;
+import frc.robot.commands.ControlClimber;
+import frc.robot.commands.ControlStorageUnit;
 import frc.robot.Constants.Controller;
 import frc.robot.Constants.Storage;
 /**
@@ -46,7 +46,7 @@ public class RobotContainer {
   private final static ShooterSubsystem m_shooter = new ShooterSubsystem();
   private final ClimberSubsystem m_climber = new ClimberSubsystem();
 
-  // private final ArcadeDriveCommand m_autoCommand = new ArcadeDriveCommand(m_DriveSubsystem);
+  // private final ArcadeDrive m_autoCommand = new ArcadeDrive(m_DriveSubsystem);
  
   // Define controllers
   private final Joystick m_flightJoystick = new Joystick(Controller.kJoystickPort);
@@ -70,13 +70,13 @@ public class RobotContainer {
     // Always push Cargo Forward....
     if(Storage.kIsUsingColorSensors){
       m_storage.setDefaultCommand(        
-      new PushCargoCommand(
+      new PushCargo(
         m_storage));
     }
 
      // Always Read Joystick and control the drivetrain
      m_drivetrain.setDefaultCommand(    
-      new ArcadeDriveCommand(
+      new ArcadeDrive(
         () -> -m_flightJoystick.getX(), 
         () -> m_flightJoystick.getY(),
         // () -> m_gameController.getRightY(), 
@@ -84,7 +84,7 @@ public class RobotContainer {
         m_drivetrain));
 
       // m_drivetrain.setDefaultCommand(    
-      // new TankDriveCommand(
+      // new TankDrive(
       //   () -> m_gameController.getLeftY(), 
       //   () -> m_gameController.getRightY(),
       //   m_drivetrain));  
@@ -92,7 +92,7 @@ public class RobotContainer {
     // Always Read Joystick and control the climber arm
     // Note by default Climber arm is Disabled, will be enabled only when holding an extra button (see configureButtonBindings)
     m_climber.setDefaultCommand(        
-      new ControlClimberCommand(
+      new ControlClimber(
         () -> m_gameController.getRightY(),
         m_climber));
     //new InstantCommand(m_climber::setEnabled, m_climber);
@@ -101,12 +101,12 @@ public class RobotContainer {
     // Front Storage Controlled by Left Joystick on Gamepad (X Axis)
     // Back Storage Controlled by Left Joystick on Gamepad (X Axis)
     m_storage.getFrontUnit().setDefaultCommand(        
-      new ControlStorageUnitCommand(
+      new ControlStorageUnit(
         () -> -m_gameController.getLeftX(),
         m_storage.getFrontUnit()));
 
     m_storage.getBackUnit().setDefaultCommand(        
-      new ControlStorageUnitCommand(
+      new ControlStorageUnit(
         () -> -m_gameController.getRightX(),
         m_storage.getBackUnit()));
   }
@@ -123,11 +123,11 @@ public class RobotContainer {
 
     // Activate the intake Mecanism
     (new JoystickButton(m_gameController, Button.kY.value))
-    .whenPressed(new PrepareToCollectCommand(m_intake, m_storage));
+    .whenPressed(new PrepareToCollect(m_intake, m_storage));
 
     // Deactivate the intake Mechanism
     (new JoystickButton(m_gameController, Button.kB.value))
-    .whenPressed(new StopCollectingCommand(m_intake, m_storage));
+    .whenPressed(new StopCollecting(m_intake, m_storage));
 
     // Start Automatic Shooting Sequence
     // (new JoystickButton(m_gameController, Button.kStart.value))
@@ -142,10 +142,10 @@ public class RobotContainer {
     .whenPressed(new InstantCommand(m_shooter::deactivate, m_shooter));
 
     // Adjust Shooting power
-    (new JoystickButton(m_gameController, Button.kLeftBumper.value))
-        .whenPressed(new InstantCommand(m_shooter::speedDown, m_shooter));
-    (new JoystickButton(m_gameController, Button.kRightBumper.value))
-        .whenPressed(new InstantCommand(m_shooter::speedUp, m_shooter));
+    // (new JoystickButton(m_gameController, Button.kLeftBumper.value))
+    //     .whenPressed(new InstantCommand(m_shooter::speedDown, m_shooter));
+    // (new JoystickButton(m_gameController, Button.kRightBumper.value))
+    //     .whenPressed(new InstantCommand(m_shooter::speedUp, m_shooter));
     
     
     // Climber Activated if Left Bumper is held. 
@@ -161,7 +161,7 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     Command retval = null;
-    retval = new ShootAndMoveCommand(m_drivetrain, m_storage, m_shooter);
+    retval = new ShootAndMove(m_drivetrain, m_storage, m_shooter);
     // try {
     //   retval = m_autoControl.getStartCommand(); // TODO: Ready for that or just shoot and drive 2 seconds?
     // } catch (IOException e) {

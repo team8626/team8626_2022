@@ -11,34 +11,31 @@ import java.util.function.DoubleSupplier;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
 // Team8626 Libraries
-import frc.robot.subsystems.DriveSubsystem;
+import frc.robot.subsystems.StorageUnitSubsystem;
 
 /**
- * Have the robot drive tank style. 
+ * Have the robot drive arcade style. 
  * */
-public class TankDriveCommand extends CommandBase {
-  private final DriveSubsystem m_drivetrain;
-  private final DoubleSupplier m_LeftSpeed;
-  private final DoubleSupplier m_RightSpeed;
+public class ControlStorageUnit extends CommandBase {
+  private final StorageUnitSubsystem m_storageUnit;
+  private final DoubleSupplier m_speed;
 
   /**
-   * Creates a new TankDrive command.
+   * Creates a new Climb command.
    *
-   * @param speed The control input for the speed of the drive
-   * @param leftSpeed Left Side Speed
-   * @param rightSpeed Right Side Speed
+   * @param speed The control input for the speed of the climber
+   * @param climber The climber subsystem to drive
    */
-  public TankDriveCommand(DoubleSupplier leftSpeed, DoubleSupplier rightSpeed, DriveSubsystem drivetrain) {
-    m_drivetrain = drivetrain;
-    m_LeftSpeed = leftSpeed;
-    m_RightSpeed = rightSpeed;
-    addRequirements(m_drivetrain);
+  public ControlStorageUnit(DoubleSupplier speed, StorageUnitSubsystem storageUnit) {
+    m_storageUnit = storageUnit;
+    m_speed = speed;
+    addRequirements(m_storageUnit);
   }
 
   // Called repeatedly when this Command is scheduled to run
   @Override
   public void execute() {
-    m_drivetrain.tankDrive(m_LeftSpeed.getAsDouble(), m_RightSpeed.getAsDouble());
+    m_storageUnit.setPower(m_speed.getAsDouble());
   }
 
   // Make this return true when this Command no longer needs to run execute()
@@ -50,6 +47,6 @@ public class TankDriveCommand extends CommandBase {
   // Called once after isFinished returns true
   @Override
   public void end(boolean interrupted) {
-    m_drivetrain.tankDrive(0, 0);
+    m_storageUnit.setPower(0);
   }
 }
