@@ -55,6 +55,9 @@ public class RobotContainer {
   // Autonomous Mode
   private final static DashBoard m_dashboard = new DashBoard();
   private final static Autonomous m_autoControl = new Autonomous(m_dashboard, m_drivetrain);
+  // Intake is intially up
+  private boolean isIntakeDown = false;
+  
 
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
@@ -123,6 +126,21 @@ public class RobotContainer {
     (new JoystickButton(m_gameController, Button.kB.value))
     .whenPressed(new StopCollectingCommand(m_intake, m_storage));
 
+    // Flightstick Intake Activate/Deactivate
+    if(m_flightJoystick.getTriggerPressed() && new JoystickButton(m_flightJoystick, 2).get()) {
+      //Toggle intake
+      isIntakeDown = !isIntakeDown;
+
+      if(isIntakeDown) {
+        new PrepareToCollectCommand(m_intake, m_storage);
+         }
+         if(!isIntakeDown) {
+           new StopCollectingCommand(m_intake, m_storage);
+            }
+    }
+    
+
+    
     // Start Automatic Shooting Sequence
     // (new JoystickButton(m_gameController, Button.kStart.value))
     // .whenPressed(new LaunchCargoCommand(m_storage, m_shooter));
@@ -155,13 +173,13 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     Command retval = null;
-    retval = new ShootAndMoveCommand(m_drivetrain, m_storage, m_shooter);
-    // try {
-    //   retval = m_autoControl.getStartCommand(); // TODO: Ready for that or just shoot and drive 2 seconds?
-    // } catch (IOException e) {
-    //   // TODO Auto-generated catch block
-    //   e.printStackTrace();
-    // }
+    // retval = new ShootAndMoveCommand(m_drivetrain, m_storage, m_shooter);
+     try {
+       retval = m_autoControl.getStartCommand(); // TODO: Ready for that or just shoot and drive 2 seconds?
+     } catch (IOException e) {
+       // TODO Auto-generated catch block
+       e.printStackTrace();
+     }
     return retval;
   }
 }

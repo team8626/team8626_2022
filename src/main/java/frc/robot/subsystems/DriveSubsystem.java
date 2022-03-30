@@ -62,7 +62,7 @@ import frc.robot.Constants.DriveTrain;
         this.setHighSpeed();
       }  
       
-      private void resetEncoders() {
+      public void resetEncoders() {
         m_leftEncoder.reset();
         m_rightEncoder.reset();  
       }
