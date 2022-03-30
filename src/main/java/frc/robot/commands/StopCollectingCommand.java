@@ -10,54 +10,38 @@ package frc.robot.commands;
 // WPI Library dependencies
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+
 // Team8626 Libraries
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.StorageSubsystem;
-//import frc.robot.commands.StoreCargo;
 
 /**
- * Get the robot ready to collect Cargo.
- *      - Get Intake Out
- *      - Start Loading the Front Storage Unit
+ * Stop the Cargo Collecting
+ *      - Get Intake Up
+ *      - Force stop Front Storage Unit
  * 
  * If the Front Storage is already in use, this will do nothing.
  **/
-public class PrepareToCollect extends ParallelCommandGroup {
+public class StopCollectingCommand extends ParallelCommandGroup {
   // @SuppressWarnings({ "PMD.UnusedPrivateField", "PMD.SingularField" })
   private final IntakeSubsystem  m_intake;
   private final StorageSubsystem m_storage;
 
   /**
-   * Creates a new PrepareToCollect command.
+   * Creates a new StopCollectingCommand command.
    * 
    * @param intake  The Intake
    * @param storage The Storage
    */
-  public PrepareToCollect(IntakeSubsystem intake, StorageSubsystem storage) {
+  public StopCollectingCommand(IntakeSubsystem intake, StorageSubsystem storage) {
     m_intake = intake;
     m_storage = storage;
 
     addCommands(
-        // Activate the Intake
-        new InstantCommand(m_intake::activate, m_intake),
+        // Deactivate the Intake
+        new InstantCommand(m_intake::deactivate, m_intake),
 
-        // Activate the Storage for loading
-        new StoreCargo(m_storage));
-  }
-
-  @Override
-  public boolean isFinished() {
-    boolean ret_value = false;
-    if(m_storage.isFull() == true) {
-      ret_value = true;
-    }
-    return ret_value;
-  }
-
-  // Called once after isFinished returns true
-  @Override
-  public void end(boolean interrupted) {
-    // Deactivate the Intake
-    new InstantCommand(m_intake::deactivate, m_intake);
+        // Deactivate the Storage Unit
+        new InstantCommand(m_storage.getFrontUnit()::stop, m_storage.getFrontUnit()));
   }
 }

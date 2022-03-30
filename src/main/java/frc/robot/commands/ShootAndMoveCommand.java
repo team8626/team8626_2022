@@ -4,45 +4,40 @@
 
 package frc.robot.commands;
 
-import java.util.function.DoubleSupplier;
-
 // Java Libraries
 // import java.util.function.DoubleSupplier;
 
 // WPI Library dependencies
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
-import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import frc.robot.Constants.Shooter;
 import frc.robot.Constants.Storage;
 import frc.robot.subsystems.DriveSubsystem;
+
 // Team8626 Libraries
 import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.StorageSubsystem;
-//import frc.robot.commands.StoreCargo;
 
 /**
  * Quick Autonomous mode routine
  * Shoot and drive backwards
  **/
-public class ShootAndMove extends SequentialCommandGroup {
+public class ShootAndMoveCommand extends SequentialCommandGroup {
   // @SuppressWarnings({ "PMD.UnusedPrivateField", "PMD.SingularField" })
   private final DriveSubsystem  m_drivetrain;
   private final ShooterSubsystem  m_shooter;
   private final StorageSubsystem m_storage;
 
   private double m_driveSpeed = 1.0;
-  private double m_driveRotation = 0.0;
 
   /**
-   * Creates a new PrepareToCollect command.
+   * Creates a new ShootAndMoveCommand command.
    * 
    * @param intake  The Intake
    * @param storage The Storage
    */
-  public ShootAndMove(DriveSubsystem drivetrain, StorageSubsystem storage, ShooterSubsystem shooter) {
+  public ShootAndMoveCommand(DriveSubsystem drivetrain, StorageSubsystem storage, ShooterSubsystem shooter) {
     m_drivetrain = drivetrain;
     m_shooter = shooter;
     m_storage = storage;
@@ -51,15 +46,15 @@ public class ShootAndMove extends SequentialCommandGroup {
         new SequentialCommandGroup(
             new InstantCommand(m_shooter::activate, m_shooter),
             new WaitCommand(Shooter.kShooterSpinSeconds),
-            new UnloadStorageUnit(m_storage.getFrontUnit())
+            new UnloadStorageUnitCommand(m_storage.getFrontUnit())
              .withTimeout(Storage.kTimeoutStorageUnit),
-                // new DeliverCargo(m_storage)
+                // new DeliverCargoCommand(m_storage)
                 //   .withTimeout(Storage.kTimeoutStorageUnit),
 
             //new InstantCommand(m_shooter::deactivate, m_shooter),
 
             // Drive Back until Timeout
-            new TankDrive(() -> m_driveSpeed, () -> -m_driveSpeed, m_drivetrain)
+            new TankDriveCommand(() -> m_driveSpeed, () -> -m_driveSpeed, m_drivetrain)
               .withTimeout(1.2)
         )
     );

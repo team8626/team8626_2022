@@ -170,7 +170,7 @@ public class DashBoard {
     //     switch (autoStart) {
     //         case EXIT: 
     //             System.out.println("Exit (Universal)");
-    //             return new SequentialCommandGroup  (new FollowTrajectory("json", m_drivetrain));
+    //             return new SequentialCommandGroup  (new FollowTrajectoryCommand("json", m_drivetrain));
     //             break;
         
     //         case EXAMPLE: switch (startPosition) {

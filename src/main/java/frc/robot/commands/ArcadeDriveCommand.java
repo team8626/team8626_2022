@@ -17,26 +17,26 @@ import frc.robot.subsystems.DriveSubsystem;
 /**
  * Have the robot drive arcade style. 
  * */
-public class ArcadeDrive extends CommandBase {
+public class ArcadeDriveCommand extends CommandBase {
   private DriveSubsystem m_drivetrain;
   private DoubleSupplier m_speed;
   private DoubleSupplier m_rotation;
 
   /**
-   * Creates a new ArcadeDrive command.
+   * Creates a new ArcadeDriveCommand command.
    *
    * @param speed The control input for the speed of the drive
    * @param rotation The control input for the rotation
    * @param drivetrain The drivetrain subsystem to drive
    */
-  public ArcadeDrive(DoubleSupplier speed, DoubleSupplier rotation, DriveSubsystem drivetrain) {
+  public ArcadeDriveCommand(DoubleSupplier speed, DoubleSupplier rotation, DriveSubsystem drivetrain) {
     m_drivetrain = drivetrain;
     m_speed = speed;
     m_rotation = rotation;
     addRequirements(m_drivetrain);
   }
 
-  // public ArcadeDrive(double speed, double rotation, DriveSubsystem drivetrain) {
+  // public ArcadeDriveCommand(double speed, double rotation, DriveSubsystem drivetrain) {
   //   m_drivetrain = drivetrain;
   //   m_speed = speed;
   //   m_rotation = rotation;

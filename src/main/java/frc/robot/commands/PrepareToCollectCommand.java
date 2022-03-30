@@ -10,38 +10,54 @@ package frc.robot.commands;
 // WPI Library dependencies
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
-
 // Team8626 Libraries
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.StorageSubsystem;
+//import frc.robot.commands.StoreCargoCommand;
 
 /**
- * Stop the Cargo Collecting
- *      - Get Intake Uop
- *      - Force stop Front Storage Unit
+ * Get the robot ready to collect Cargo.
+ *      - Get Intake Out
+ *      - Start Loading the Front Storage Unit
  * 
  * If the Front Storage is already in use, this will do nothing.
  **/
-public class StopCollecting extends ParallelCommandGroup {
+public class PrepareToCollectCommand extends ParallelCommandGroup {
   // @SuppressWarnings({ "PMD.UnusedPrivateField", "PMD.SingularField" })
   private final IntakeSubsystem  m_intake;
   private final StorageSubsystem m_storage;
 
   /**
-   * Creates a new PrepareToCollect command.
+   * Creates a new PrepareToCollectCommand command.
    * 
    * @param intake  The Intake
    * @param storage The Storage
    */
-  public StopCollecting(IntakeSubsystem intake, StorageSubsystem storage) {
+  public PrepareToCollectCommand(IntakeSubsystem intake, StorageSubsystem storage) {
     m_intake = intake;
     m_storage = storage;
 
     addCommands(
-        // Deactivate the Intake
-        new InstantCommand(m_intake::deactivate, m_intake),
+        // Activate the Intake
+        new InstantCommand(m_intake::activate, m_intake),
 
-        // Deactivate the Storage Unit
-        new InstantCommand(m_storage.getFrontUnit()::stop, m_storage.getFrontUnit()));
+        // Activate the Storage for loading
+        new StoreCargoCommand(m_storage));
+  }
+
+  @Override
+  public boolean isFinished() {
+    boolean ret_value = false;
+    if(m_storage.isFull() == true) {
+      ret_value = true;
+    }
+    return ret_value;
+  }
+
+  // Called once after isFinished returns true
+  @Override
+  public void end(boolean interrupted) {
+    // Deactivate the Intake
+    new InstantCommand(m_intake::deactivate, m_intake);
   }
 }

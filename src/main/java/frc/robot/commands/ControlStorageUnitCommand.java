@@ -5,7 +5,7 @@
 package frc.robot.commands;
 
 // Java Libraries
-// import java.util.function.DoubleSupplier;
+import java.util.function.DoubleSupplier;
 
 // WPI Library dependencies
 import edu.wpi.first.wpilibj2.command.CommandBase;
@@ -16,39 +16,37 @@ import frc.robot.subsystems.StorageUnitSubsystem;
 /**
  * Have the robot drive arcade style. 
  * */
-public class LoadStorageUnit extends CommandBase {
+public class ControlStorageUnitCommand extends CommandBase {
   private final StorageUnitSubsystem m_storageUnit;
+  private final DoubleSupplier m_speed;
 
   /**
-   * Creates a new LoadStorageUnit command.
-   * This will start the storage unit until cancelled of cargo has been loaded.
-   * 
-   * @param storage The storage system to receive cargo from
+   * Creates a new Climb command.
+   *
+   * @param speed The control input for the speed of the climber
+   * @param climber The climber subsystem to drive
    */
-  public LoadStorageUnit(StorageUnitSubsystem storageUnit) {
+  public ControlStorageUnitCommand(DoubleSupplier speed, StorageUnitSubsystem storageUnit) {
     m_storageUnit = storageUnit;
-
+    m_speed = speed;
     addRequirements(m_storageUnit);
   }
 
   // Called repeatedly when this Command is scheduled to run
   @Override
   public void execute() {
-    m_storageUnit.start();
+    m_storageUnit.setPower(m_speed.getAsDouble());
   }
 
+  // Make this return true when this Command no longer needs to run execute()
   @Override
   public boolean isFinished() {
-    boolean ret_value = false;
-    if(m_storageUnit.isEmpty() == false) {
-      ret_value = true;
-    }
-    return ret_value;
+    return false; // Runs until interrupted
   }
 
   // Called once after isFinished returns true
   @Override
   public void end(boolean interrupted) {
-    m_storageUnit.stop();
+    m_storageUnit.setPower(0);
   }
 }

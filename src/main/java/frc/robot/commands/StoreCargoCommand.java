@@ -9,41 +9,39 @@ package frc.robot.commands;
 
 // WPI Library dependencies
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.Constants.Storage;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 // Team8626 Libraries
 import frc.robot.subsystems.StorageSubsystem;
 
 /**
- * Have the robot drive arcade style. 
+ * Have the robot store cargo style. 
  * */
-public class DeliverCargo extends CommandBase {
+public class StoreCargoCommand extends CommandBase {
   private final StorageSubsystem m_storage;
 
   /**
-   * Creates a new DeliverCargo command.
-   * This will empty the current storage toward the shooter.
-   * Make sure the shooter is activated before scheduling this command.
+   * Creates a new StoreCargoCommand command.
+   * This will start the storage unit until cancelled of cargo has been loaded.
    * 
    * @param storage The storage system to receive cargo from
    */
-  public DeliverCargo(StorageSubsystem storage) {
+  public StoreCargoCommand(StorageSubsystem storage) {
     m_storage = storage;
 
+    new LoadStorageUnitCommand(m_storage.getFrontUnit());
     addRequirements(m_storage);
   }
 
   // Called repeatedly when this Command is scheduled to run
   @Override
   public void execute() {
-    // Unload the BACK UNIT
-    new UnloadStorageUnit(m_storage.getBackUnit()).withTimeout(Storage.kTimeoutStorageUnit);
+    // Nothing here, executed once in the Command Constructor
   }
 
-  // Make this return true when this Command no longer needs to run execute()
   @Override
   public boolean isFinished() {
     boolean ret_value = false;
-    if(m_storage.isEmpty() == false) {
+    if(m_storage.isFull() == true) {
       ret_value = true;
     }
     return ret_value;
@@ -52,6 +50,8 @@ public class DeliverCargo extends CommandBase {
   // Called once after isFinished returns true
   @Override
   public void end(boolean interrupted) {
-    // TODO: Do we need to stop the motors or storage units? NO WE ASSUME TIMEOUT WILL DO IT!
+    // Force stop of the storage units
+    new InstantCommand(m_storage.getFrontUnit()::stop, m_storage.getFrontUnit());
+    new InstantCommand(m_storage.getBackUnit()::stop, m_storage.getBackUnit());
   }
 }

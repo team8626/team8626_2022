@@ -9,39 +9,41 @@ package frc.robot.commands;
 
 // WPI Library dependencies
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
+import frc.robot.Constants.Storage;
 // Team8626 Libraries
 import frc.robot.subsystems.StorageSubsystem;
 
 /**
  * Have the robot drive arcade style. 
  * */
-public class StoreCargo extends CommandBase {
+public class DeliverCargoCommand extends CommandBase {
   private final StorageSubsystem m_storage;
 
   /**
-   * Creates a new LoadStorageUnit command.
-   * This will start the storage unit until cancelled of cargo has been loaded.
+   * Creates a new DeliverCargoCommand command.
+   * This will empty the current storage toward the shooter.
+   * Make sure the shooter is activated before scheduling this command.
    * 
    * @param storage The storage system to receive cargo from
    */
-  public StoreCargo(StorageSubsystem storage) {
+  public DeliverCargoCommand(StorageSubsystem storage) {
     m_storage = storage;
 
-    new LoadStorageUnit(m_storage.getFrontUnit());
     addRequirements(m_storage);
   }
 
   // Called repeatedly when this Command is scheduled to run
   @Override
   public void execute() {
-    // Nothing here, executed once in the Command Constructor
+    // Unload the BACK UNIT
+    new UnloadStorageUnitCommand(m_storage.getBackUnit()).withTimeout(Storage.kTimeoutStorageUnit);
   }
 
+  // Make this return true when this Command no longer needs to run execute()
   @Override
   public boolean isFinished() {
     boolean ret_value = false;
-    if(m_storage.isFull() == true) {
+    if(m_storage.isEmpty() == false) {
       ret_value = true;
     }
     return ret_value;
@@ -50,8 +52,6 @@ public class StoreCargo extends CommandBase {
   // Called once after isFinished returns true
   @Override
   public void end(boolean interrupted) {
-    // Force stop of the storage units
-    new InstantCommand(m_storage.getFrontUnit()::stop, m_storage.getFrontUnit());
-    new InstantCommand(m_storage.getBackUnit()::stop, m_storage.getBackUnit());
+    // TODO: Do we need to stop the motors or storage units? NO WE ASSUME TIMEOUT WILL DO IT!
   }
 }

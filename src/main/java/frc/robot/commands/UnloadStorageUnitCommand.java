@@ -16,14 +16,14 @@ import frc.robot.subsystems.StorageUnitSubsystem;
 /**
  * Unload thge Storage Unit (Start Motor until timeout)
  **/
-public class UnloadStorageUnit extends CommandBase {
+public class UnloadStorageUnitCommand extends CommandBase {
   private final StorageUnitSubsystem m_storageUnit;
 
   /**
-   * Creates a new UnloadStorageUnit command.
+   * Creates a new UnloadStorageUnitCommand command.
    * @param storage The storage system to receive cargo from
    */
-  public UnloadStorageUnit(StorageUnitSubsystem storageUnit) {
+  public UnloadStorageUnitCommand(StorageUnitSubsystem storageUnit) {
     m_storageUnit = storageUnit;
    
     addRequirements(m_storageUnit);
