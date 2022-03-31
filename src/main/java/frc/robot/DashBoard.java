@@ -47,8 +47,9 @@ public class DashBoard {
             initStartupPostion();
 
         }
-        m_thread.startPeriodic(kShortInterval);    
-        SmartDashboard.putString("Robot Status", "---STARTING---");   
+        m_thread.startPeriodic(kShortInterval);
+
+        initSubsystems();
     }
 
     /** 
@@ -102,6 +103,18 @@ public class DashBoard {
                 updateLongInterval();
             }
         }
+    }
+
+    // Initialize Dashboard foe all subsystems.
+    private static void initSubsystems() {
+        SmartDashboard.putString("Robot Status", "---STARTING---");   
+
+        // TODO: Link subsystems dashboard init here
+        //m_drivetrain.initDashboard();
+        //m_intake.initDashboard();
+        //m_storage.initDashboard();
+        //m_shooter.initDashboard();
+        //m_climber.initDashboard();
     }
 
     // Update values that need high frequency refresh.
