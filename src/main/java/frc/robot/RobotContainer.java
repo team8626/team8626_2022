@@ -54,7 +54,7 @@ public class RobotContainer {
 
   // Autonomous Mode
   private final static DashBoard m_dashboard = new DashBoard();
-  private final static Autonomous m_autoControl = new Autonomous(m_dashboard, m_drivetrain);
+  private final static Autonomous m_autoControl = new Autonomous(m_dashboard, m_drivetrain, m_storage, m_shooter);
   // Intake is intially up
   private boolean isIntakeDown = false;
   
@@ -173,9 +173,8 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     Command retval = null;
-    // retval = new ShootAndMoveCommand(m_drivetrain, m_storage, m_shooter);
      try {
-       retval = m_autoControl.getStartCommand(); // TODO: Ready for that or just shoot and drive 2 seconds?
+       retval = m_autoControl.getStartCommand();
      } catch (IOException e) {
        // TODO Auto-generated catch block
        e.printStackTrace();

@@ -12,6 +12,12 @@
       "/LiveWindow/Ungrouped/AnalogGyro[0]": "Gyro",
       "/LiveWindow/Ungrouped/DifferentialDrive[1]": "DifferentialDrive",
       "/LiveWindow/Ungrouped/Scheduler": "Scheduler",
+      "/LiveWindow/Ungrouped/Victor SPX [10]": "Motor Controller",
+      "/LiveWindow/Ungrouped/Victor SPX [11]": "Motor Controller",
+      "/LiveWindow/Ungrouped/Victor SPX [12]": "Motor Controller",
+      "/LiveWindow/Ungrouped/Victor SPX [22]": "Motor Controller",
+      "/LiveWindow/Ungrouped/Victor SPX [6]": "Motor Controller",
+      "/LiveWindow/Ungrouped/Victor SPX [7]": "Motor Controller",
       "/SmartDashboard/Auto Mode": "String Chooser",
       "/SmartDashboard/Starting Position": "String Chooser"
     }

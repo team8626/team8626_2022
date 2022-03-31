@@ -15,20 +15,27 @@ import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.DashBoard.AutoSelec;
 import frc.robot.DashBoard.StartPosition;
 import frc.robot.subsystems.DriveSubsystem;
+import frc.robot.subsystems.ShooterSubsystem;
+import frc.robot.subsystems.StorageSubsystem;
 import frc.robot.commands.FollowTrajectoryCommand;
+import frc.robot.commands.ShootAndMoveCommand;
 import frc.robot.commands.TestTrajectoryCommand;
 
 public class Autonomous {
 
     private final DashBoard m_dashboard;
     private final DriveSubsystem m_drivetrain;
+    private final StorageSubsystem m_storage;
+    private final ShooterSubsystem m_shooter;
 
     public StartPosition m_startPosition;
     public AutoSelec m_autoStart;
 
-    public Autonomous(DashBoard dashboard, DriveSubsystem drivetrain){
+    public Autonomous(DashBoard dashboard, DriveSubsystem drivetrain, StorageSubsystem storage, ShooterSubsystem shooter){
         m_dashboard = dashboard;
         m_drivetrain = drivetrain;
+        m_storage = storage;
+        m_shooter = shooter;
     }
 
     public Command getStartCommand() throws IOException {
@@ -38,6 +45,11 @@ public class Autonomous {
          
         switch (m_autoStart) {
             default: 
+            case SHOOT_AND_MOVE:
+                // Shoot then move out of the tarmac
+                startCommand = new ShootAndMoveCommand(m_drivetrain, m_storage, m_shooter);
+                break;
+
             case EXIT: 
                 System.out.println("Exit (Universal)");
                 startCommand = new FollowTrajectoryCommand("Exit.json", m_drivetrain);

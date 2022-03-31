@@ -16,7 +16,7 @@ public class DashBoard {
     }
 
     enum AutoSelec {
-        EXIT, TEST, EXAMPLE, GOAL_FIRST, COLLECT_FIRST
+        SHOOT_AND_MOVE, EXIT, TEST, EXAMPLE, GOAL_FIRST, COLLECT_FIRST
     }
 
     private static final Notifier m_thread = new Notifier(new dashboardThread());
@@ -29,10 +29,10 @@ public class DashBoard {
     SendableChooser<AutoSelec> m_autonomousModeChooser = new SendableChooser<>();
 
     static final double kShortInterval = .02;
-    static final double kLongInterval = .5;
+    static final double kLongInterval  = .5;
     
     static double m_shortOldTime = 0.0;
-    static double m_longOldTime = 0.0;   
+    static double m_longOldTime  = 0.0;   
 
     /**
      * Class Constructor
@@ -43,14 +43,25 @@ public class DashBoard {
             //SmartDashboard.putBoolean("Compressor ENABLE", true);
             //SmartDashboard.putBoolean("Limelight-LED Toggle", false);
 
-            initStartupPostion();
             initAutonomousStrategy();
+            initStartupPostion();
 
         }
         m_thread.startPeriodic(kShortInterval);    
-        SmartDashboard.putString("Robot Status", "empty");   
+        SmartDashboard.putString("Robot Status", "---STARTING---");   
     }
 
+    /** 
+     * Initialize Robot Autonomous Strategy 
+     */
+    private void initAutonomousStrategy(){
+        
+        m_autonomousModeChooser.addOption("Exit", AutoSelec.EXIT);
+        m_autonomousModeChooser.setDefaultOption("Shoot and Move", AutoSelec.SHOOT_AND_MOVE);
+        
+        SmartDashboard.putData("Auto Mode", m_autonomousModeChooser);
+    }
+    
     /** 
      * Initialize Robot Starting Position
      */
@@ -77,24 +88,7 @@ public class DashBoard {
         return m_autonomousModeChooser.getSelected();
     }
 
-    /** 
-     * Initialize Robot Autonomous Strategy 
-     */
-    private void initAutonomousStrategy(){
-        
-        m_autonomousModeChooser.setDefaultOption("Exit", AutoSelec.EXIT);
-        m_autonomousModeChooser.addOption("Example", AutoSelec.EXAMPLE);
-
-        SmartDashboard.putData("Auto Mode", m_autonomousModeChooser);
-        SmartDashboard.putNumber("Some Number", 1.45);
-    }
-
-    public void initShooterVoltage(){
-        SmartDashboard.putNumber("Shooter_Voltage", 1.00);
-    }
-
-
-    public static void updateDashboard() {
+    private static void updateDashboard() {
         double time = Timer.getFPGATimestamp();
         if (kEnableDashBoard) {
             if ((time - m_shortOldTime) > kShortInterval) {
@@ -110,43 +104,39 @@ public class DashBoard {
         }
     }
 
-    /**
-     * Update values that need high frequency refresh.
-     **/   
+    // Update values that need high frequency refresh.
     private static void updateShortInterval() {
-        // RobotContainer.swerve.dashboard();
-        // RobotContainer.launcher.dashboard();
-        // RobotContainer.tower.dashboard();
-        // RobotContainer.intake.dashboard();
-        // RobotContainer.indexer.dashboard();
-        // RobotContainer.climber.dashboard();
-        // SmartDashboard.putBoolean("Pressure SW",
-        // RobotContainer.compressor.getPressureSwitchValue());
+         // TODO: Link subsystems dashboard updates here
+         //m_drivetrain.updateDashboard();
+         //m_intake.updateDashboard();
+         //m_storage.updateDashboard();
+         //m_shooter.updateDashboard();
+         //m_climber.updateDashboard();
+
+         // Pulsing to indicate Dashboard is updated
+         dashboardFlash();
     }
 
-    /**
-     * Update values that need low frequency refresh.
-     **/
+    // Update values that need low frequency refresh.
     private static void updateLongInterval(){
         //SmartDashboard.putBoolean("Compressor On?", RobotContainer.pneumatics.compressor.enabled());
         
-        //Can change to show a different message than "Yes" and "No"
+        // Can change to show a different message than "Yes" and "No"
         // SmartDashboard.putBoolean("Change Battery", Util.changeBattery());
     }
 
 
-    // static int t = 0;
-    // static boolean b = true;
-    // 
-    // public static void dashboardFlash(){
-    //     //Flash a light on the dashboard so that you know that the dashboard is refreshing.
-    //     if (t > 20) {
-    //         t = 0;
-    //         b = !b;
-    //         SmartDashboard.putBoolean("Disabled Toggle", b);
-    //     }
-    //     t++;
-    // }
+    //Flash a light on the dashboard so that you know that the dashboard is refreshing.
+    static int t = 0;
+    static boolean b = true;
+    public static void dashboardFlash(){
+        if (t > 20) {
+            t = 0;
+            b = !b;
+            SmartDashboard.putBoolean("Pulse", b);
+        }
+        t++;
+    }
 
     private static class dashboardThread implements Runnable {  
         @Override
@@ -154,42 +144,4 @@ public class DashBoard {
             updateDashboard();
         }
     }
-
- // MOVED TO AUTOMOMOUS... CAN BE DELETED?
-    // /**
-    // * Use this to pass the autonomous command to the main {@link Robot} class.
-    // *
-    // * @return the command to run in autonomous
-    // */
-    // public Command getStartCommand() {
-    //     Command startCommand = null;
-    //     startPosition = m_startPositionChooser.getselected();
-    //     autoStart = m_autonomousModeChooser.getselected();
-          
-     
-    //     switch (autoStart) {
-    //         case EXIT: 
-    //             System.out.println("Exit (Universal)");
-    //             return new SequentialCommandGroup  (new FollowTrajectoryCommand("json", m_drivetrain));
-    //             break;
-        
-    //         case EXAMPLE: switch (startPosition) {
-    //             case TARMAC_1: 
-    //                 System.out.println("Do example; Tarmac 1");
-    //                 break;
-
-    //             case TARMAC_2: 
-    //                 System.out.println("Do example; Tarmac 2");
-    //                 break;
-
-    //             case TARMAC_3: 
-    //                 System.out.println("Do example; Tarmac 3");
-    //                 break;
-    //         }
-    //     }
-    //     return startCommand;
-
-  
-    // }
-
 }
