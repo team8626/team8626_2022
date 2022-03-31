@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.XboxController.Button;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
@@ -55,10 +56,6 @@ public class RobotContainer {
   // Autonomous Mode
   private final static DashBoard m_dashboard = new DashBoard();
   private final static Autonomous m_autoControl = new Autonomous(m_dashboard, m_drivetrain, m_storage, m_shooter);
-  // Intake is intially up
-  private boolean isIntakeDown = false;
-  
-
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
@@ -126,20 +123,12 @@ public class RobotContainer {
     (new JoystickButton(m_gameController, Button.kB.value))
     .whenPressed(new StopCollectingCommand(m_intake, m_storage));
 
-    // Flightstick Intake Activate/Deactivate
-    if(m_flightJoystick.getTriggerPressed() && new JoystickButton(m_flightJoystick, 2).get()) {
-      //Toggle intake
-      isIntakeDown = !isIntakeDown;
-
-      if(isIntakeDown) {
-        new PrepareToCollectCommand(m_intake, m_storage);
-         }
-         if(!isIntakeDown) {
-           new StopCollectingCommand(m_intake, m_storage);
-            }
-    }
-    
-
+    // If both the grip button and trigger are pressed then activate the intake
+    new JoystickButton(m_flightJoystick, 1 )
+    .and(new JoystickButton(m_flightJoystick, 2))
+    .whenActive(new ConditionalCommand(
+        new StopCollectingCommand(m_intake, m_storage), 
+        new PrepareToCollectCommand(m_intake, m_storage), m_intake::isActive));
     
     // Start Automatic Shooting Sequence
     // (new JoystickButton(m_gameController, Button.kStart.value))

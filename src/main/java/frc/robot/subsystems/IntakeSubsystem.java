@@ -116,6 +116,9 @@ public class IntakeSubsystem extends SubsystemBase {
   public void periodic() {
   }
 
+  public boolean isActive(){
+    return m_activated;
+  }
   /**
    * Sets the max output of the drive. Useful for scaling the drive to drive more slowly.
    *
