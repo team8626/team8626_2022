@@ -10,7 +10,7 @@ package frc.robot.commands;
 // WPI Library dependencies
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 // Team8626 Libraries
 import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.StorageSubsystem;
@@ -38,7 +38,7 @@ public class LaunchCargoCommand extends SequentialCommandGroup {
 
     addCommands(
       new InstantCommand(m_shooter::activate, m_shooter),
-      new WaitUntilCommand(Shooter.kShooterSpinSeconds),
+      new WaitCommand(Shooter.kShooterSpinSeconds),
       new DeliverCargoCommand(storage)
     );
     addRequirements(m_shooter, m_storage);

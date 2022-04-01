@@ -12,7 +12,6 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.XboxController.Button;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
@@ -23,7 +22,7 @@ import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.ClimberSubsystem;
 
-import frc.robot.commands.PushCargo;
+import frc.robot.commands.PushCargoCommand;
 import frc.robot.commands.ShootAndMoveCommand;
 import frc.robot.commands.ArcadeDriveCommand;
 import frc.robot.commands.PrepareToCollectCommand;
@@ -31,8 +30,10 @@ import frc.robot.commands.StopCollectingCommand;
 import frc.robot.commands.LaunchCargoCommand;
 import frc.robot.commands.ControlClimberCommand;
 import frc.robot.commands.ControlStorageUnitCommand;
+
 import frc.robot.Constants.Controller;
 import frc.robot.Constants.Storage;
+
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
  * "declarative" paradigm, very little robot logic should actually be handled in the {@link Robot}
@@ -43,9 +44,9 @@ public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private final static DriveSubsystem m_drivetrain = new DriveSubsystem();
   private final static StorageSubsystem m_storage = new StorageSubsystem();
-  private final IntakeSubsystem m_intake = new IntakeSubsystem();
+  private final static IntakeSubsystem m_intake = new IntakeSubsystem();
   private final static ShooterSubsystem m_shooter = new ShooterSubsystem();
-  private final ClimberSubsystem m_climber = new ClimberSubsystem();
+  private final static ClimberSubsystem m_climber = new ClimberSubsystem();
 
   // private final ArcadeDriveCommand m_autoCommand = new ArcadeDriveCommand(m_DriveSubsystem);
  
@@ -54,8 +55,8 @@ public class RobotContainer {
   private final XboxController m_gameController = new XboxController(Controller.kGamepadPort); 
 
   // Autonomous Mode
-  private final static DashBoard m_dashboard = new DashBoard();
-  private final static Autonomous m_autoControl = new Autonomous(m_dashboard, m_drivetrain, m_storage, m_shooter);
+  private final static DashBoard m_dashboard = new DashBoard(m_intake, m_storage, m_shooter);
+  private final static Autonomous m_autoControl = new Autonomous(m_dashboard, m_drivetrain, m_intake, m_storage, m_shooter);
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
@@ -68,11 +69,11 @@ public class RobotContainer {
    */
   private void configureDefaultCommands(){
     // Always push Cargo Forward....
-    if(Storage.kIsUsingColorSensors){
-      m_storage.setDefaultCommand(        
-      new PushCargo(
-        m_storage));
-    }
+    // if(Storage.kIsUsingColorSensors){
+    //   m_storage.setDefaultCommand(        
+    //   new PushCargoCommand(
+    //     m_storage));
+    // }
 
      // Always Read Joystick and control the drivetrain
      m_drivetrain.setDefaultCommand(    
@@ -124,15 +125,13 @@ public class RobotContainer {
     .whenPressed(new StopCollectingCommand(m_intake, m_storage));
 
     // If both the grip button and trigger are pressed then activate the intake
-    new JoystickButton(m_flightJoystick, 1 )
-    .and(new JoystickButton(m_flightJoystick, 2))
-    .whenActive(new ConditionalCommand(
-        new StopCollectingCommand(m_intake, m_storage), 
-        new PrepareToCollectCommand(m_intake, m_storage), m_intake::isActive));
-    
+    new JoystickButton(m_flightJoystick, 1)
+    .whenPressed(new PrepareToCollectCommand(m_intake, m_storage))
+    .whenReleased(new StopCollectingCommand(m_intake, m_storage));
+ 
     // Start Automatic Shooting Sequence
-    // (new JoystickButton(m_gameController, Button.kStart.value))
-    // .whenPressed(new LaunchCargoCommand(m_storage, m_shooter));
+    (new JoystickButton(m_gameController, Button.kStart.value))
+     .whenPressed(new LaunchCargoCommand(m_storage, m_shooter));
 
     // Start Manual Shooting
     (new JoystickButton(m_gameController, Button.kX.value))
@@ -162,12 +161,12 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     Command retval = null;
-     try {
-       retval = m_autoControl.getStartCommand();
-     } catch (IOException e) {
-       // TODO Auto-generated catch block
-       e.printStackTrace();
-     }
+    //  try {
+       retval = new ShootAndMoveCommand(m_drivetrain, m_storage, m_shooter); // TODO: NEED THAT FOR REAL DEPLOYMENT m_autoControl.getStartCommand();
+    //  } catch (IOException e) {
+    //    // TODO Auto-generated catch block
+    //    e.printStackTrace();
+    //  }
     return retval;
   }
 }

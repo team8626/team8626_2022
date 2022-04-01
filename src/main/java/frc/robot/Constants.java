@@ -80,8 +80,8 @@ public final class Constants {
     // Storage subsystem constants
     public final static class Storage {
         // CAN Bus Addresses for Motors
-        public static int kCANMotorStorageFront = 6;   // USING VICTOR SPX
-        public static int kCANMotorStorageBack = 10;   // USING VICTOR SPX
+        public static int kCANMotorStorageFront = 10;   // USING VICTOR SPX
+        public static int kCANMotorStorageBack  =  6;   // USING VICTOR SPX
 
         // i2C Addresses for Color Sensors
         public static I2C.Port kI2CColorSensorPortFront = I2C.Port.kOnboard;
@@ -91,7 +91,7 @@ public final class Constants {
         public static int kTimeoutStorageUnit= 5;
 
         // USing Color Sensors
-        public static boolean kIsUsingColorSensors = false;
+        public static boolean kIsUsingColorSensors = true;
     }
 
     // Cargo constants

@@ -5,31 +5,37 @@ package frc.robot.subsystems;
 
 // WPI Library dependencies
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
-import edu.wpi.first.wpilibj2.command.PrintCommand;
 
 // Team8626 Libraries
 import frc.robot.commands.LoadStorageUnitCommand;
 import frc.robot.commands.UnloadStorageUnitCommand;
+import frc.robot.Constants.Cargo;
 import frc.robot.Constants.Storage;
 
 /* 
 ** Main class for handling Storate Substystem 
 */
 public class StorageSubsystem extends SubsystemBase {
+
   // Storage Units
-  private final StorageUnitSubsystem m_unitFront = new StorageUnitSubsystem(Storage.kCANMotorStorageFront, Storage.kI2CColorSensorPortFront);
-  private final StorageUnitSubsystem m_unitBack  = new StorageUnitSubsystem(Storage.kCANMotorStorageBack, Storage.kI2CColorSensorPortBack);
+  private final StorageUnitSubsystem m_unitFront = new StorageUnitSubsystem("FRONT", Storage.kCANMotorStorageFront, Storage.kI2CColorSensorPortFront);
+  private final StorageUnitSubsystem m_unitBack  = new StorageUnitSubsystem("BACK", Storage.kCANMotorStorageBack, Storage.kI2CColorSensorPortBack);
+
+  // Remember Colors
+  private Color m_loadedColorFront = null;
+  private Color m_loadedColorBack  = null;
 
   // Class Constructor
-  public StorageSubsystem() {
-  }  
+  public StorageSubsystem() {}  
 
-  @Override
-  public void periodic() {
-    SmartDashboard.putString("Front Storage", m_unitFront.getColorAsString());
-    SmartDashboard.putString("Back Storage", m_unitBack.getColorAsString());
+  // Initialize Dashboard
+  public void initDashboard(){
+  }
+
+  // Update Dashboard (Called Periodically)
+  public void updateDashboard(){
   }
 
   // Push all Cargos towards the Back...
@@ -41,7 +47,6 @@ public class StorageSubsystem extends SubsystemBase {
         } else {
           // Push the Cargo "Forward"
           new ParallelCommandGroup(
-            new PrintCommand("[STORAGE] Moving Cargo Forward"),
             new LoadStorageUnitCommand(m_unitBack),
             new UnloadStorageUnitCommand(m_unitFront).withTimeout(Storage.kTimeoutStorageUnit)
           );
@@ -79,5 +84,6 @@ public class StorageSubsystem extends SubsystemBase {
   // Get Reference to the Back Unit
   public StorageUnitSubsystem getBackUnit(){
     return m_unitBack;
-  }
+  }    
 }
+

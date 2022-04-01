@@ -8,11 +8,9 @@ package frc.robot.commands;
 import java.util.function.DoubleSupplier;
 
 import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.wpilibj.Encoder;
 // WPI Library dependencies
-import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.PIDCommand;
-import edu.wpi.first.wpilibj2.command.RamseteCommand;
+
 // Team8626 Libraries
 import frc.robot.subsystems.DriveSubsystem;
 
@@ -21,29 +19,18 @@ import frc.robot.subsystems.DriveSubsystem;
  * */
 public class TurnDegreesCommand extends PIDCommand {
   private final DriveSubsystem m_drivetrain;
-  private final DoubleSupplier m_angleDegrees;
-  // private final Encoder m_leftEncoder;
-  // private final Encoder m_rightEncoder;
 
   /**
-   * Creates a new TankDriveCommand command.
-   *
-   *
+   * Creates a new TurnDegrees command.
    * @param angleDegrees 
-  
+   * @param drivetrain
    */
   
   public TurnDegreesCommand(DoubleSupplier angleDegrees, DriveSubsystem drivetrain) {
 
-super( new PIDController(4, 0, 0), drivetrain::getHeading, angleDegrees, rot -> drivetrain.arcadeDrive(0, rot));
+    super( new PIDController(4, 0, 0), drivetrain::getHeading, angleDegrees, rot -> drivetrain.arcadeDrive(0, rot));
 
-    m_drivetrain = drivetrain;
-    m_angleDegrees = angleDegrees;
-    
-
-    // m_LeftSpeed = leftSpeed;
-   // m_RightSpeed = rightSpeed;
-  
+    m_drivetrain = drivetrain;  
     addRequirements(m_drivetrain);
     
     getController().setTolerance(0.01);

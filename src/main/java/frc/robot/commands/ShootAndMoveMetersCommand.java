@@ -23,21 +23,19 @@ import frc.robot.subsystems.StorageSubsystem;
  * Quick Autonomous mode routine
  * Shoot and drive backwards
  **/
-public class ShootAndMoveCommand extends SequentialCommandGroup {
+public class ShootAndMoveMetersCommand extends SequentialCommandGroup {
   // @SuppressWarnings({ "PMD.UnusedPrivateField", "PMD.SingularField" })
   private final DriveSubsystem  m_drivetrain;
   private final ShooterSubsystem  m_shooter;
   private final StorageSubsystem m_storage;
 
-  private double m_driveSpeed = 1.0;
-
   /**
-   * Creates a new ShootAndMoveCommand command.
+   * Creates a new ShootAndMoveMetersCommand command.
    * 
    * @param intake  The Intake
    * @param storage The Storage
    */
-  public ShootAndMoveCommand(DriveSubsystem drivetrain, StorageSubsystem storage, ShooterSubsystem shooter) {
+  public ShootAndMoveMetersCommand(double distanceMeters, DriveSubsystem drivetrain, StorageSubsystem storage, ShooterSubsystem shooter) {
     m_drivetrain = drivetrain;
     m_shooter = shooter;
     m_storage = storage;
@@ -45,20 +43,11 @@ public class ShootAndMoveCommand extends SequentialCommandGroup {
     addCommands(
         new SequentialCommandGroup(
             new InstantCommand(m_shooter::activate, m_shooter),
-    //         // TODO TRYING TO REMOVE DIFFERENTIAL DRIVE ERROR PUT BACK MAYBE...
-             new WaitCommand(Shooter.kShooterSpinSeconds),
-            // new UnloadStorageUnitCommand(m_storage.getBackUnit())
-            //  .withTimeout(Storage.kTimeoutStorageUnit),
-    //             // TODO SHOULD BE USING THIS:
-    //             // new DeliverCargoCommand(m_storage)
-    //             //   .withTimeout(Storage.kTimeoutStorageUnit),
-
-            new InstantCommand(m_shooter::deactivate, m_shooter)
-
-    //         // Drive Back until Timeout
-    //         new TankDriveCommand(() -> m_driveSpeed, () -> -m_driveSpeed, m_drivetrain)
-    //           .withTimeout(1.2)
-         )
+            new WaitCommand(Shooter.kShooterSpinSeconds),
+            new UnloadStorageUnitCommand(m_storage.getBackUnit())
+             .withTimeout(Storage.kTimeoutStorageUnit),
+            new DriveMetersCommand(() -> distanceMeters, m_drivetrain)
+        )
     );
   }
 

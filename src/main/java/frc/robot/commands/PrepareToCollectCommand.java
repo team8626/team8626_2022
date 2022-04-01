@@ -9,7 +9,7 @@ package frc.robot.commands;
 
 // WPI Library dependencies
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 // Team8626 Libraries
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.StorageSubsystem;
@@ -22,7 +22,7 @@ import frc.robot.subsystems.StorageSubsystem;
  * 
  * If the Front Storage is already in use, this will do nothing.
  **/
-public class PrepareToCollectCommand extends ParallelCommandGroup {
+public class PrepareToCollectCommand extends SequentialCommandGroup {
   // @SuppressWarnings({ "PMD.UnusedPrivateField", "PMD.SingularField" })
   private final IntakeSubsystem  m_intake;
   private final StorageSubsystem m_storage;
@@ -58,6 +58,6 @@ public class PrepareToCollectCommand extends ParallelCommandGroup {
   @Override
   public void end(boolean interrupted) {
     // Deactivate the Intake
-    new InstantCommand(m_intake::deactivate, m_intake);
+    m_intake.deactivate();
   }
 }

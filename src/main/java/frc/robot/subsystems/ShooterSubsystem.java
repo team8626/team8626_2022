@@ -28,6 +28,16 @@ public class ShooterSubsystem extends SubsystemBase {
     this.deactivate();
   }  
 
+  // Initialize Dashboard
+  public void initDashboard(){
+    SmartDashboard.putBoolean("SHOOTER", m_activated);
+  }
+
+  // Update Dashboard (Called Periodically)
+  public void updateDashboard(){
+    SmartDashboard.putBoolean("SHOOTER", m_activated);
+  }
+
   // Periodic Updates
   @Override
   public void periodic(){
@@ -39,7 +49,6 @@ public class ShooterSubsystem extends SubsystemBase {
   public void activate(double voltage){
     m_motor.setVoltage(voltage);
     this.activate();
-    SmartDashboard.putString("Robot Status", "[SHOOTER] Spinning");
   }
 
   public void activate(){

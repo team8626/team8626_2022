@@ -9,7 +9,7 @@ package frc.robot.commands;
 
 // WPI Library dependencies
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
+
 // Team8626 Libraries
 import frc.robot.subsystems.StorageSubsystem;
 
@@ -27,15 +27,13 @@ public class StoreCargoCommand extends CommandBase {
    */
   public StoreCargoCommand(StorageSubsystem storage) {
     m_storage = storage;
-
-    new LoadStorageUnitCommand(m_storage.getFrontUnit());
     addRequirements(m_storage);
   }
 
-  // Called repeatedly when this Command is scheduled to run
+  // Called Once when this Command is initialized
   @Override
-  public void execute() {
-    // Nothing here, executed once in the Command Constructor
+  public void initialize() {
+    new LoadStorageUnitCommand(m_storage.getFrontUnit());
   }
 
   @Override
@@ -51,7 +49,7 @@ public class StoreCargoCommand extends CommandBase {
   @Override
   public void end(boolean interrupted) {
     // Force stop of the storage units
-    new InstantCommand(m_storage.getFrontUnit()::stop, m_storage.getFrontUnit());
-    new InstantCommand(m_storage.getBackUnit()::stop, m_storage.getBackUnit());
+    m_storage.getFrontUnit().stop();
+    m_storage.getBackUnit().stop();
   }
 }

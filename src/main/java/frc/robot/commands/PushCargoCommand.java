@@ -17,7 +17,7 @@ import frc.robot.subsystems.StorageSubsystem;
  * This command will push cargo from front unit to back unit.
  * If Back unit is already in use, nothing will happen.
  * */
-public class PushCargo extends CommandBase {
+public class PushCargoCommand extends CommandBase {
   private final StorageSubsystem m_storage;
 
   /**
@@ -25,7 +25,7 @@ public class PushCargo extends CommandBase {
    * 
    * @param storage The storage system to receive cargo from
    */
-  public PushCargo(StorageSubsystem storage) {
+  public PushCargoCommand(StorageSubsystem storage) {
     m_storage = storage;
 
     addRequirements(m_storage);

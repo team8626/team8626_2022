@@ -6,8 +6,8 @@ import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 
 import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
@@ -39,7 +39,17 @@ public class IntakeSubsystem extends SubsystemBase {
     this.retract();
     m_activated = false;
   }  
-      
+  
+  // Initialize Dashboard
+  public void initDashboard(){
+    SmartDashboard.putBoolean("INTAKE", m_activated);
+  }
+
+  // Update Dashboard(Called Periodically)
+  public void updateDashboard(){
+    SmartDashboard.putBoolean("INTAKE", m_activated);
+  }
+
   /**
    * Deploy the intake.
    * Pushing the intake assembly out using the 2 pneumatic cylinders
@@ -79,14 +89,12 @@ public class IntakeSubsystem extends SubsystemBase {
   // Set assembly passive
   private void passive(){
     // Extend Cylinders
-    new PrintCommand("[INTAKE] Passive Deployed");
     m_Cylinder.set(Value.kOff);
   }
   
   // Push the Assembly Out
   private void deploy(){
     // Extend Cylinders
-    new PrintCommand("[INTAKE] Intake Deployed");
     m_Cylinder.set(Value.kForward);
 
     // Stop pushing on cylinders (keep the assembly "loose")
@@ -96,29 +104,26 @@ public class IntakeSubsystem extends SubsystemBase {
   // Pull The Assembly in
   private void retract(){
     // Retract Cylinders
-    new PrintCommand("[INTAKE] Intake Stowed");
     m_Cylinder.set(Value.kReverse);
   }
   
   // Start Rotation of the Intake
   private void startSpinning(){
-    new PrintCommand("[INTAKE] Spinning");
     m_motorIntake.set(m_intakePower);
   }
 
   // Stop Rotation of the Intake
   private void stopSpinning(){
-    new PrintCommand("[INTAKE] STOP Spinning");
     m_motorIntake.stopMotor();
   }
 
   @Override
-  public void periodic() {
-  }
+  public void periodic() {}
 
   public boolean isActive(){
     return m_activated;
   }
+
   /**
    * Sets the max output of the drive. Useful for scaling the drive to drive more slowly.
    *

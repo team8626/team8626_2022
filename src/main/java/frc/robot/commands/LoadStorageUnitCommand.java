@@ -27,13 +27,12 @@ public class LoadStorageUnitCommand extends CommandBase {
    */
   public LoadStorageUnitCommand(StorageUnitSubsystem storageUnit) {
     m_storageUnit = storageUnit;
-
     addRequirements(m_storageUnit);
   }
 
-  // Called repeatedly when this Command is scheduled to run
+  // Called Once when this Command is started
   @Override
-  public void execute() {
+  public void initialize() {
     m_storageUnit.start();
   }
 
