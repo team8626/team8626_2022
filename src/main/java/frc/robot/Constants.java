@@ -8,6 +8,7 @@ import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.util.Color;
+import frc.robot.subsystems.ShooterSubsystem;
 
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
@@ -110,16 +111,43 @@ public final class Constants {
 
     // Shooter subsystem constants
     public final static class Shooter {
-        // CAN Bus Addresses for Motor
-        public static int kCANMotorShooter  = 12;      // USING VICTOR SPX
+         // CAN Bus Addresses for Motor
+         public static int kCANMotorShooterMain       = 12;      // USING SPARKMAX & NEO
+         public static int kCANMotorShooterSecondary  = 13;      // USING SPARKMAX & NEO 550
+ 
+         // Predefined Voltage for Shooter Motor
+         public static double kShooterVoltageMainHighGoal  = 9.0;
+         public static double kShooterVoltageMainLowGoal   = 5.5;
+         public static double kShooterVoltageMainDiscard   = 4.0;
+ 
+         // Encoder Specifications
+         public static int kEncoderCountPerRev = 42; // NEO and NEO 550 Encoder Count per Revolution
+ 
+         //Predefined RPM for sooter motors
+         public static double kShooterMainRPM_LowGoal       = 1000;
+         public static double kShooterSecondaryRPM_LowGoal  = 1500;
 
-        // Predefined Voltage for Shooter Motor
-        public static double kShooterVoltageHighGoal  = 9.0;
-        public static double kShooterVoltageLowGoal   = 5.5;
-        public static double kShooterVoltageDiscard   = 4.0;
+         public static double kShooterMainRPM_HighGoal      = 3000;
+         public static double kShooterSecondaryRPM_HighGoal = 1500;
         
-        // Time for the shooter to reach stable speed.
+         public static double kShooterMainRPM_Discard       =  900;
+         public static double kShooterSecondaryRPM_Discard  = 1500;
+
+         public static double kRPMTolerance = 0.01;
+ 
+         // PID Loop Coefficients
+         public static double kP  = 0.1;
+         public static double kI  = 1e-4;
+         public static double kD  = 1.0;
+         public static double kIz = 0.0;
+         public static double kFF = 0.0;
+         public static double kMinOutput  = -1.0;
+         public static double kMaxOutput  = 1.0;
+  
         public static int kShooterSpinSeconds = 5;
+
+        public static ShooterSubsystem.Target kDefaultTarget = ShooterSubsystem.Target.LOW;
+
     }
     
     // Controller station constants

@@ -8,11 +8,7 @@ package frc.robot.commands;
 // import java.util.function.DoubleSupplier;
 
 // WPI Library dependencies
-import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import edu.wpi.first.wpilibj2.command.WaitCommand;
-import frc.robot.Constants.Shooter;
-import frc.robot.Constants.Storage;
 import frc.robot.subsystems.DriveSubsystem;
 
 // Team8626 Libraries
@@ -42,11 +38,8 @@ public class ShootAndMoveMetersCommand extends SequentialCommandGroup {
 
     addCommands(
         new SequentialCommandGroup(
-            new InstantCommand(m_shooter::activate, m_shooter),
-            new WaitCommand(Shooter.kShooterSpinSeconds),
-            new UnloadStorageUnitCommand(m_storage.getBackUnit())
-             .withTimeout(Storage.kTimeoutStorageUnit),
-            new DriveMetersCommand(() -> distanceMeters, m_drivetrain)
+          new StartDeliveringCommand(m_storage, m_shooter),
+          new DriveMetersCommand(() -> distanceMeters, m_drivetrain)
         )
     );
   }

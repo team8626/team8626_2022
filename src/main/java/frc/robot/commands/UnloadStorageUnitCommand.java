@@ -4,6 +4,8 @@
 
 package frc.robot.commands;
 
+import edu.wpi.first.wpilibj.RobotBase;
+
 // Java Libraries
 // import java.util.function.DoubleSupplier;
 
@@ -32,6 +34,7 @@ public class UnloadStorageUnitCommand extends CommandBase {
   // Called repeatedly when this Command is scheduled to run
   @Override
   public void execute() {
+    if(RobotBase.isSimulation()){ System.out.println("[UnloadStorageUnitCommand] Starting " + m_storageUnit.getName()); }
     m_storageUnit.start();
   }
 
@@ -44,6 +47,7 @@ public class UnloadStorageUnitCommand extends CommandBase {
   // Called once after isFinished returns true
   @Override
   public void end(boolean interrupted) {
+    if(RobotBase.isSimulation()){ System.out.println("[UnloadStorageUnitCommand] Stopping " + m_storageUnit.getName()); }
     m_storageUnit.stop();
   }
 }

@@ -4,12 +4,13 @@
 
 package frc.robot.commands;
 
+import edu.wpi.first.wpilibj.RobotBase;
+import edu.wpi.first.wpilibj2.command.CommandBase;
+
 // Java Libraries
-// import java.util.function.DoubleSupplier;
 
 // WPI Library dependencies
-import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+
 // Team8626 Libraries
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.StorageSubsystem;
@@ -21,7 +22,7 @@ import frc.robot.subsystems.StorageSubsystem;
  * 
  * If the Front Storage is already in use, this will do nothing.
  **/
-public class StopCollectingCommand extends SequentialCommandGroup {
+public class StopCollectingCommand extends CommandBase {
   // @SuppressWarnings({ "PMD.UnusedPrivateField", "PMD.SingularField" })
   private final IntakeSubsystem  m_intake;
   private final StorageSubsystem m_storage;
@@ -35,12 +36,27 @@ public class StopCollectingCommand extends SequentialCommandGroup {
   public StopCollectingCommand(IntakeSubsystem intake, StorageSubsystem storage) {
     m_intake = intake;
     m_storage = storage;
-
-    addCommands(
-        // Deactivate the Intake
-        new InstantCommand(m_intake::deactivate, m_intake),
-
-        // Deactivate the Storage Unit
-        new InstantCommand(m_storage.getFrontUnit()::stop, m_storage.getFrontUnit()));
   }
+
+  @Override
+  public void initialize(){
+    if(RobotBase.isSimulation()){ System.out.println("[StopCollectingCommand] Deactivate INTAKE"); }
+    m_intake.deactivate();
+    if(RobotBase.isSimulation()){ System.out.println("[StopCollectingCommand] Aboard Loading"); }
+    m_storage.stopLoadingCargo();
+  }
+
+  @Override
+  public void execute(){}
+
+  @Override
+  public boolean isFinished(){
+    // Only execute a few methods at initialization.
+    // Finishes immediately.
+    return true;
+  }
+
+  @Override
+  public void end(boolean interrupted){}
+
 }

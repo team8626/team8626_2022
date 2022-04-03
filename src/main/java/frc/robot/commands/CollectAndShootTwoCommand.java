@@ -11,6 +11,7 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
+
 // Team8626 Libraries
 import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.StorageSubsystem;
@@ -40,12 +41,12 @@ public class CollectAndShootTwoCommand extends SequentialCommandGroup {
 
     addCommands(
         new SequentialCommandGroup(
-            new PrepareToCollectCommand(m_intake, m_storage),
+            new StartCollectingCommand(m_intake, m_storage),
             new DriveMetersCommand(() -> distanceMeters, m_drivetrain),
             new StopCollectingCommand(m_intake, m_storage),
             new TurnDegreesCommand(() -> 180, m_drivetrain),
             new DriveMetersCommand(() -> distanceMeters, m_drivetrain),
-            new LaunchCargoCommand(m_storage, m_shooter)
+            new StartDeliveringCommand(m_storage, m_shooter)
         )
     );
   }

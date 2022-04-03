@@ -4,16 +4,16 @@
 
 package frc.robot.commands;
 
+import edu.wpi.first.wpilibj.RobotBase;
+import edu.wpi.first.wpilibj2.command.CommandBase;
+
 // Java Libraries
-// import java.util.function.DoubleSupplier;
 
 // WPI Library dependencies
-import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+
 // Team8626 Libraries
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.StorageSubsystem;
-//import frc.robot.commands.StoreCargoCommand;
 
 /**
  * Get the robot ready to collect Cargo.
@@ -22,7 +22,7 @@ import frc.robot.subsystems.StorageSubsystem;
  * 
  * If the Front Storage is already in use, this will do nothing.
  **/
-public class PrepareToCollectCommand extends SequentialCommandGroup {
+public class StartCollectingCommand extends CommandBase {
   // @SuppressWarnings({ "PMD.UnusedPrivateField", "PMD.SingularField" })
   private final IntakeSubsystem  m_intake;
   private final StorageSubsystem m_storage;
@@ -33,22 +33,27 @@ public class PrepareToCollectCommand extends SequentialCommandGroup {
    * @param intake  The Intake
    * @param storage The Storage
    */
-  public PrepareToCollectCommand(IntakeSubsystem intake, StorageSubsystem storage) {
+  public StartCollectingCommand(IntakeSubsystem intake, StorageSubsystem storage) {
     m_intake = intake;
     m_storage = storage;
+  }
 
-    addCommands(
-        // Activate the Intake
-        new InstantCommand(m_intake::activate, m_intake),
+  @Override
+  public void initialize(){
+    if(RobotBase.isSimulation()){ System.out.println("[StartCollectingCommand] Activate INTAKE"); }
+    m_intake.activate();
+  }
 
-        // Activate the Storage for loading
-        new StoreCargoCommand(m_storage));
+  @Override
+  public void execute(){
+    m_storage.loadCargo();
   }
 
   @Override
   public boolean isFinished() {
     boolean ret_value = false;
-    if(m_storage.isFull() == true) {
+    // Storage is full or back to IDLE State (cancelled loading)
+    if((m_storage.isFull() == true) || (m_storage.getStatus() == StorageSubsystem.Status.CANCELLED)) {
       ret_value = true;
     }
     return ret_value;
@@ -57,7 +62,9 @@ public class PrepareToCollectCommand extends SequentialCommandGroup {
   // Called once after isFinished returns true
   @Override
   public void end(boolean interrupted) {
+    // The Storage will stop by itself
     // Deactivate the Intake
+    if(RobotBase.isSimulation()){ System.out.println("[StartCollectingCommand] Deactivate INTAKE"); }
     m_intake.deactivate();
   }
 }

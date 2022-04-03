@@ -4,6 +4,8 @@
 
 package frc.robot.commands;
 
+import edu.wpi.first.wpilibj.RobotBase;
+
 // Java Libraries
 // import java.util.function.DoubleSupplier;
 
@@ -49,7 +51,10 @@ public class StoreCargoCommand extends CommandBase {
   @Override
   public void end(boolean interrupted) {
     // Force stop of the storage units
-    m_storage.getFrontUnit().stop();
-    m_storage.getBackUnit().stop();
+    if(interrupted){
+      if(RobotBase.isSimulation()){ System.out.println("[StoreCargoCommand] Stopping BOTH (interrupted)"); }
+      m_storage.getFrontUnit().stop();
+      m_storage.getBackUnit().stop();
+    }
   }
 }

@@ -1,14 +1,12 @@
 package frc.robot.subsystems;
   
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import edu.wpi.first.wpilibj2.command.WaitCommand;
 //import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
+import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 
 import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
 import frc.robot.Constants.Intake;
@@ -65,6 +63,8 @@ public class IntakeSubsystem extends SubsystemBase {
 
       // Set Action to Finished
       m_activated = true;
+      if(RobotBase.isSimulation()){ System.out.println("[INTAKE] Activated"); }
+
     }
   }
 
@@ -83,6 +83,7 @@ public class IntakeSubsystem extends SubsystemBase {
 
       // Set Action to Finished
       m_activated = false;
+      if(RobotBase.isSimulation()){ System.out.println("[INTAKE] Deactivated"); }
     }
   }
 
@@ -96,9 +97,6 @@ public class IntakeSubsystem extends SubsystemBase {
   private void deploy(){
     // Extend Cylinders
     m_Cylinder.set(Value.kForward);
-
-    // Stop pushing on cylinders (keep the assembly "loose")
-    new SequentialCommandGroup(new WaitCommand(0.5), new InstantCommand(this::passive, this));
   }
   
   // Pull The Assembly in

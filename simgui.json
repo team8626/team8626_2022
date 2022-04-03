@@ -1,4 +1,16 @@
 {
+  "HALProvider": {
+    "Encoders": {
+      "window": {
+        "visible": true
+      }
+    },
+    "Solenoids": {
+      "window": {
+        "visible": true
+      }
+    }
+  },
   "NTProvider": {
     "types": {
       "/FMSInfo": "FMSInfo",
@@ -19,6 +31,7 @@
       "/LiveWindow/Ungrouped/Victor SPX [6]": "Motor Controller",
       "/LiveWindow/Ungrouped/Victor SPX [7]": "Motor Controller",
       "/SmartDashboard/Auto Mode": "String Chooser",
+      "/SmartDashboard/SHOOTER Target": "String Chooser",
       "/SmartDashboard/SIM BACK": "String Chooser",
       "/SmartDashboard/SIM FRONT": "String Chooser",
       "/SmartDashboard/Starting Position": "String Chooser"
@@ -26,15 +39,12 @@
   },
   "NetworkTables": {
     "LiveWindow": {
-      "StorageSubsystem": {
+      "IntakeSubsystem": {
         "open": true
       },
       "open": true
     },
     "SmartDashboard": {
-      "Auto Mode": {
-        "open": true
-      },
       "open": true
     }
   }

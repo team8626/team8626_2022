@@ -23,11 +23,10 @@ import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.ClimberSubsystem;
 
 import frc.robot.commands.PushCargoCommand;
-import frc.robot.commands.ShootAndMoveCommand;
 import frc.robot.commands.ArcadeDriveCommand;
-import frc.robot.commands.PrepareToCollectCommand;
+import frc.robot.commands.StartCollectingCommand;
+import frc.robot.commands.StartDeliveringCommand;
 import frc.robot.commands.StopCollectingCommand;
-import frc.robot.commands.LaunchCargoCommand;
 import frc.robot.commands.ControlClimberCommand;
 import frc.robot.commands.ControlStorageUnitCommand;
 
@@ -69,20 +68,20 @@ public class RobotContainer {
    */
   private void configureDefaultCommands(){
     // Always push Cargo Forward....
-    // if(Storage.kIsUsingColorSensors){
-    //   m_storage.setDefaultCommand(        
-    //   new PushCargoCommand(
-    //     m_storage));
-    // }
+    if(Storage.kIsUsingColorSensors){
+      m_storage.setDefaultCommand(        
+      new PushCargoCommand(
+        m_storage));
+    }
 
-     // Always Read Joystick and control the drivetrain
-     m_drivetrain.setDefaultCommand(    
-      new ArcadeDriveCommand(
-        () -> -m_flightJoystick.getX(), 
-        () -> m_flightJoystick.getY(),
-        // () -> m_gameController.getRightY(), 
-        // () -> m_gameController.getRightX(),
-        m_drivetrain));
+    // Always Read Joystick and control the drivetrain
+    m_drivetrain.setDefaultCommand(    
+    new ArcadeDriveCommand(
+      () -> -m_flightJoystick.getX(), 
+      () -> m_flightJoystick.getY(),
+      // () -> m_gameController.getRightY(), 
+      // () -> m_gameController.getRightX(),
+      m_drivetrain));
 
     // Always Read Joystick and control the climber arm
     // Note by default Climber arm is Disabled, will be enabled only when holding an extra button (see configureButtonBindings)
@@ -90,7 +89,6 @@ public class RobotContainer {
       new ControlClimberCommand(
         () -> m_gameController.getRightY(),
         m_climber));
-    //new InstantCommand(m_climber::setEnabled, m_climber);
 
     // Always Read Joystick and control the storage units
     // Front Storage Controlled by Left Joystick on Gamepad (X Axis)
@@ -118,20 +116,20 @@ public class RobotContainer {
 
     // Activate the intake Mecanism
     (new JoystickButton(m_gameController, Button.kY.value))
-    .whenPressed(new PrepareToCollectCommand(m_intake, m_storage));
+    .whenPressed(new StartCollectingCommand(m_intake, m_storage));
 
     // Deactivate the intake Mechanism
     (new JoystickButton(m_gameController, Button.kB.value))
     .whenPressed(new StopCollectingCommand(m_intake, m_storage));
 
-    // If both the grip button and trigger are pressed then activate the intake
+    // If trigger is pressed then activate the intake, deactivate on release of the button
     new JoystickButton(m_flightJoystick, 1)
-    .whenPressed(new PrepareToCollectCommand(m_intake, m_storage))
+    .whenPressed(new StartCollectingCommand(m_intake, m_storage))
     .whenReleased(new StopCollectingCommand(m_intake, m_storage));
  
     // Start Automatic Shooting Sequence
     (new JoystickButton(m_gameController, Button.kStart.value))
-     .whenPressed(new LaunchCargoCommand(m_storage, m_shooter));
+     .whenPressed(new StartDeliveringCommand(m_storage, m_shooter));
 
     // Start Manual Shooting
     (new JoystickButton(m_gameController, Button.kX.value))
@@ -140,20 +138,6 @@ public class RobotContainer {
     // Stop Manual Shooting
     (new JoystickButton(m_gameController, Button.kA.value))
     .whenPressed(new InstantCommand(m_shooter::deactivate, m_shooter));
-
-    // Adjust Shooting power
-    // (new JoystickButton(m_gameController, Button.kLeftBumper.value))
-    //     .whenPressed(new InstantCommand(m_shooter::speedDown, m_shooter));
-    // (new JoystickButton(m_gameController, Button.kRightBumper.value))
-    //     .whenPressed(new InstantCommand(m_shooter::speedUp, m_shooter));
-    
-    
-    // Climber Activated if Left Bumper is held. 
-    // When Released, it will deactivate.
-    // (new JoystickButton(m_gameController, Button.kStart.value))
-    //    .whileHeld(new InstantCommand(m_climber::setEnabled, m_climber))
-    //    .whenReleased(new InstantCommand(m_climber::setDisabled, m_climber));
-
   }
 
   /**
@@ -161,12 +145,12 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     Command retval = null;
-    //  try {
-       retval = new ShootAndMoveCommand(m_drivetrain, m_storage, m_shooter); // TODO: NEED THAT FOR REAL DEPLOYMENT m_autoControl.getStartCommand();
-    //  } catch (IOException e) {
-    //    // TODO Auto-generated catch block
-    //    e.printStackTrace();
-    //  }
+     try {
+       retval = m_autoControl.getStartCommand();
+     } catch (IOException e) {
+       // TODO Auto-generated catch block
+       e.printStackTrace();
+     }
     return retval;
   }
 }

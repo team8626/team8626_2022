@@ -3,6 +3,8 @@ package frc.robot.subsystems;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.RobotBase;
+import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Color;
@@ -15,7 +17,7 @@ import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
 // Team8626 Libraries
 import frc.robot.Constants.Cargo;
 
-/* 
+/**
 ** Main class for handling Storage Unit Substystem 
 */
 public class StorageUnitSubsystem extends SubsystemBase {
@@ -33,6 +35,10 @@ public class StorageUnitSubsystem extends SubsystemBase {
 
   private Color m_loadedColor = null;
   private boolean m_activated = false;
+
+  private Timer m_delayedStopTimer = new Timer();
+  private double m_delayedStopDuration = 0.0;
+  private boolean m_delayedStopStarted = false;
 
   // Class Constructor
   public StorageUnitSubsystem(String name, int CANID, I2C.Port I2CPort) {
@@ -52,12 +58,15 @@ public class StorageUnitSubsystem extends SubsystemBase {
     m_colorMatcher.addColorMatch(Cargo.kRed);
 
     readLoadedColor();
+
+    m_delayedStopTimer.reset();
   }  
 
   // Initialize Dashboard
   public void initDashboard(){
     SmartDashboard.putBoolean(m_name, this.isActive());
     SmartDashboard.putString("COLOR " + m_name, getColorAsString(m_loadedColor));
+    SmartDashboard.putBoolean(m_name + "_isEmpty", this.isEmpty());
 
     if(RobotBase.isSimulation()){
       m_SIM_cargoChooser.addOption("BLUE", Cargo.kBlue);
@@ -77,6 +86,7 @@ public class StorageUnitSubsystem extends SubsystemBase {
     }
     SmartDashboard.putBoolean(m_name, this.isActive());
     SmartDashboard.putString("COLOR " + m_name, getColorAsString(m_loadedColor));
+    SmartDashboard.putBoolean(m_name + "_isEmpty", this.isEmpty());
   };
 
   // Periodic Updates
@@ -86,19 +96,42 @@ public class StorageUnitSubsystem extends SubsystemBase {
       // Update Loaded Color
       readLoadedColor();
     }
+
+    // Check the delayed Stop timer
+    if(m_delayedStopStarted && (m_delayedStopTimer.hasElapsed(m_delayedStopDuration))){
+      m_delayedStopStarted = false;
+      m_delayedStopTimer.stop();
+      this.stop();
+    }
   }
 
-  // Start conveying
+ /** 
+   * Start conveying the Storage Unit
+   */ 
   public void start(){
+    if(RobotBase.isSimulation()){ System.out.println("[STORAGE " + m_name + "] Started"); }
     m_motor.set(1.0);
     m_activated = true;
   }
 
-  // Stop conveying
+  /** 
+   * Stop conveying the Storage Unit
+   */
   public void stop(){
+    if(RobotBase.isSimulation()){ System.out.println("[STORAGE " + m_name + "] Stopped"); }
     m_motor.stopMotor();
     m_activated = false;
+  }
 
+  /**
+   * Stop conveying with timeout (seconds)
+   * @param seconds Timer dutration in seconds 
+   */
+  public void stop(double seconds){
+    m_delayedStopDuration = seconds;
+    m_delayedStopStarted = true;
+    m_delayedStopTimer.reset();
+    m_delayedStopTimer.start();
   }
 
   // Return Current Loaded Color
@@ -150,5 +183,18 @@ public class StorageUnitSubsystem extends SubsystemBase {
       retval = "RED";
     }
     return retval;
-  }    
+  }
+
+    // Get Color as String
+    public Alliance getCargoColor(){
+      Alliance retval = Alliance.Invalid;
+      if(m_loadedColor == Cargo.kBlue){
+        retval = Alliance.Blue;
+      }
+      else if(m_loadedColor == Cargo.kRed){
+        retval = Alliance.Red;
+      }
+      return retval;
+    }
+  
 }

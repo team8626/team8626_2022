@@ -4,6 +4,8 @@
 
 package frc.robot.commands;
 
+import edu.wpi.first.wpilibj.RobotBase;
+
 // Java Libraries
 // import java.util.function.DoubleSupplier;
 
@@ -34,7 +36,7 @@ public class PushCargoCommand extends CommandBase {
   // Called repeatedly when this Command is scheduled to run
   @Override
   public void execute() {
-    m_storage.storeForward();
+    m_storage.pushCargo();
   }
 
   @Override
@@ -45,6 +47,9 @@ public class PushCargoCommand extends CommandBase {
   // Called once after isFinished returns true
   @Override
   public void end(boolean interrupted) {
-    // TODO: Do we need to stop the motors or storage units? NO WE ASSUME TIMEOUT WILL DO IT!
+    // Make sure to stop storage activity if command is interrupted
+    if(RobotBase.isSimulation()){ System.out.println("[PushCargoCommand] Stopping BOTH"); }
+    m_storage.getFrontUnit().stop();
+    m_storage.getBackUnit().stop();
   }
 }
