@@ -4,6 +4,7 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
 import edu.wpi.first.wpilibj.Encoder;
+import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.interfaces.Gyro;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
@@ -29,7 +30,7 @@ import frc.robot.Constants.DriveTrain;
     private final MotorControllerGroup m_motorControllerRight = new MotorControllerGroup(m_motorFrontRight, m_motorRearRight);
   
     private final DifferentialDrive m_drive = new DifferentialDrive(m_motorControllerLeft, m_motorControllerRight);
-  
+    
     // The left-side drive encoder
     private final Encoder m_leftEncoder =
       new Encoder(
@@ -58,8 +59,13 @@ import frc.robot.Constants.DriveTrain;
         resetEncoders();
         m_odometry = new DifferentialDriveOdometry(m_gyro.getRotation2d());
 
-        // Set initial Power for he drivetrain
+        // Set initial Power for the drivetrain
         this.setHighSpeed();
+
+        // Disable motor Safety for Simulation (Avoid Watchdog timeopiut on motors)
+        if(RobotBase.isSimulation()){
+          m_drive.setSafetyEnabled(false);
+        } 
       }  
       
       public void resetEncoders() {
