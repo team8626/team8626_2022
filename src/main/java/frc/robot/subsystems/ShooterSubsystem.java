@@ -110,6 +110,7 @@ public class ShooterSubsystem extends SubsystemBase {
     SmartDashboard.putNumber("Set Back Spin RPM", 0);
     SmartDashboard.putNumber("Actual Wheel RPM", m_encoderMain.getVelocity());
     SmartDashboard.putNumber("Actual Back Spin RPM", m_encoderSecondary.getVelocity());
+    SmartDashboard.putBoolean("SPEED OK ", this.isAtSpeed());
 
     // General Status
     SmartDashboard.putBoolean("SHOOTER", m_activated);
@@ -201,6 +202,8 @@ public class ShooterSubsystem extends SubsystemBase {
     SmartDashboard.putNumber("Tuned Back Spin RPM", m_secondaryTuneTarget);
     SmartDashboard.putNumber("Actual Wheel RPM", m_encoderMain.getVelocity());
     SmartDashboard.putNumber("Actual Back Spin RPM", m_encoderSecondary.getVelocity());
+    SmartDashboard.putBoolean("SPEED OK ", this.isAtSpeed());
+
   }
 
   // Periodic Updates
@@ -255,12 +258,12 @@ public class ShooterSubsystem extends SubsystemBase {
 
   // Shooter is spinning at target speed!
   public boolean isAtSpeed() {
-      boolean retval = false;
-      if( (Math.abs(m_encoderMain.getVelocity() - m_mainRPMRequest) <= Shooter.kRPMTolerance)
-        && (Math.abs(m_encoderSecondary.getVelocity() - m_secondaryRPMRequest) <= Shooter.kRPMTolerance) ){
-        retval = true;
-      }
-      return retval;
+    boolean retval = false;
+    if( (Math.abs(m_encoderMain.getVelocity() - m_mainRPMRequest) <= Shooter.kRPMTolerance)
+      && (Math.abs(m_encoderSecondary.getVelocity() - m_secondaryRPMRequest) <= Shooter.kRPMTolerance) ){
+      retval = true;
+    }
+    return retval;
   }
 
   public String targetToString(Target target){
