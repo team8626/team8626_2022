@@ -48,30 +48,24 @@ public class ShooterSubsystem extends SubsystemBase {
   // Store Velocity set by User on Dashboard
   private double m_RPMInputMain = Shooter.kShooterMainRPM_LowGoal;
   private double m_RPMInputSecondary = Shooter.kShooterSecondaryRPM_LowGoal;
-
-   // Store SetPoint
-   private double m_RPMSetPointMain = 0;
-   private double m_RPMSetPointSecondary = 0;
-   
-   private double m_RPMLastActiveSetPointMain = m_RPMInputMain;
-   private double m_RPMLastActiveSetPointSecondary = m_RPMInputSecondary;
-
-
-  //  private double m_mainTuneTarget      = m_mainRPMTarget;
-  //  private double m_secondaryTuneTarget = m_secondaryRPMTarget;
-
-  // Velocity Actually set on the Controllers
-  // private double m_mainRPMRequest      = 0;
-  // private double m_secondaryRPMRequest = 0;
+  private double m_RPMLastCustomMain = m_RPMInputMain;
+  private double m_RPMLastCustomSecondary = m_RPMInputSecondary;
+  
+  // Store SetPoint
+  private double m_RPMSetPointMain = 0;
+  private double m_RPMSetPointSecondary = 0;
+  private double m_RPMLastActiveSetPointMain = m_RPMInputMain;
+  private double m_RPMLastActiveSetPointSecondary = m_RPMInputSecondary;
 
   // Shooter Targets
-  public enum Target {LOW, HIGH, DISCARD, EMPTY};
+  public enum Target {LOW, HIGH, DISCARD, USER};
 
   // Internal States
   private boolean m_activated;
 
   private SendableChooser<Target> m_targetChooser = new SendableChooser<>();
   private Target m_shooterTarget = Shooter.kDefaultTarget;
+  // private boolean m_isTunedTarget = false;
 
   private Timer m_delayedStopTimer = new Timer();
   private double m_delayedStopDuration = 1.0;
@@ -139,12 +133,12 @@ public class ShooterSubsystem extends SubsystemBase {
     SmartDashboard.putBoolean("SHOOTER", m_activated);
 
     // Taget Selection
-  //   //m_targetChooser.addOption(targetToString(Target.EMPTY), Target.EMPTY);
-  //   m_targetChooser.addOption(targetToString(Target.LOW), Target.LOW);
-  //   m_targetChooser.addOption(targetToString(Target.HIGH), Target.HIGH);
-  //   //m_targetChooser.addOption(targetToString(Target.DISCARD), Target.DISCARD);
-  //   m_targetChooser.setDefaultOption(targetToString(m_shooterTarget), m_shooterTarget);
-  //   SmartDashboard.putData("SHOOTER Target", m_targetChooser);
+    m_targetChooser.addOption(targetToString(Target.USER), Target.USER);
+    m_targetChooser.addOption(targetToString(Target.LOW), Target.LOW);
+    m_targetChooser.addOption(targetToString(Target.HIGH), Target.HIGH);
+    m_targetChooser.addOption(targetToString(Target.DISCARD), Target.DISCARD);
+    m_targetChooser.setDefaultOption(targetToString(m_shooterTarget), m_shooterTarget);
+    SmartDashboard.putData("SHOOTER Target", m_targetChooser);
   }
 
   // Update Dashboard (Called Periodically)
@@ -165,61 +159,85 @@ public class ShooterSubsystem extends SubsystemBase {
     double max = SmartDashboard.getNumber("Max Output", 0);
     double min = SmartDashboard.getNumber("Min Output", 0);
 
-    double setpoint_main      = SmartDashboard.getNumber("SetPoint Wheel RPM", 0);
-    double setpoint_secondary = SmartDashboard.getNumber("SetPoint Back Spin RPM", 0);
+    double input_main      = SmartDashboard.getNumber("Input Wheel RPM", 0);
+    double input_secondary = SmartDashboard.getNumber("Input Back Spin RPM", 0);
     
-      // if PID coefficients on SmartDashboard have changed, write new values to controller
-      if((pMain != m_pMain))   { m_pidControllerMain.setP(pMain); m_pMain = pMain; }
-      if((iMain != m_iMain))   { m_pidControllerMain.setI(iMain); m_iMain = iMain; }
-      if((dMain != m_dMain))   { m_pidControllerMain.setD(dMain); m_dMain = dMain; }
-      if((izMain != m_izMain)) { m_pidControllerMain.setIZone(izMain); m_izMain = izMain; }
-      if((ffMain != m_ffMain)) { m_pidControllerMain.setFF(ffMain); m_ffMain = ffMain; }
+    // if PID coefficients on SmartDashboard have changed, write new values to controller
+    if((pMain != m_pMain))   { m_pidControllerMain.setP(pMain); m_pMain = pMain; }
+    if((iMain != m_iMain))   { m_pidControllerMain.setI(iMain); m_iMain = iMain; }
+    if((dMain != m_dMain))   { m_pidControllerMain.setD(dMain); m_dMain = dMain; }
+    if((izMain != m_izMain)) { m_pidControllerMain.setIZone(izMain); m_izMain = izMain; }
+    if((ffMain != m_ffMain)) { m_pidControllerMain.setFF(ffMain); m_ffMain = ffMain; }
 
-      if((pSec != m_pSecondary))   { m_pidControllerSecondary.setP(pSec); m_pSecondary = pSec; }
-      if((iSec != m_iSecondary))   { m_pidControllerSecondary.setI(iSec); m_iSecondary = iSec; }
-      if((dSec != m_dSecondary))   { m_pidControllerSecondary.setD(dSec); m_dSecondary = dSec; }
-      if((izSec != m_izSecondary)) { m_pidControllerSecondary.setIZone(izSec); m_izSecondary = izSec; }
-      if((ffSec != m_ffSecondary)) { m_pidControllerSecondary.setFF(ffSec); m_ffSecondary = ffSec; }
+    if((pSec != m_pSecondary))   { m_pidControllerSecondary.setP(pSec); m_pSecondary = pSec; }
+    if((iSec != m_iSecondary))   { m_pidControllerSecondary.setI(iSec); m_iSecondary = iSec; }
+    if((dSec != m_dSecondary))   { m_pidControllerSecondary.setD(dSec); m_dSecondary = dSec; }
+    if((izSec != m_izSecondary)) { m_pidControllerSecondary.setIZone(izSec); m_izSecondary = izSec; }
+    if((ffSec != m_ffSecondary)) { m_pidControllerSecondary.setFF(ffSec); m_ffSecondary = ffSec; }
 
-      if((max != m_maxOutput) || (min != m_minOutput)) { 
-        m_pidControllerMain.setOutputRange(min, max); 
-        m_pidControllerSecondary.setOutputRange(min, max); 
-        m_minOutput = min; 
-        m_maxOutput = max; 
+    if((max != m_maxOutput) || (min != m_minOutput)) { 
+      m_pidControllerMain.setOutputRange(min, max); 
+      m_pidControllerSecondary.setOutputRange(min, max); 
+      m_minOutput = min; 
+      m_maxOutput = max; 
+    }
+
+    Target target = m_targetChooser.getSelected();
+    if(target == Target.USER){
+      if(m_shooterTarget != Target.USER){
+        // Enterring in Custom mode
+        // Resel last Custom Values
+        m_RPMInputMain      = 999999; // Dummy value to force update
+        m_RPMInputSecondary = 999999; // Dummy value to force update
+        input_main          = m_RPMLastCustomMain;
+        input_secondary     = m_RPMLastCustomSecondary;
+
+        m_shooterTarget = Target.USER; 
+        m_targetChooser.setDefaultOption(targetToString(m_shooterTarget), m_shooterTarget);
+        SmartDashboard.putData("SHOOTER Target", m_targetChooser);
       }
-
       // Read User input for RPM and store them
-      if((setpoint_main != m_RPMSetPointMain))   { m_RPMSetPointMain = setpoint_main; }
-      if((setpoint_secondary != m_RPMSetPointSecondary))   { m_RPMSetPointSecondary = setpoint_secondary; }
-
+      if((input_main != m_RPMInputMain)) 
+      {
+        m_RPMInputMain = input_main;
+        if(m_activated){
+          m_RPMSetPointMain = m_RPMInputMain;
+        } else {
+          m_RPMLastActiveSetPointMain = m_RPMInputMain;
+        }
+        m_RPMLastCustomMain = m_RPMInputMain;
+        if(RobotBase.isSimulation()){ System.out.println("[SHOOTER] New SetPoint: " + m_RPMInputMain); }
+      }
       
-    // Update Shooter Speed based on Shuffleboard
-    // Is selection changed, use the selection.
-    // Otherwise, use the tuning values if changed.
-    Target newTarget = m_targetChooser.getSelected();
-    if(newTarget != m_shooterTarget){
-  //     if(RobotBase.isSimulation()){ System.out.println("[SHOOTER] New Target: " + targetToString(newTarget)); }
-  //     m_shooterTarget = newTarget;
-  //     setRPMTarget(m_shooterTarget);
-  //     m_mainTuneTarget = m_mainRPMTarget;
-  //     m_secondaryTuneTarget = m_secondaryRPMTarget;
+      if((input_secondary != m_RPMInputSecondary))
+      { 
+        m_RPMInputSecondary = input_secondary;
+        if(m_activated){
+          m_RPMSetPointSecondary = m_RPMInputSecondary;
+        } else {
+          m_RPMLastActiveSetPointSecondary = m_RPMInputSecondary;
+        }
+        m_RPMLastCustomSecondary = m_RPMInputSecondary;
+
+        if(RobotBase.isSimulation()){ System.out.println("[SHOOTER] New Back Spin: " + m_RPMInputSecondary); }
+      } 
     } else {
-      // Adjust Wheel Speed if changed
+      // Predefined Values (LOW, HIGH, DISCARD)
+      if(target != m_shooterTarget){
+        m_shooterTarget = target;
+        setRPMTarget(m_shooterTarget);
 
-  //     if((main_rot != m_mainTuneTarget)) {
-  //       if(RobotBase.isSimulation()){ System.out.println("[SHOOTER] New Target MAIN (" + m_mainTuneTarget + " -> " + main_rot +")"); }
-  //       m_mainTuneTarget = main_rot; 
-  //       m_mainRPMTarget = m_mainTuneTarget;
-  //     };
-  //     if((secondary_rot != m_secondaryTuneTarget)) { 
-  //       if(RobotBase.isSimulation()){ System.out.println("[SHOOTER] New Target SECONDARY (" + m_secondaryTuneTarget + " -> " + secondary_rot +")"); }
-  //       m_secondaryTuneTarget = secondary_rot; 
-  //       m_secondaryRPMTarget = m_secondaryTuneTarget; 
-      // };
+        // Adjust Input values for display on shuffleboard
+        if(m_activated){
+          m_RPMInputMain = m_RPMSetPointMain;
+          m_RPMInputSecondary = m_RPMSetPointSecondary;
+        } else {
+          m_RPMInputMain = m_RPMLastActiveSetPointMain;
+          m_RPMInputSecondary = m_RPMLastActiveSetPointSecondary;
+        }
+      }
+    }
 
-  //     // m_targetChooser.setDefaultOption(targetToString(Target.EMPTY), Target.EMPTY);
-  //     // SmartDashboard.putData("SHOOTER Target", m_targetChooser);
-    } 
 
     // General Status
     SmartDashboard.putBoolean("SHOOTER", m_activated);
@@ -254,10 +272,13 @@ public class ShooterSubsystem extends SubsystemBase {
   }
 
   public void activate(){
-    m_pidControllerMain.setReference(m_RPMLastActiveSetPointMain, CANSparkMax.ControlType.kVelocity);
-    m_pidControllerSecondary.setReference(m_RPMLastActiveSetPointSecondary, CANSparkMax.ControlType.kVelocity);
+    m_RPMSetPointMain      = m_RPMLastActiveSetPointMain;
+    m_RPMSetPointSecondary = m_RPMLastActiveSetPointSecondary;
+    
+    // m_pidControllerMain.setReference(m_RPMSetPointMain, CANSparkMax.ControlType.kVelocity);
+    // m_pidControllerSecondary.setReference(m_RPMSetPointSecondary, CANSparkMax.ControlType.kVelocity);
     m_activated = true;
-    if(RobotBase.isSimulation()){ System.out.println("[SHOOTER] Activated"); }
+    if(RobotBase.isSimulation()){ System.out.println("[SHOOTER] Activated (" + m_RPMSetPointMain + ", " + m_RPMSetPointSecondary +")"); }
 
   }
 
@@ -317,35 +338,44 @@ public boolean isAtSpeed() {
       case DISCARD:
         retval = "Discard Cargo";
         break;
-      case EMPTY:
-        retval = "---";
+      case USER:
+        retval = "USER Defined";
         break;
     }
     return retval;
   }
 
   public void setRPMTarget(Target target){ 
-    // TODO Currently doing nothing since Shooter not tuned
+    double newSetPointMain = 0;
+    double newSetPointSecondary = 0;
+    
+    switch(target){
+      case LOW:
+        newSetPointMain = Shooter.kShooterMainRPM_LowGoal;
+        newSetPointSecondary = Shooter.kShooterSecondaryRPM_LowGoal;
+        break;
+      case HIGH:
+        newSetPointMain = Shooter.kShooterMainRPM_HighGoal;
+        newSetPointSecondary = Shooter.kShooterSecondaryRPM_HighGoal;
+        break;
+      case DISCARD:
+        newSetPointMain = Shooter.kShooterMainRPM_Discard;
+        newSetPointSecondary = Shooter.kShooterSecondaryRPM_Discard;
+       break;
+      case USER:
+        newSetPointMain      = m_RPMInputMain;
+        newSetPointSecondary = m_RPMInputSecondary;
+        break;
+    }
+    if(RobotBase.isSimulation()){ System.out.println("[SHOOTER] " + targetToString(target) + " (" + newSetPointMain + ", " + newSetPointSecondary +")"); }
 
-  //   switch(target){
-  //     default:
-  //     case LOW:
-  //       m_mainRPMTarget = Shooter.kShooterMainRPM_LowGoal;
-  //       m_secondaryRPMTarget = Shooter.kShooterSecondaryRPM_LowGoal;
-  //       if(RobotBase.isSimulation()){ System.out.println("[SHOOTER] LOW (" + m_mainRPMTarget + ", " + m_secondaryRPMTarget +")"); }
-  //       break;
-  //     case HIGH:
-  //       m_mainRPMTarget = Shooter.kShooterMainRPM_HighGoal;
-  //       m_secondaryRPMTarget = Shooter.kShooterSecondaryRPM_HighGoal;
-  //       if(RobotBase.isSimulation()){ System.out.println("[SHOOTER] HIGH (" + m_mainRPMTarget + ", " + m_secondaryRPMTarget +")"); }
-  //       break;
-  //     case DISCARD:
-  //       m_mainRPMTarget = Shooter.kShooterMainRPM_Discard;
-  //       m_secondaryRPMTarget = Shooter.kShooterSecondaryRPM_Discard;
-  //       if(RobotBase.isSimulation()){ System.out.println("[SHOOTER] DISCARD (" + m_mainRPMTarget + ", " + m_secondaryRPMTarget +")"); }
-
-  //       break;
-  //   }
+    if(m_activated){
+      m_RPMSetPointMain      = newSetPointMain;
+      m_RPMSetPointSecondary = newSetPointSecondary;
+    } else {
+      m_RPMLastActiveSetPointMain    = newSetPointMain;
+      m_RPMLastActiveSetPointSecondary = newSetPointSecondary;
+    }
   }
 
   public Target getTarget(){

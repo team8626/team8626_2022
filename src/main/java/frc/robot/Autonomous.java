@@ -18,11 +18,11 @@ import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.StorageSubsystem;
-import frc.robot.commands.CollectAndShootTwoCommand;
+import frc.robot.commands.Autonomous_CollectAndShootTwoCommand;
 import frc.robot.commands.DriveMetersCommand;
 import frc.robot.commands.FollowTrajectoryCommand;
-import frc.robot.commands.ShootAndMoveCommand;
-import frc.robot.commands.ShootAndMoveMetersCommand;
+import frc.robot.commands.Autonomous_ShootAndMoveCommand;
+import frc.robot.commands.Autonomous_ShootAndMoveMetersCommand;
 import frc.robot.commands.TestTrajectoryCommand;
 
 public class Autonomous {
@@ -53,26 +53,27 @@ public class Autonomous {
             default: 
             case SHOOT_AND_MOVE:
                 // Shoot then move out of the tarmac
-                startCommand = new ShootAndMoveCommand(m_drivetrain, m_storage, m_shooter);
+                startCommand = new Autonomous_ShootAndMoveCommand(m_drivetrain, m_storage, m_shooter);
                 break;
 
             case SHOOT_AND_MOVE_METERS:
-                startCommand = new ShootAndMoveMetersCommand(1.5 /* distance in m */, m_drivetrain, m_storage, m_shooter);
-                // Shoot then move out of the tarmac
+                 // Shoot then move out of the tarmac
+                 startCommand = new Autonomous_ShootAndMoveMetersCommand(2.15 /* distance in m */, m_drivetrain, m_storage, m_shooter);
                 break;
 
             case COLLECT_AND_SHOOT2:
-                // Shoot then move out of the tarmac
-                startCommand = new CollectAndShootTwoCommand(1 /* distance in m */, m_drivetrain, m_intake, m_storage, m_shooter);
+                // Collect one extra ball then shoot 2 balls
+                startCommand = new Autonomous_CollectAndShootTwoCommand(3 /* distance in m */, m_drivetrain, m_intake, m_storage, m_shooter);
                 break;
             
             case EXIT: 
                 System.out.println("Exit (Universal)");
-                startCommand = new DriveMetersCommand(() -> 1 /* meters */ , m_drivetrain);
+                startCommand = new DriveMetersCommand(() -> 2.15 /* meters */ , m_drivetrain);
                 //startCommand = new FollowTrajectoryCommand("Exit.json", m_drivetrain);
                 break;
              
-            case TEST: System.out.println("Running Test Trajectory)");
+            case TEST: 
+                System.out.println("Running Test Trajectory)");
                 startCommand = new TestTrajectoryCommand(m_drivetrain);            
                 break;
 

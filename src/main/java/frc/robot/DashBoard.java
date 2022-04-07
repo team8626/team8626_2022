@@ -120,8 +120,6 @@ public class DashBoard {
 
     // Initialize Dashboard for all subsystems.
     private static void initSubsystems() {
-        SmartDashboard.putString("Robot Status", "---STARTING---");   
-
         //m_drivetrain.initDashboard();
         m_intake.initDashboard();
         m_storage.initDashboard();
@@ -133,7 +131,6 @@ public class DashBoard {
 
     // Update values that need high frequency refresh.
     private static void updateShortInterval() {
-
         //m_drivetrain.updateDashboard();
          m_intake.updateDashboard();
          m_storage.updateDashboard();

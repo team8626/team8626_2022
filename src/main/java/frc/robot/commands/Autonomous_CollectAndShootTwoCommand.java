@@ -10,6 +10,7 @@ package frc.robot.commands;
 // WPI Library dependencies
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.subsystems.DriveSubsystem;
+import frc.robot.subsystems.IntakeSubsystem;
 
 // Team8626 Libraries
 import frc.robot.subsystems.ShooterSubsystem;
@@ -19,31 +20,34 @@ import frc.robot.subsystems.StorageSubsystem;
  * Quick Autonomous mode routine
  * Shoot and drive backwards
  **/
-public class ShootAndMoveCommand extends SequentialCommandGroup {
+public class Autonomous_CollectAndShootTwoCommand extends SequentialCommandGroup {
   // @SuppressWarnings({ "PMD.UnusedPrivateField", "PMD.SingularField" })
   private final DriveSubsystem  m_drivetrain;
-  private final ShooterSubsystem  m_shooter;
+  private final IntakeSubsystem m_intake;
   private final StorageSubsystem m_storage;
-
-  private double m_driveSpeed = 1.0;
+  private final ShooterSubsystem m_shooter;
 
   /**
-   * Creates a new ShootAndMoveCommand command.
+   * Creates a new ShootAndMoveMetersCommand command.
    * 
    * @param intake  The Intake
    * @param storage The Storage
    */
-  public ShootAndMoveCommand(DriveSubsystem drivetrain, StorageSubsystem storage, ShooterSubsystem shooter) {
+  public Autonomous_CollectAndShootTwoCommand(double distanceMeters, DriveSubsystem drivetrain, IntakeSubsystem intake, StorageSubsystem storage, ShooterSubsystem shooter) {
     m_drivetrain = drivetrain;
-    m_shooter = shooter;
+    m_intake = intake;
     m_storage = storage;
+    m_shooter = shooter;
 
     addCommands(
-            new StartDeliveringCommand(m_storage, m_shooter),
-
-           // Drive Back until Timeout
-            new TankDriveCommand(() -> m_driveSpeed, () -> -m_driveSpeed, m_drivetrain)
-              .withTimeout(1.2)
+        new SequentialCommandGroup(
+            new StartCollectingCommand(m_intake, m_storage),
+            new DriveMetersCommand(() -> distanceMeters, m_drivetrain),
+            new StopCollectingCommand(m_intake, m_storage),
+            new TurnDegreesCommand(() -> 180, m_drivetrain),
+            new DriveMetersCommand(() -> distanceMeters, m_drivetrain),
+            new StartDeliveringCommand(m_storage, m_shooter)
+        )
     );
   }
 

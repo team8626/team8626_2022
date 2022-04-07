@@ -19,7 +19,7 @@ import frc.robot.subsystems.StorageSubsystem;
  * Quick Autonomous mode routine
  * Shoot and drive backwards
  **/
-public class ShootAndMoveMetersCommand extends SequentialCommandGroup {
+public class Autonomous_ShootAndMoveMetersCommand extends SequentialCommandGroup {
   // @SuppressWarnings({ "PMD.UnusedPrivateField", "PMD.SingularField" })
   private final DriveSubsystem  m_drivetrain;
   private final ShooterSubsystem  m_shooter;
@@ -31,7 +31,7 @@ public class ShootAndMoveMetersCommand extends SequentialCommandGroup {
    * @param intake  The Intake
    * @param storage The Storage
    */
-  public ShootAndMoveMetersCommand(double distanceMeters, DriveSubsystem drivetrain, StorageSubsystem storage, ShooterSubsystem shooter) {
+  public Autonomous_ShootAndMoveMetersCommand(double distanceMeters, DriveSubsystem drivetrain, StorageSubsystem storage, ShooterSubsystem shooter) {
     m_drivetrain = drivetrain;
     m_shooter = shooter;
     m_storage = storage;
