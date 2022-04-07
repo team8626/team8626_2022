@@ -118,7 +118,7 @@ public class DashBoard {
         }
     }
 
-    // Initialize Dashboard foe all subsystems.
+    // Initialize Dashboard for all subsystems.
     private static void initSubsystems() {
         SmartDashboard.putString("Robot Status", "---STARTING---");   
 
