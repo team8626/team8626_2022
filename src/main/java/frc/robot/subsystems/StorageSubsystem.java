@@ -63,19 +63,10 @@ public class StorageSubsystem extends SubsystemBase {
         // We are moving the cargo forward:
         //  Stop front unit when cargo is not detected anymore
         //  Stop back unit when cargo is detected 
-        // if(m_unitFront.isEmpty() && m_unitFront.isActive()){
-        //   if(RobotBase.isSimulation()){ System.out.println("[STORAGE] Status FORWARDING - Stopping FRONT (isEmpty)"); }
-        //   m_unitFront.stop();
-        // }
-        // if(!m_unitBack.isEmpty()){
-        //   if(RobotBase.isSimulation()){ System.out.println("[STORAGE] Status FORWARDING - Stopping BACK (isLoaded)"); }
-        //   m_unitBack.stop();
-        //   m_status = Status.IDLE;
-        // }
         if(m_unitFront.isEmpty() && !m_unitBack.isEmpty()){
-          if(RobotBase.isSimulation()){ System.out.println("[STORAGE] Status FORWARDING - Stopping FRONT (isEmpty)"); }
+          if(RobotBase.isSimulation()){ System.out.println("[STORAGE] Status FORWARDING - Stopping FRONT (isEmpty) - DELAY"); }
           if(RobotBase.isSimulation()){ System.out.println("[STORAGE] Status FORWARDING - Stopping BACK (isLoaded)"); }
-          m_unitFront.stop();
+          m_unitFront.stop(0.5 /* seconds delay*/);
           m_unitBack.stop();
           m_status = Status.IDLE;
         }
@@ -84,8 +75,8 @@ public class StorageSubsystem extends SubsystemBase {
 
       case DELIVERING:
         if(m_unitBack.isEmpty()){
-          if(RobotBase.isSimulation()){ System.out.println("[STORAGE] Status DELIVERING - Stopping BACK (isEmpty)"); }
-          m_unitBack.stop();
+          if(RobotBase.isSimulation()){ System.out.println("[STORAGE] Status DELIVERING - Stopping BACK (isEmpty) - DELAY"); }
+          m_unitBack.stop(0.5 /* seconds delay*/);
           m_status = Status.IDLE;
         }
         break;
