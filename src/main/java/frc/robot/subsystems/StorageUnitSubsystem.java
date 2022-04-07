@@ -56,6 +56,10 @@ public class StorageUnitSubsystem extends SubsystemBase {
 
     m_colorMatcher.addColorMatch(Cargo.kBlue);
     m_colorMatcher.addColorMatch(Cargo.kRed);
+    // Add Dummy Colors to improve our chance or reading the right colors
+    m_colorMatcher.addColorMatch(Cargo.kDummyGreen);
+    m_colorMatcher.addColorMatch(Cargo.kDummyYellow);
+    m_colorMatcher.addColorMatch(Cargo.kDummyBlack);
 
     readLoadedColor();
 
@@ -138,7 +142,14 @@ public class StorageUnitSubsystem extends SubsystemBase {
   private void readLoadedColor(){
     //Run the color match algorithm on our detected color
     ColorMatchResult match = m_colorMatcher.matchClosestColor(m_colorSensor.getColor());
-    m_loadedColor = match.color;  
+    
+    if(match.color == Cargo.kRed){
+      m_loadedColor = Cargo.kRed;
+    } else if(match.color == Cargo.kBlue){
+      m_loadedColor = Cargo.kBlue;
+    } else {
+      m_loadedColor = null;
+    }
   }
 
   // Return Current Loaded Color
