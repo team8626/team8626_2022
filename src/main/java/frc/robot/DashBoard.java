@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj.Notifier;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.subsystems.ClimberSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.StorageSubsystem;
@@ -41,12 +42,13 @@ public class DashBoard {
     private static IntakeSubsystem m_intake;
     private static StorageSubsystem m_storage;
     private static ShooterSubsystem m_shooter;
+    private static ClimberSubsystem m_climber;
 
     /**
      * Class Constructor
      * Initialize the Dashboard with defaul values of "settable" inputs.
      */
-    public DashBoard(IntakeSubsystem intake, StorageSubsystem storage, ShooterSubsystem shooter) {
+    public DashBoard(IntakeSubsystem intake, StorageSubsystem storage, ShooterSubsystem shooter, ClimberSubsystem climber) {
         if(kEnableDashBoard){
             //SmartDashboard.putBoolean("Compressor ENABLE", true);
             //SmartDashboard.putBoolean("Limelight-LED Toggle", false);
@@ -59,6 +61,7 @@ public class DashBoard {
         m_intake = intake;
         m_storage = storage;
         m_shooter = shooter;
+        m_climber = climber;
 
         initSubsystems();
     }
@@ -126,6 +129,7 @@ public class DashBoard {
         m_storage.getFrontUnit().initDashboard();
         m_storage.getBackUnit().initDashboard();
         m_shooter.initDashboard();
+        m_climber.initDashboard();
         //m_climber.initDashboard();
     }
 
@@ -137,6 +141,7 @@ public class DashBoard {
          m_storage.getFrontUnit().updateDashboard();
          m_storage.getBackUnit().updateDashboard();
          m_shooter.updateDashboard();
+         m_climber.updateDashboard();
          //m_climber.updateDashboard();
 
          // Pulsing to indicate Dashboard is updated
