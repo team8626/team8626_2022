@@ -127,14 +127,14 @@ public final class Constants {
          // public static int kEncoderCountPerRev = 42; // NEO and NEO 550 Encoder Count per Revolution
  
          //Predefined RPM for sooter motors
-         public static double kShooterMainRPM_LowGoal       = 300;
-         public static double kShooterSecondaryRPM_LowGoal  = 450;
+         public static double kShooterMainRPM_LowGoal       = 500;
+         public static double kShooterSecondaryRPM_LowGoal  = 2000;
 
-         public static double kShooterMainRPM_HighGoal      = 900;
-         public static double kShooterSecondaryRPM_HighGoal = 1500;
+         public static double kShooterMainRPM_HighGoal      = 1000;
+         public static double kShooterSecondaryRPM_HighGoal = 4000;
         
-         public static double kShooterMainRPM_Discard       =  500;
-         public static double kShooterSecondaryRPM_Discard  = -1000;
+         public static double kShooterMainRPM_Discard       =  400;
+         public static double kShooterSecondaryRPM_Discard  = -200;
 
          public static double kRPMTolerance = 0.01;
  
