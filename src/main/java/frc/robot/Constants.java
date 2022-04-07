@@ -100,6 +100,9 @@ public final class Constants {
         // Colors
         public static Color kBlue = new Color(0.2, 0.45, 0.34);
         public static Color kRed   = new Color(0.4, 0.4, 0.2);
+        public static Color kDummyGreen = new Color(0.197, 0.561, 0.240);
+        public static Color kDummyYellow = new Color(0.361, 0.524, 0.113);
+        public static Color kDummyBlack = new Color(0.0, 0.0, 0.0);
     }
 
     // Climber subsystem constants
@@ -112,37 +115,44 @@ public final class Constants {
     // Shooter subsystem constants
     public final static class Shooter {
          // CAN Bus Addresses for Motor
-         public static int kCANMotorShooterMain       = 12;      // USING SPARKMAX & NEO
-         public static int kCANMotorShooterSecondary  = 13;      // USING SPARKMAX & NEO 550
- 
+         public static int kCANMotorShooterMain       =  9;      // USING SPARKMAX & NEO
+         public static int kCANMotorShooterSecondary  = 13;      // USING SPARKMAX & NEO
+
          // Predefined Voltage for Shooter Motor
-         public static double kShooterVoltageMainHighGoal  = 9.0;
-         public static double kShooterVoltageMainLowGoal   = 5.5;
-         public static double kShooterVoltageMainDiscard   = 4.0;
+        //  public static double kShooterVoltageMainHighGoal  = 9.0;
+        //  public static double kShooterVoltageMainLowGoal   = 5.5;
+        //  public static double kShooterVoltageMainDiscard   = 4.0;
  
          // Encoder Specifications
-         public static int kEncoderCountPerRev = 42; // NEO and NEO 550 Encoder Count per Revolution
+         // public static int kEncoderCountPerRev = 42; // NEO and NEO 550 Encoder Count per Revolution
  
          //Predefined RPM for sooter motors
-         public static double kShooterMainRPM_LowGoal       = 1000;
-         public static double kShooterSecondaryRPM_LowGoal  = 1500;
+         public static double kShooterMainRPM_LowGoal       = 300;
+         public static double kShooterSecondaryRPM_LowGoal  = 450;
 
-         public static double kShooterMainRPM_HighGoal      = 3000;
+         public static double kShooterMainRPM_HighGoal      = 900;
          public static double kShooterSecondaryRPM_HighGoal = 1500;
         
-         public static double kShooterMainRPM_Discard       =  900;
-         public static double kShooterSecondaryRPM_Discard  = 1500;
+         public static double kShooterMainRPM_Discard       =  500;
+         public static double kShooterSecondaryRPM_Discard  = -1000;
 
          public static double kRPMTolerance = 0.01;
  
          // PID Loop Coefficients
-         public static double kP  = 0.1;
-         public static double kI  = 1e-4;
-         public static double kD  = 1.0;
-         public static double kIz = 0.0;
-         public static double kFF = 0.0;
-         public static double kMinOutput  = -1.0;
-         public static double kMaxOutput  = 1.0;
+         public static double kP_Main = 6e-5; 
+         public static double kI_Main = 0;
+         public static double kD_Main = 0; 
+         public static double kIz_Main = 0; 
+         public static double kFF_Main = 0.000015; 
+
+         public static double kP_Secondary = 6e-5; 
+         public static double kI_Secondary = 0;
+         public static double kD_Secondary = 0; 
+         public static double kIz_Secondary = 0; 
+         public static double kFF_Secondary = 0.000015; 
+
+         public static double kMaxOutput = 1; 
+         public static double kMinOutput = -1;
   
         public static int kShooterSpinSeconds = 5;
 
