@@ -76,7 +76,7 @@ public class StartDeliveringCommand extends CommandBase {
   @Override
   public void end(boolean interrupted) {
     // The Storage will stop by itself
-    // Deactivate the Shooter (5 seconds delay)
-    m_shooter.deactivate(5.0); 
+    // Deactivate the Shooter (2 seconds delay)
+    m_shooter.deactivate(2.0); 
   }
 }
