@@ -54,7 +54,7 @@ public class RobotContainer {
   private final XboxController m_gameController = new XboxController(Controller.kGamepadPort); 
 
   // Autonomous Mode
-  private final static DashBoard m_dashboard = new DashBoard(m_intake, m_storage, m_shooter);
+  private final static DashBoard m_dashboard = new DashBoard(m_intake, m_storage, m_shooter, m_climber);
   private final static Autonomous m_autoControl = new Autonomous(m_dashboard, m_drivetrain, m_intake, m_storage, m_shooter);
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
