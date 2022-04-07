@@ -367,7 +367,9 @@ public boolean isAtSpeed() {
         newSetPointSecondary = m_RPMInputSecondary;
         break;
     }
-    if(RobotBase.isSimulation()){ System.out.println("[SHOOTER] " + targetToString(target) + " (" + newSetPointMain + ", " + newSetPointSecondary +")"); }
+    if((m_RPMSetPointMain != newSetPointMain) ||  (m_RPMSetPointSecondary != newSetPointSecondary) || (m_RPMLastActiveSetPointMain != newSetPointMain) || (m_RPMLastActiveSetPointSecondary != newSetPointSecondary)){
+      if(RobotBase.isSimulation()){ System.out.println("[SHOOTER] " + targetToString(target) + " (" + newSetPointMain + ", " + newSetPointSecondary +")"); }
+    }
 
     if(m_activated){
       m_RPMSetPointMain      = newSetPointMain;
