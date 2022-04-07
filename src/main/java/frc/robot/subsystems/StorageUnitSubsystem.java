@@ -35,6 +35,7 @@ public class StorageUnitSubsystem extends SubsystemBase {
 
   private Color m_loadedColor = null;
   private boolean m_activated = false;
+  private boolean m_manualControl = false;
 
   private Timer m_delayedStopTimer = new Timer();
   private double m_delayedStopDuration = 0.0;
@@ -68,7 +69,7 @@ public class StorageUnitSubsystem extends SubsystemBase {
 
   // Initialize Dashboard
   public void initDashboard(){
-    SmartDashboard.putBoolean(m_name, this.isActive());
+    SmartDashboard.putBoolean(m_name, m_activated || m_manualControl);
     SmartDashboard.putString("COLOR " + m_name, getColorAsString(m_loadedColor));
     SmartDashboard.putBoolean(m_name + "_isEmpty", this.isEmpty());
 
@@ -88,7 +89,7 @@ public class StorageUnitSubsystem extends SubsystemBase {
             
       if (newColor != m_loadedColor) {m_loadedColor = newColor;}
     }
-    SmartDashboard.putBoolean(m_name, this.isActive());
+    SmartDashboard.putBoolean(m_name, m_activated || m_manualControl);
     SmartDashboard.putString("COLOR " + m_name, getColorAsString(m_loadedColor));
     SmartDashboard.putBoolean(m_name + "_isEmpty", this.isEmpty());
   };
@@ -114,8 +115,8 @@ public class StorageUnitSubsystem extends SubsystemBase {
    */ 
   public void start(){
     if(RobotBase.isSimulation()){ System.out.println("[STORAGE " + m_name + "] Started"); }
-    m_motor.set(1.0);
     m_activated = true;
+    m_motor.set(1.0);
   }
 
   /** 
@@ -167,10 +168,6 @@ public class StorageUnitSubsystem extends SubsystemBase {
     return ret_value;
   }
 
-  public boolean isActive(){
-    return m_activated;
-  }
-
   /** 
    * Set Motor Power. Used for manual control of the unit
    * @newPower new value to be applied [-1.0 ; 1.0]
@@ -178,9 +175,9 @@ public class StorageUnitSubsystem extends SubsystemBase {
   public void setPower(double newPower){
       m_motor.set(newPower);
       if(newPower != 0){
-        m_activated = true;
+        m_manualControl = true;
       } else {
-        m_activated = false;
+        m_manualControl = false;
       }
   }
 
