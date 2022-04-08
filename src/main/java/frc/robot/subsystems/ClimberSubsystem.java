@@ -41,7 +41,7 @@ public class ClimberSubsystem extends SubsystemBase {
    */
   public void setPower(double newPower){
     if(m_enabled){
-      if(newPower > 0){
+      if(newPower != 0){
         m_activated = true;
       }
       else{
