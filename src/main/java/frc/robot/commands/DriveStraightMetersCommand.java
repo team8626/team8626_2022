@@ -7,10 +7,10 @@ package frc.robot.commands;
 // Java Libraries
 import java.util.function.DoubleSupplier;
 
+// WPI Library dependencies
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-// WPI Library dependencies
-import edu.wpi.first.wpilibj2.command.PIDCommand;
+
 // Team8626 Libraries
 import frc.robot.subsystems.DriveSubsystem;
 
@@ -21,24 +21,30 @@ public class DriveStraightMetersCommand extends CommandBase {
   private final DriveSubsystem m_drivetrain;
 
   private double m_setPoint = 0;
-  private int m_P, m_I, m_D = 1;
-  private int m_integral_Left, m_integral_Right;
-  private double m_previous_error_Left, m_previous_error_Right;
-  private double m_power, m_powerLeft, m_powerRight = 0;
+  private double m_P = 0.001;
+  private double m_I = 0;
+  private double m_D = 0;
+  private double m_powerRatio;
+  private PIDController m_LeftController;
+  private PIDController m_RightController;
 
   /**
-   * Creates a new TankDriveCommand command.
+   * Creates a new DriveStraightMetersCommand command.
    *
-   * @param distanceMeters 
+   * @param distanceMeters Distance to be driven
+   * @param power Power Ratio to be applie to the driving [0-1]
    */
   
   public DriveStraightMetersCommand(DoubleSupplier distanceMeters, DoubleSupplier power, DriveSubsystem drivetrain) {
   
     m_setPoint = distanceMeters.getAsDouble();
-    m_power = power.getAsDouble();
+    m_powerRatio = power.getAsDouble();
     m_drivetrain = drivetrain;
-   // getController().setTolerance(0.01);
-   System.out.println("[DRIVE_STRAIGHT] Start Driving "+ m_setPoint + "m");
+
+    m_LeftController = new PIDController(m_P, m_I, m_D);
+    m_RightController = new PIDController(m_P, m_I, m_D);
+    
+    System.out.println("[DRIVE_STRAIGHT] Start Driving "+ m_setPoint + "m");
 
     addRequirements(m_drivetrain);
   }
@@ -47,42 +53,34 @@ public class DriveStraightMetersCommand extends CommandBase {
   @Override
   public void initialize() {
     m_drivetrain.resetEncoders();
+    m_LeftController.setSetpoint(m_setPoint);
+    m_LeftController.setTolerance(0.01);
+    m_LeftController.setIntegratorRange(-1.0, 1.0);
+    
+    m_RightController.setSetpoint(m_setPoint);
+    m_RightController.setTolerance(0.01);
+    m_RightController.setIntegratorRange(-1.0, 1.0);
   }
   
   @Override
   public void execute()
   {
-      PID();
-      m_drivetrain.tankDrive(m_powerLeft * m_power, m_powerRight * m_power);
+      // SketchyPID();
+      double powerLeft  = m_LeftController.calculate(m_drivetrain.getEncoderDistanceLeft());
+      double powerRight = m_RightController.calculate(m_drivetrain.getEncoderDistanceRight());
+      
+      m_drivetrain.tankDrive(powerLeft * m_powerRatio, powerRight * m_powerRatio);
   }
 
   @Override
   public boolean isFinished() {
     boolean retval = false;
 
-    // If each side is withing 1cm of target
-    if((m_previous_error_Left < 0.01) || (m_previous_error_Right < 0.01)){
+    // If both sides are at setpoint
+    if((m_LeftController.atSetpoint() && m_RightController.atSetpoint())){
       System.out.println("[DRIVE_STRAIGHT] Done Driving");
       retval = true;
     }
     return retval;
   }
-
-  private void PID(){
-    double error = 0.0;
-    double derivative;
-
-    error = m_setPoint - m_drivetrain.getEncoderDistanceLeft(); // Error = Target - Actual
-    m_integral_Left+= (error * .02); // Integral is increased by the error*time (which is .02 seconds using normal IterativeRobot)
-    derivative = (error - m_previous_error_Left) / .02;
-    m_powerLeft = m_P * error + m_I * m_integral_Left + m_D * derivative;
-    m_previous_error_Left = error;
-
-    error = m_setPoint - m_drivetrain.getEncoderDistanceRight(); // Error = Target - Actual
-    m_integral_Right+= (error * .02); // Integral is increased by the error*time (which is .02 seconds using normal IterativeRobot)
-    derivative = (error - m_previous_error_Right) / .02;
-    m_powerRight = m_P * error + m_I * m_integral_Right + m_D * derivative;
-    m_previous_error_Right = error;
-  }
-
 }
