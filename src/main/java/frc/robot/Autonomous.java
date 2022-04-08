@@ -19,6 +19,7 @@ import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.StorageSubsystem;
 import frc.robot.commands.Autonomous_CollectAndShootTwoCommand;
+import frc.robot.commands.Autonomous_NewShootAndMoveCommand;
 import frc.robot.commands.DriveMetersCommand;
 import frc.robot.commands.FollowTrajectoryCommand;
 import frc.robot.commands.Autonomous_ShootAndMoveCommand;
@@ -53,7 +54,8 @@ public class Autonomous {
             default: 
             case SHOOT_AND_MOVE:
                 // Shoot then move out of the tarmac
-                startCommand = new Autonomous_ShootAndMoveCommand(m_drivetrain, m_storage, m_shooter);
+                //startCommand = new Autonomous_ShootAndMoveCommand(m_drivetrain, m_storage, m_shooter);
+                startCommand = new Autonomous_NewShootAndMoveCommand(m_drivetrain, m_storage, m_shooter);
                 break;
 
             case SHOOT_AND_MOVE_METERS:
@@ -68,7 +70,7 @@ public class Autonomous {
             
             case EXIT: 
                 System.out.println("Exit (Universal)");
-                startCommand = new DriveMetersCommand(() -> 2.15 /* meters */ , m_drivetrain);
+                startCommand = new DriveMetersCommand(() -> 2.15 /* meters */ , () -> 0.75 /* Power */, m_drivetrain);
                 //startCommand = new FollowTrajectoryCommand("Exit.json", m_drivetrain);
                 break;
              
