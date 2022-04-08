@@ -39,7 +39,7 @@ public class Autonomous_ShootAndMoveMetersCommand extends SequentialCommandGroup
     addCommands(
         new SequentialCommandGroup(
           new StartDeliveringCommand(m_storage, m_shooter),
-          new DriveMetersCommand(() -> distanceMeters, m_drivetrain)
+          new DriveMetersCommand(() -> distanceMeters, () -> 0.85 /* power% */, m_drivetrain)
         )
     );
   }
