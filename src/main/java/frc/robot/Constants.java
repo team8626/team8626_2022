@@ -31,8 +31,8 @@ public final class Constants {
         public static int[] kLeftEncoderPorts = {0,1};
         public static int[] kRightEncoderPorts = {2,3};
 
-        public static boolean kLeftEncoderReversed = false;
-        public static boolean kRightEncoderReversed = true;
+        public static boolean kLeftEncoderReversed = true;
+        public static boolean kRightEncoderReversed = false;
 
         // P{ower Moultiplicators
         public static double kPowerRatioLowSpeed = 0.5;

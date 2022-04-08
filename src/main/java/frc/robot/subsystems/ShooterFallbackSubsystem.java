@@ -170,7 +170,7 @@ public class ShooterFallbackSubsystem extends SubsystemBase {
 
   // Shooter is spinning at target speed!
   public boolean isAtSpeed() {
-    boolean retval = true;  // TODO Always True since could not get shooter at setpoint...
+    boolean retval = true; 
     return retval;
   }
 }

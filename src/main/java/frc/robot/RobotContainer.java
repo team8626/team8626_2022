@@ -77,7 +77,7 @@ public class RobotContainer {
     // Always Read Joystick and control the drivetrain
     m_drivetrain.setDefaultCommand(    
     new ArcadeDriveCommand(
-      () -> -m_flightJoystick.getX(), 
+      () -> m_flightJoystick.getX(), 
       () -> m_flightJoystick.getY(),
       // () -> m_gameController.getRightY(), 
       // () -> m_gameController.getRightX(),

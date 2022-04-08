@@ -21,10 +21,12 @@ import frc.robot.subsystems.StorageSubsystem;
 import frc.robot.commands.Autonomous_CollectAndShootTwoCommand;
 import frc.robot.commands.Autonomous_NewShootAndMoveCommand;
 import frc.robot.commands.DriveMetersCommand;
+import frc.robot.commands.DriveStraightMetersCommand;
 import frc.robot.commands.FollowTrajectoryCommand;
 import frc.robot.commands.Autonomous_ShootAndMoveCommand;
 import frc.robot.commands.Autonomous_ShootAndMoveMetersCommand;
 import frc.robot.commands.TestTrajectoryCommand;
+import frc.robot.commands.TurnDegreesCommand;
 
 public class Autonomous {
 
@@ -60,7 +62,7 @@ public class Autonomous {
 
             case SHOOT_AND_MOVE_METERS:
                  // Shoot then move out of the tarmac
-                 startCommand = new Autonomous_ShootAndMoveMetersCommand(2.15 /* distance in m */, m_drivetrain, m_storage, m_shooter);
+                 startCommand = new Autonomous_ShootAndMoveMetersCommand(-2.15 /* distance in m */, m_drivetrain, m_storage, m_shooter);
                 break;
 
             case COLLECT_AND_SHOOT2:
@@ -69,14 +71,29 @@ public class Autonomous {
                 break;
             
             case EXIT: 
-                System.out.println("Exit (Universal)");
+                System.out.println("[AUTONOMOUS] Exit (Universal])");
                 startCommand = new DriveMetersCommand(() -> 2.15 /* meters */ , () -> 0.75 /* Power */, m_drivetrain);
                 //startCommand = new FollowTrajectoryCommand("Exit.json", m_drivetrain);
                 break;
              
             case TEST: 
-                System.out.println("Running Test Trajectory)");
+                System.out.println("[AUTONOMOUS] Drive 1 Meter");
+                startCommand = new DriveMetersCommand(() -> 1 /* meters */ , () -> 0.5 /* Power */, m_drivetrain);
+                    break;
+    
+            case TEST_1M: 
+                System.out.println("[AUTONOMOUS] Drive 1 Meter");
+                startCommand = new DriveStraightMetersCommand(() -> 1 /* meters */ , () -> 0.5 /* Power */, m_drivetrain);
+                break;
+    
+            case TEST_1M_STRAIGHT: 
+                System.out.println("[AUTONOMOUS] Turn 180 Degrees");
                 startCommand = new TestTrajectoryCommand(m_drivetrain);            
+                break;
+
+            case TEST_TURN180: 
+                System.out.println("Running Test Trajectory)");
+                startCommand = new TurnDegreesCommand(() -> 180 /* degrees */ , () -> 0.5 /* Power */, m_drivetrain);
                 break;
 
             case EXAMPLE: 

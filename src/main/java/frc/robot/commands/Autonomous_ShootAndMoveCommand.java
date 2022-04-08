@@ -25,7 +25,7 @@ public class Autonomous_ShootAndMoveCommand extends SequentialCommandGroup {
   private final ShooterSubsystem  m_shooter;
   private final StorageSubsystem m_storage;
 
-  private double m_driveSpeed = 1.0;
+  private double m_driveSpeed = -1.0;
 
   /**
    * Creates a new ShootAndMoveCommand command.
@@ -42,7 +42,7 @@ public class Autonomous_ShootAndMoveCommand extends SequentialCommandGroup {
             new StartDeliveringCommand(m_storage, m_shooter),
 
            // Drive Back until Timeout
-            new TankDriveCommand(() -> m_driveSpeed, () -> -m_driveSpeed, m_drivetrain)
+            new TankDriveCommand(() -> m_driveSpeed, () -> m_driveSpeed, m_drivetrain)
               .withTimeout(1.2)
     );
   }

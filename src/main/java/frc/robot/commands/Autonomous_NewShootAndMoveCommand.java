@@ -26,7 +26,7 @@ public class Autonomous_NewShootAndMoveCommand extends CommandBase {
   private final ShooterSubsystem  m_shooter;
   private final StorageSubsystem m_storage;
 
-  private double m_driveSpeed = .5;
+  private double m_driveSpeed = -.5;
 
   /**
    * Creates a new ShootAndMoveCommand command.
@@ -60,7 +60,7 @@ public class Autonomous_NewShootAndMoveCommand extends CommandBase {
       m_storage.getBackUnit().stop(2.0);
     }
     if(!m_shooter.isActive()){
-      new TankDriveCommand(() -> m_driveSpeed, () -> -m_driveSpeed, m_drivetrain)
+      new TankDriveCommand(() -> m_driveSpeed, () -> m_driveSpeed, m_drivetrain)
               .withTimeout(1.0);
     }
   }

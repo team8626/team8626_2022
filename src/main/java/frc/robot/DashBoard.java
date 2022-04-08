@@ -20,7 +20,8 @@ public class DashBoard {
     }
 
     enum AutoSelec {
-        SHOOT_AND_MOVE, SHOOT_AND_MOVE_METERS, COLLECT_AND_SHOOT2, EXIT, TEST, EXAMPLE, GOAL_FIRST, COLLECT_FIRST
+        SHOOT_AND_MOVE, SHOOT_AND_MOVE_METERS, COLLECT_AND_SHOOT2, EXIT, TEST, EXAMPLE, GOAL_FIRST, COLLECT_FIRST,
+        TEST_1M, TEST_1M_STRAIGHT, TEST_TURN180
     }
 
     private static final Notifier m_thread = new Notifier(new dashboardThread());
@@ -71,10 +72,13 @@ public class DashBoard {
      */
     private void initAutonomousStrategy(){
         
-        m_autonomousModeChooser.addOption("Exit", AutoSelec.EXIT);
         m_autonomousModeChooser.setDefaultOption("Shoot and Move", AutoSelec.SHOOT_AND_MOVE);
         m_autonomousModeChooser.addOption("Shoot and Move Meters", AutoSelec.SHOOT_AND_MOVE_METERS);
         m_autonomousModeChooser.addOption("Collect and Shoot 2", AutoSelec.COLLECT_AND_SHOOT2);
+        m_autonomousModeChooser.addOption("Exit Tarmac (Forward)", AutoSelec.EXIT);
+        m_autonomousModeChooser.addOption("Drive 1 meter)", AutoSelec.TEST_1M);
+        m_autonomousModeChooser.addOption("Drive Straight 1m", AutoSelec.TEST_1M_STRAIGHT);
+        m_autonomousModeChooser.addOption("Turn 180deg", AutoSelec.TEST_TURN180);
 
         SmartDashboard.putData("Auto Mode", m_autonomousModeChooser);
     }
