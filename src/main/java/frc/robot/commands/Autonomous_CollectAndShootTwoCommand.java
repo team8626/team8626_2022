@@ -42,10 +42,10 @@ public class Autonomous_CollectAndShootTwoCommand extends SequentialCommandGroup
     addCommands(
         new SequentialCommandGroup(
             new StartCollectingCommand(m_intake, m_storage),
-            new DriveMetersCommand(() -> distanceMeters, m_drivetrain),
+            new DriveMetersCommand(() -> distanceMeters, () -> 0.75 /* Power */, m_drivetrain),
             new StopCollectingCommand(m_intake, m_storage),
-            new TurnDegreesCommand(() -> 180, m_drivetrain),
-            new DriveMetersCommand(() -> distanceMeters, m_drivetrain),
+            new TurnDegreesCommand(() -> 180, () -> 0.33 /* Power */, m_drivetrain),
+            new DriveMetersCommand(() -> distanceMeters,  () -> 0.75 /* Power */, m_drivetrain),
             new StartDeliveringCommand(m_storage, m_shooter)
         )
     );
