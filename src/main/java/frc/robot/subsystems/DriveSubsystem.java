@@ -149,6 +149,12 @@ import frc.robot.Constants.DriveTrain;
   public double getAverageEncoderDistance() {
     return (m_leftEncoder.getDistance() + m_rightEncoder.getDistance()) / 2.0;
   }
+  public double getEncoderDistanceLeft() {
+    return m_leftEncoder.getDistance();
+  }
+  public double getEncoderDistanceRight() {
+    return m_rightEncoder.getDistance();
+  }
 
   /**
    * Gets the left drive encoder.
