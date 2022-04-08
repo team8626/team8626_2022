@@ -54,7 +54,7 @@ public class IntakeSubsystem extends SubsystemBase {
    * then start spinning the intake.
    */
   public void activate(){
-    if (m_activated == false) {
+    // if (m_activated == false) {
       // Push the assembly out
       this.deploy();
 
@@ -63,9 +63,9 @@ public class IntakeSubsystem extends SubsystemBase {
 
       // Set Action to Finished
       m_activated = true;
-      if(RobotBase.isSimulation()){ System.out.println("[INTAKE] Activated"); }
+      System.out.println("[INTAKE] Activated");
 
-    }
+    // }
   }
 
   /**
@@ -74,7 +74,7 @@ public class IntakeSubsystem extends SubsystemBase {
    * then start spinning the intake.
    */
   public void deactivate(){
-    if (m_activated == true) {
+    // if (m_activated == true) {
       // Stop Spinning the intake
       this.stopSpinning();
 
@@ -83,8 +83,8 @@ public class IntakeSubsystem extends SubsystemBase {
 
       // Set Action to Finished
       m_activated = false;
-      if(RobotBase.isSimulation()){ System.out.println("[INTAKE] Deactivated"); }
-    }
+      System.out.println("[INTAKE] Deactivated");
+    // }
   }
 
   // Set assembly passive

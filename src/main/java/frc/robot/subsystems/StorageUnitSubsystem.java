@@ -60,7 +60,6 @@ public class StorageUnitSubsystem extends SubsystemBase {
     // Add Dummy Colors to improve our chance or reading the right colors
     m_colorMatcher.addColorMatch(Cargo.kDummyGreen);
     m_colorMatcher.addColorMatch(Cargo.kDummyYellow);
-    m_colorMatcher.addColorMatch(Cargo.kDummyBlack);
 
     readLoadedColor();
 

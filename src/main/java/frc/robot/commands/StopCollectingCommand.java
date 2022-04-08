@@ -40,9 +40,9 @@ public class StopCollectingCommand extends CommandBase {
 
   @Override
   public void initialize(){
-    if(RobotBase.isSimulation()){ System.out.println("[StopCollectingCommand] Deactivate INTAKE"); }
+    System.out.println("[StopCollectingCommand] Deactivate INTAKE");
     m_intake.deactivate();
-    if(RobotBase.isSimulation()){ System.out.println("[StopCollectingCommand] Aboard Loading"); }
+    System.out.println("[StopCollectingCommand] Aboard Loading"); 
     m_storage.stopLoadingCargo();
   }
 

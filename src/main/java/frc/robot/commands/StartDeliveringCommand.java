@@ -66,7 +66,7 @@ public class StartDeliveringCommand extends CommandBase {
   public boolean isFinished() {
     boolean ret_value = false;
     if(m_storage.isEmpty()) {
-      if(RobotBase.isSimulation()){ System.out.println("[StartDeliveringCommand] Storage is empty... Stopping"); }
+      System.out.println("[StartDeliveringCommand] Storage is empty... Stopping");
       ret_value = true;
     }
     return ret_value;

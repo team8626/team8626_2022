@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkMaxPIDController;
+import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 // Team8626 Libraries
@@ -80,6 +81,7 @@ public class ShooterSubsystem extends SubsystemBase {
 
     // Set PID coefficients
     m_motorMain.restoreFactoryDefaults();
+    m_motorMain.setIdleMode(IdleMode.kBrake);
     m_pidControllerMain.setP(m_pMain);
     m_pidControllerMain.setI(m_iMain);
     m_pidControllerMain.setD(m_dMain);
@@ -88,15 +90,13 @@ public class ShooterSubsystem extends SubsystemBase {
     m_pidControllerMain.setOutputRange(m_minOutput, m_maxOutput);
 
     m_motorSecondary.restoreFactoryDefaults();
+    m_motorSecondary.setIdleMode(IdleMode.kBrake);
     m_pidControllerSecondary.setP(m_pSecondary);
     m_pidControllerSecondary.setI(m_iSecondary);
     m_pidControllerSecondary.setD(m_dSecondary);
     m_pidControllerSecondary.setIZone(m_izSecondary);
     m_pidControllerSecondary.setFF(m_ffSecondary);
     m_pidControllerSecondary.setOutputRange(m_minOutput, m_maxOutput);
-
-    // Initialize states
-    //this.deactivate();
   }  
 
   // Initialize Dashboard
@@ -187,8 +187,8 @@ public class ShooterSubsystem extends SubsystemBase {
       if(m_shooterTarget != Target.USER){
         // Enterring in Custom mode
         // Resel last Custom Values
-        m_RPMInputMain      = 999999; // Dummy value to force update
-        m_RPMInputSecondary = 999999; // Dummy value to force update
+        // m_RPMInputMain      = 99999; // Dummy value to force update
+        // m_RPMInputSecondary = 99999; // Dummy value to force update
         input_main          = m_RPMLastCustomMain;
         input_secondary     = m_RPMLastCustomSecondary;
 
@@ -206,7 +206,7 @@ public class ShooterSubsystem extends SubsystemBase {
           m_RPMLastActiveSetPointMain = m_RPMInputMain;
         }
         m_RPMLastCustomMain = m_RPMInputMain;
-        if(RobotBase.isSimulation()){ System.out.println("[SHOOTER] New SetPoint: " + m_RPMInputMain); }
+        System.out.println("[SHOOTER] New Main RPM: " + m_RPMInputMain);
       }
       
       if((input_secondary != m_RPMInputSecondary))
@@ -219,7 +219,7 @@ public class ShooterSubsystem extends SubsystemBase {
         }
         m_RPMLastCustomSecondary = m_RPMInputSecondary;
 
-        if(RobotBase.isSimulation()){ System.out.println("[SHOOTER] New Back Spin: " + m_RPMInputSecondary); }
+        System.out.println("[SHOOTER] New Back Spin RPM: " + m_RPMInputSecondary);
       } 
     } else {
       // Predefined Values (LOW, HIGH, DISCARD)
@@ -275,10 +275,8 @@ public class ShooterSubsystem extends SubsystemBase {
     m_RPMSetPointMain      = m_RPMLastActiveSetPointMain;
     m_RPMSetPointSecondary = m_RPMLastActiveSetPointSecondary;
     
-    // m_pidControllerMain.setReference(m_RPMSetPointMain, CANSparkMax.ControlType.kVelocity);
-    // m_pidControllerSecondary.setReference(m_RPMSetPointSecondary, CANSparkMax.ControlType.kVelocity);
     m_activated = true;
-    if(RobotBase.isSimulation()){ System.out.println("[SHOOTER] Activated (" + m_RPMSetPointMain + ", " + m_RPMSetPointSecondary +")"); }
+    System.out.println("[SHOOTER] Activated (" + m_RPMSetPointMain + ", " + m_RPMSetPointSecondary +")");
 
   }
 
@@ -296,7 +294,7 @@ public class ShooterSubsystem extends SubsystemBase {
     SmartDashboard.putNumber("SetPoint Back Spin RPM", m_RPMSetPointSecondary);
 
 
-    if(RobotBase.isSimulation()){ System.out.println("[SHOOTER] Deactivated"); }
+    System.out.println("[SHOOTER] Deactivated (" + m_RPMSetPointMain + ", " + m_RPMSetPointSecondary + ")");
   }
 
 /**
@@ -368,15 +366,19 @@ public boolean isAtSpeed() {
         break;
     }
     if((m_RPMSetPointMain != newSetPointMain) ||  (m_RPMSetPointSecondary != newSetPointSecondary) || (m_RPMLastActiveSetPointMain != newSetPointMain) || (m_RPMLastActiveSetPointSecondary != newSetPointSecondary)){
-      if(RobotBase.isSimulation()){ System.out.println("[SHOOTER] " + targetToString(target) + " (" + newSetPointMain + ", " + newSetPointSecondary +")"); }
+      System.out.println("[SHOOTER] " + targetToString(target) + " (" + newSetPointMain + ", " + newSetPointSecondary +")");
     }
 
     if(m_activated){
+      if((m_RPMSetPointMain != newSetPointMain) || (m_RPMSetPointSecondary != newSetPointSecondary)){
+        System.out.println("[SHOOTER] (Deactivated) Storing values (" + m_RPMLastActiveSetPointMain + ", " + m_RPMLastActiveSetPointSecondary +")");
+      }
       m_RPMSetPointMain      = newSetPointMain;
       m_RPMSetPointSecondary = newSetPointSecondary;
     } else {
       m_RPMLastActiveSetPointMain    = newSetPointMain;
       m_RPMLastActiveSetPointSecondary = newSetPointSecondary;
+      System.out.println("[SHOOTER] (Deactivated) Storing RPM (" + m_RPMLastActiveSetPointMain + ", " + m_RPMLastActiveSetPointSecondary +")");
     }
   }
 
