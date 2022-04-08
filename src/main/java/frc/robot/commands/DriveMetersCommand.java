@@ -25,8 +25,10 @@ public class DriveMetersCommand extends PIDCommand {
    * @param distanceMeters 
    */
   
-  public DriveMetersCommand(DoubleSupplier distanceMeters, DriveSubsystem drivetrain) {
-    super(new PIDController(4, 0, 0), drivetrain::getAverageEncoderDistance, distanceMeters, d -> drivetrain.tankDrive(d, d));
+  public DriveMetersCommand(DoubleSupplier distanceMeters, DoubleSupplier power, DriveSubsystem drivetrain) {
+    super(new PIDController(4, 0, 0), drivetrain::getAverageEncoderDistance, distanceMeters, d -> drivetrain.tankDrive(d * power.getAsDouble(), d * power.getAsDouble()));
+
+    System.out.println("[DRIVE_METERS] Start Driving "+ distanceMeters + "m");
 
     m_drivetrain = drivetrain;
     getController().setTolerance(0.01);
@@ -44,6 +46,7 @@ public class DriveMetersCommand extends PIDCommand {
   
   @Override
   public boolean isFinished() {
+    System.out.println("[DRIVE_METERS] Done Driving");
     return getController().atSetpoint();
   }
 }
