@@ -132,10 +132,12 @@ public class StorageUnitSubsystem extends SubsystemBase {
    * @param seconds Timer dutration in seconds 
    */
   public void stop(double seconds){
-    m_delayedStopDuration = seconds;
-    m_delayedStopStarted = true;
-    m_delayedStopTimer.reset();
-    m_delayedStopTimer.start();
+    if(!m_delayedStopStarted){
+      m_delayedStopDuration = seconds;
+      m_delayedStopStarted = true;
+      m_delayedStopTimer.reset();
+      m_delayedStopTimer.start();
+    }
   }
 
   // Return Current Loaded Color
