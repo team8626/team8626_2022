@@ -1,7 +1,6 @@
 package frc.robot.subsystems;
   
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -302,10 +301,12 @@ public class ShooterSubsystem extends SubsystemBase {
  * @param seconds Timer dutration in seconds 
  */
 public void deactivate(double seconds){
-  m_delayedStopDuration = seconds;
-  m_delayedStopStarted = true;
-  m_delayedStopTimer.reset();
-  m_delayedStopTimer.start();
+  if(!m_delayedStopStarted){
+    m_delayedStopDuration = seconds;
+    m_delayedStopStarted = true;
+    m_delayedStopTimer.reset();
+    m_delayedStopTimer.start();
+  }
 }
 
 // Return Shooter Status
@@ -315,11 +316,11 @@ public boolean isActive(){
 
 // // Shooter is spinning at target speed!
 public boolean isAtSpeed() {
-  boolean retval = true;  // TODO Always True since could not get shooter at setpoint...
-//   if( (Math.abs(m_encoderMain.getVelocity() - m_mainRPMRequest) > Shooter.kRPMTolerance)
-//     && (Math.abs(m_encoderSecondary.getVelocity() - m_secondaryRPMRequest) <= Shooter.kRPMTolerance) ){
-//     retval = false;
-//   }
+  boolean retval = true; 
+  if( (Math.abs(m_encoderMain.getVelocity() - m_RPMSetPointMain) > Shooter.kRPMTolerance)
+    && (Math.abs(m_encoderSecondary.getVelocity() - m_RPMSetPointSecondary) <= Shooter.kRPMTolerance) ){
+    retval = false;
+  }
   return retval;
 }
 
@@ -371,7 +372,7 @@ public boolean isAtSpeed() {
 
     if(m_activated){
       if((m_RPMSetPointMain != newSetPointMain) || (m_RPMSetPointSecondary != newSetPointSecondary)){
-        System.out.println("[SHOOTER] (Deactivated) Storing values (" + m_RPMLastActiveSetPointMain + ", " + m_RPMLastActiveSetPointSecondary +")");
+        System.out.println("[SHOOTER] (Activated) New RPM (" + newSetPointMain + ", " + newSetPointSecondary + ")");
       }
       m_RPMSetPointMain      = newSetPointMain;
       m_RPMSetPointSecondary = newSetPointSecondary;
