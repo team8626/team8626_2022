@@ -98,11 +98,10 @@ public final class Constants {
     // Cargo constants
     public final static class Cargo {
         // Colors
-        public static Color kBlue = new Color(0.2, 0.45, 0.34);
-        public static Color kRed   = new Color(0.4, 0.4, 0.2);
+        public static Color kBlue = new Color(0.143, 0.427, 0.429);
+        public static Color kRed   = new Color(0.561, 0.232, 0.114);
         public static Color kDummyGreen = new Color(0.197, 0.561, 0.240);
         public static Color kDummyYellow = new Color(0.361, 0.524, 0.113);
-        public static Color kDummyBlack = new Color(0.0, 0.0, 0.0);
     }
 
     // Climber subsystem constants
@@ -139,17 +138,17 @@ public final class Constants {
          public static double kRPMTolerance = 0.01;
  
          // PID Loop Coefficients
-         public static double kP_Main = 6e-5; 
+         public static double kP_Main = 0.00006; 
          public static double kI_Main = 0;
          public static double kD_Main = 0; 
          public static double kIz_Main = 0; 
-         public static double kFF_Main = 0.000015; 
+         public static double kFF_Main = 0.000019; 
 
-         public static double kP_Secondary = 6e-5; 
+         public static double kP_Secondary = 0.000002; 
          public static double kI_Secondary = 0;
          public static double kD_Secondary = 0; 
          public static double kIz_Secondary = 0; 
-         public static double kFF_Secondary = 0.000015; 
+         public static double kFF_Secondary = 0.000019; 
 
          public static double kMaxOutput = 1; 
          public static double kMinOutput = -1;
