@@ -4,8 +4,6 @@
 
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj.RobotBase;
-
 // Java Libraries
 // import java.util.function.DoubleSupplier;
 
@@ -48,7 +46,7 @@ public class PushCargoCommand extends CommandBase {
   @Override
   public void end(boolean interrupted) {
     // Make sure to stop storage activity if command is interrupted
-    if(RobotBase.isSimulation()){ System.out.println("[PushCargoCommand] Stopping BOTH"); }
+    System.out.println("[PushCargoCommand] Stopping BOTH");
     m_storage.getFrontUnit().stop();
     m_storage.getBackUnit().stop();
   }

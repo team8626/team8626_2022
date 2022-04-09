@@ -40,7 +40,7 @@ public class Autonomous_NewShootAndMoveCommand extends CommandBase {
     m_storage = storage;
 
     // addRequirements(drivetrain);
-    addRequirements(storage);
+    // addRequirements(storage);
     addRequirements(shooter);
   }
 

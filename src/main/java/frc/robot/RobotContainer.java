@@ -78,7 +78,7 @@ public class RobotContainer {
     m_drivetrain.setDefaultCommand(    
     new ArcadeDriveCommand(
       () -> m_flightJoystick.getX(), 
-      () -> m_flightJoystick.getY(),
+      () -> -m_flightJoystick.getY(),
       // () -> m_gameController.getRightY(), 
       // () -> m_gameController.getRightX(),
       m_drivetrain));
@@ -114,6 +114,11 @@ public class RobotContainer {
    */
   private void configureButtonBindings() {
 
+    // Toogle intake Mecanism
+    (new JoystickButton(m_flightJoystick, 1))
+    .toggleWhenPressed(new StartCollectingCommand(m_intake, m_storage), true); 
+    
+
     // Activate the intake Mecanism
     (new JoystickButton(m_gameController, Button.kY.value))
     .whenPressed(new StartCollectingCommand(m_intake, m_storage));
@@ -123,9 +128,9 @@ public class RobotContainer {
     .whenPressed(new StopCollectingCommand(m_intake, m_storage));
 
     // If trigger is pressed then activate the intake, deactivate on release of the button
-    new JoystickButton(m_flightJoystick, 1)
-    .whenPressed(new StartCollectingCommand(m_intake, m_storage))
-    .whenReleased(new StopCollectingCommand(m_intake, m_storage));
+    // new JoystickButton(m_flightJoystick, 1)
+    // .whenPressed(new StartCollectingCommand(m_intake, m_storage))
+    // .whenReleased(new StopCollectingCommand(m_intake, m_storage));
  
     // Start Automatic Shooting Sequence
     (new JoystickButton(m_gameController, Button.kStart.value))

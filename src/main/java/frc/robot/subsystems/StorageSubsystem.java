@@ -75,7 +75,7 @@ public class StorageSubsystem extends SubsystemBase {
 
       case DELIVERING:
         if(m_unitBack.isEmpty()){
-          if(RobotBase.isSimulation()){ System.out.println("[STORAGE] Status DELIVERING - Stopping BACK (isEmpty) - DELAY"); }
+          System.out.println("[STORAGE] Status DELIVERING - Stopping BACK (isEmpty) - DELAY");
           m_unitBack.stop(0.5 /* seconds delay*/);
           m_status = Status.IDLE;
         }
@@ -100,7 +100,7 @@ public class StorageSubsystem extends SubsystemBase {
           // NOTHING TO DO HERE
         } else {
           // Push the Cargo "Forward"
-          if(RobotBase.isSimulation()){ System.out.println("[STORAGE] Starting BOTH (Forwarding)"); }
+          System.out.println("[STORAGE] Starting BOTH (Forwarding)");
           m_unitBack.start();
           m_unitFront.start();
           m_status = Status.FORWARDING;
@@ -118,7 +118,7 @@ public class StorageSubsystem extends SubsystemBase {
     if(m_status == Status.IDLE){
       // Only if Front unit is empty and Status is IDLE
       if(m_unitFront.isEmpty()){
-        if(RobotBase.isSimulation()){ System.out.println("[STORAGE] Starting FRONT (Loading)"); }
+        System.out.println("[STORAGE] Starting FRONT (Loading)");
         m_unitFront.start();
         m_status = Status.LOADING;
       }
@@ -130,7 +130,7 @@ public class StorageSubsystem extends SubsystemBase {
     if(m_status == Status.IDLE){
       // Only if Back unit is not empty
       if(!m_unitBack.isEmpty()){
-        if(RobotBase.isSimulation()){ System.out.println("[STORAGE] Starting BACK (Deliver)"); }
+        System.out.println("[STORAGE] Starting BACK (Deliver)");
         m_unitBack.start();
         m_status = Status.DELIVERING;
       }
@@ -140,7 +140,7 @@ public class StorageSubsystem extends SubsystemBase {
   // Stop loading Cargo
   public void stopLoadingCargo(){
     if(m_status == Status.LOADING){
-      if(RobotBase.isSimulation()){ System.out.println("[STORAGE] Status LOADING - Stopping FRONT (Cancelled)"); }
+      System.out.println("[STORAGE] Status LOADING - Stopping FRONT (Cancelled)");
       m_unitFront.stop();
       m_status = Status.CANCELLED;
     }

@@ -16,56 +16,66 @@ import frc.robot.Constants.Shooter;
 /* 
 ** Main class for handling Shooter Substystem 
 */
+
+
 public class ShooterSubsystem extends SubsystemBase {
 
+private CANSparkMax m_motor;
+private CANSparkMax m_motor3;
+private SparkMaxPIDController m_pidController;
+private SparkMaxPIDController m_pidController3;
+private RelativeEncoder m_encoder;
+private RelativeEncoder m_encoder3;
+public double kP, kI, kD, kIz, kFF, kMaxOutput, kMinOutput, maxRPM,setPoint;
+public double kP3, kI3, kD3, kIz3, kFF3, kMaxOutput3, kMinOutput3, maxRPM3,setPoint3;
   // Shooter Motors
-  private final CANSparkMax m_motorMain = new CANSparkMax(Shooter.kCANMotorShooterMain, MotorType.kBrushless);
-  private final CANSparkMax m_motorSecondary = new CANSparkMax(Shooter.kCANMotorShooterSecondary, MotorType.kBrushless);
+  // private final CANSparkMax m_motor1 = new CANSparkMax(Shooter.kCANMotorShooterMain, MotorType.kBrushless);
+  // private final CANSparkMax m_motor2 = new CANSparkMax(Shooter.kCANMotorShooterSecondary, MotorType.kBrushless);
 
-  // Encoders
-  private final RelativeEncoder m_encoderMain       = m_motorMain.getEncoder();
-  private final RelativeEncoder m_encoderSecondary  = m_motorSecondary.getEncoder();
+  // // Encoders
+  // private final RelativeEncoder m_encoder1       = m_motor1.getEncoder();
+  // private final RelativeEncoder m_encoder2  = m_motor2.getEncoder();
 
-  // PID Controllers
-  private final SparkMaxPIDController m_pidControllerMain = m_motorMain.getPIDController();
-  private final SparkMaxPIDController m_pidControllerSecondary = m_motorSecondary.getPIDController();
+  // // PID Controllers
+  // private final SparkMaxPIDController m_pidController1 = m_motor1.getPIDController();
+  // private final SparkMaxPIDController m_pidController2 = m_motor2.getPIDController();
 
-  private double m_pMain  = Shooter.kP_Main;
-  private double m_iMain  = Shooter.kI_Main;
-  private double m_dMain  = Shooter.kD_Main;
-  private double m_izMain = Shooter.kIz_Main;
-  private double m_ffMain = Shooter.kFF_Main;
+  // private double m_p1  = Shooter.kP_Main;
+  // private double m_i1  = Shooter.kI_Main;
+  // private double m_d1  = Shooter.kD_Main;
+  // private double m_iz1 = Shooter.kIz_Main;
+  // private double m_ff1 = Shooter.kFF_Main;
 
-  private double m_pSecondary  = Shooter.kP_Secondary;
-  private double m_iSecondary  = Shooter.kI_Secondary;
-  private double m_dSecondary  = Shooter.kD_Secondary;
-  private double m_izSecondary = Shooter.kIz_Secondary;
-  private double m_ffSecondary = Shooter.kFF_Secondary;
+  // private double m_p2  = Shooter.kP_Secondary;
+  // private double m_i2  = Shooter.kI_Secondary;
+  // private double m_d2  = Shooter.kD_Secondary;
+  // private double m_iz2 = Shooter.kIz_Secondary;
+  // private double m_ff2 = Shooter.kFF_Secondary;
 
-  private double m_minOutput = Shooter.kMinOutput;
-  private double m_maxOutput = Shooter.kMaxOutput;
+  // private double m_minOutput = Shooter.kMinOutput;
+  // private double m_maxOutput = Shooter.kMaxOutput;
+ 
 
   // Store Velocity set by User on Dashboard
-  private double m_RPMInputMain = Shooter.kShooterMainRPM_LowGoal;
-  private double m_RPMInputSecondary = Shooter.kShooterSecondaryRPM_LowGoal;
-  private double m_RPMLastCustomMain = m_RPMInputMain;
-  private double m_RPMLastCustomSecondary = m_RPMInputSecondary;
+  private double m_RPMInput1 = Shooter.kShooterMainRPM_LowGoal;
+  private double m_RPMInput2 = Shooter.kShooterSecondaryRPM_LowGoal;
+  private double m_RPMLastCustom1 = m_RPMInput1;
+  private double m_RPMLastCustom2 = m_RPMInput2;
   
   // Store SetPoint
-  private double m_RPMSetPointMain = 0;
-  private double m_RPMSetPointSecondary = 0;
-  private double m_RPMLastActiveSetPointMain = m_RPMInputMain;
-  private double m_RPMLastActiveSetPointSecondary = m_RPMInputSecondary;
+  private double m_RPMSetPoint1 = 0;
+  private double m_RPMSetPoint2 = 0;
+  private double m_RPMLastActiveSetPoint1 = m_RPMInput1;
+  private double m_RPMLastActiveSetPoint2 = m_RPMInput2;
 
   // Shooter Targets
   public enum Target {LOW, HIGH, DISCARD, USER};
 
-  // Internal States
+  // Internal Stats
   private boolean m_activated;
 
-  private SendableChooser<Target> m_targetChooser = new SendableChooser<>();
-  private Target m_shooterTarget = Shooter.kDefaultTarget;
-  // private boolean m_isTunedTarget = false;
+  // private SendableChooser<Targe> m_targetChooser = new SendableChooser<>();
+  // private Target m_shooterTarget = Shooter.kDefaultTarget;
 
   private Timer m_delayedStopTimer = new Timer();
   private double m_delayedStopDuration = 1.0;
@@ -74,57 +84,105 @@ public class ShooterSubsystem extends SubsystemBase {
   // Class Constructor
   public ShooterSubsystem() {
 
-    // Set motor inverted or not...
-    m_motorMain.setInverted(true);
-    m_motorSecondary.setInverted(false);
+    // // Set motor inverted or not...
+    // m_motor1.setInverted(true);
+    // m_motor2.setInverted(false);
 
-    // Set PID coefficients
-    m_motorMain.restoreFactoryDefaults();
-    m_motorMain.setIdleMode(IdleMode.kBrake);
-    m_pidControllerMain.setP(m_pMain);
-    m_pidControllerMain.setI(m_iMain);
-    m_pidControllerMain.setD(m_dMain);
-    m_pidControllerMain.setIZone(m_izMain);
-    m_pidControllerMain.setFF(m_ffMain);
-    m_pidControllerMain.setOutputRange(m_minOutput, m_maxOutput);
+    // // Set PID coefficients
+    // m_motor1.restoreFactoryDefaults();
+    // m_motor1.setIdleMode(IdleMode.kBrake);
+    // m_pidController1.setP(m_p1);
+    // m_pidController1.setI(m_i1);
+    // m_pidController1.setD(m_d1);
+    // m_pidController1.setIZone(m_iz1);
+    // m_pidController1.setFF(m_ff1);
+    // m_pidController1.setOutputRange(m_minOutput, m_maxOutput);
 
-    m_motorSecondary.restoreFactoryDefaults();
-    m_motorSecondary.setIdleMode(IdleMode.kBrake);
-    m_pidControllerSecondary.setP(m_pSecondary);
-    m_pidControllerSecondary.setI(m_iSecondary);
-    m_pidControllerSecondary.setD(m_dSecondary);
-    m_pidControllerSecondary.setIZone(m_izSecondary);
-    m_pidControllerSecondary.setFF(m_ffSecondary);
-    m_pidControllerSecondary.setOutputRange(m_minOutput, m_maxOutput);
+    // m_motor2.restoreFactoryDefaults();
+    // m_motor2.setIdleMode(IdleMode.kBrake);
+    // m_pidController2.setP(m_p2);
+    // m_pidController2.setI(m_i2);
+    // m_pidController2.setD(m_d2);
+    // m_pidController2.setIZone(m_iz2);
+    // m_pidController2.setFF(m_ff2);
+    // m_pidController2.setOutputRange(m_minOutput, m_maxOutput);
+    m_motor  = new CANSparkMax(Shooter.kCANMotorShooterMain, MotorType.kBrushless);
+    m_motor3 = new CANSparkMax(Shooter.kCANMotorShooterSecondary , MotorType.kBrushless);
+
+    m_motor.restoreFactoryDefaults();
+    m_motor3.restoreFactoryDefaults();
+
+    m_pidController = m_motor.getPIDController();
+    m_pidController3 = m_motor3.getPIDController();
+
+    // Encoder object created to display position values
+    m_encoder  = m_motor.getEncoder();
+    m_encoder3 = m_motor3.getEncoder();
+
+    // PID coefficients
+    kP = 0.00006; 
+    kI = 0;
+    kD = 0; 
+    kIz = 0; 
+    kFF = 0.00019; 
+    kMaxOutput = 1; 
+    kMinOutput = -1;
+    maxRPM = 5700;
+    setPoint = 0;
+
+    kP3 = 0.000002; 
+    kI3 = 0;
+    kD3 = 0; 
+    kIz3 = 0; 
+    kFF3 = 0.00019; 
+    kMaxOutput3 = 1; 
+    kMinOutput3 = -1;
+    maxRPM3 = 5700;
+    setPoint3 = 0;
+
+    // set PID coefficients
+    m_pidController.setP(kP);
+    m_pidController.setI(kI);
+    m_pidController.setD(kD);
+    m_pidController.setIZone(kIz);
+    m_pidController.setFF(kFF);
+    m_pidController.setOutputRange(kMinOutput, kMaxOutput);
+
+    m_pidController3.setP(kP3);
+    m_pidController3.setI(kI3);
+    m_pidController3.setD(kD3);
+    m_pidController3.setIZone(kIz3);
+    m_pidController3.setFF(kFF3);
+    m_pidController3.setOutputRange(kMinOutput3, kMaxOutput3);
   }  
 
   // Initialize Dashboard
   public void initDashboard(){
     // Display PID coefficients on SmartDashboard
-    SmartDashboard.putNumber("MAIN P Gain", m_pMain);
-    SmartDashboard.putNumber("MAIN I Gain", m_iMain);
-    SmartDashboard.putNumber("MAIN D Gain", m_dMain);
-    SmartDashboard.putNumber("MAIN I Zone", m_izMain);
-    SmartDashboard.putNumber("MAIN Feed Forward", m_ffMain);
+    // SmartDashboard.putNumber("MAIN P Gain", m_p1);
+    // SmartDashboard.putNumber("MAIN I Gain", m_i1);
+    // SmartDashboard.putNumber("MAIN D Gain", m_d1);
+    // SmartDashboard.putNumber("MAIN I Zone", m_iz1);
+    // SmartDashboard.putNumber("MAIN Feed Forward", m_ff1);
 
-    SmartDashboard.putNumber("SECONDARY P Gain", m_pSecondary);
-    SmartDashboard.putNumber("SECONDARY I Gain", m_iSecondary);
-    SmartDashboard.putNumber("SECONDARY D Gain", m_dSecondary);
-    SmartDashboard.putNumber("SECONDARY I Zone", m_izSecondary);
-    SmartDashboard.putNumber("SECONDARY Feed Forward", m_ffSecondary);
+    // SmartDashboard.putNumber("SECONDARY P Gain", m_p2);
+    // SmartDashboard.putNumber("SECONDARY I Gain", m_i2);
+    // SmartDashboard.putNumber("SECONDARY D Gain", m_d2);
+    // SmartDashboard.putNumber("SECONDARY I Zone", m_iz2);
+    // SmartDashboard.putNumber("SECONDARY Feed Forward", m_ff2);
 
-    SmartDashboard.putNumber("Max Output", m_minOutput);
-    SmartDashboard.putNumber("Min Output", m_maxOutput);
+    // SmartDashboard.putNumber("Max Output", m_minOutput);
+    // SmartDashboard.putNumber("Min Output", m_maxOutput);
 
     // Display Wheel RPM on Dashboard
-    SmartDashboard.putNumber("Input Wheel RPM", m_RPMInputMain);
-    SmartDashboard.putNumber("Input Back Spin RPM", m_RPMInputSecondary);
+    SmartDashboard.putNumber("Input Wheel RPM", m_RPMInput1);
+    SmartDashboard.putNumber("Input Back Spin RPM", m_RPMInput2);
 
-    SmartDashboard.putNumber("SetPoint Wheel RPM", m_RPMSetPointMain);
-    SmartDashboard.putNumber("SetPoint Back Spin RPM", m_RPMSetPointSecondary);
+    SmartDashboard.putNumber("SetPoint Wheel RPM", m_RPMSetPoint1);
+    SmartDashboard.putNumber("SetPoint Back Spin RPM", m_RPMSetPoint2);
 
-    SmartDashboard.putNumber("Actual Wheel RPM", m_encoderMain.getVelocity());
-    SmartDashboard.putNumber("Actual Back Spin RPM", m_encoderSecondary.getVelocity());
+    SmartDashboard.putNumber("Actual Wheel RPM", m_encoder.getVelocity());
+    SmartDashboard.putNumber("Actual Back Spin RPM", m_encoder3.getVelocity());
 
     SmartDashboard.putBoolean("SPEED OK ", this.isAtSpeed());
 
@@ -132,109 +190,119 @@ public class ShooterSubsystem extends SubsystemBase {
     SmartDashboard.putBoolean("SHOOTER", m_activated);
 
     // Taget Selection
-    m_targetChooser.addOption(targetToString(Target.USER), Target.USER);
-    m_targetChooser.addOption(targetToString(Target.LOW), Target.LOW);
-    m_targetChooser.addOption(targetToString(Target.HIGH), Target.HIGH);
-    m_targetChooser.addOption(targetToString(Target.DISCARD), Target.DISCARD);
-    m_targetChooser.setDefaultOption(targetToString(m_shooterTarget), m_shooterTarget);
-    SmartDashboard.putData("SHOOTER Target", m_targetChooser);
+    // m_targetChooser.addOption(targetToString(Target.USER), Target.USER);
+    // m_targetChooser.addOption(targetToString(Target.LOW), Target.LOW);
+    // m_targetChooser.addOption(targetToString(Target.HIGH), Target.HIGH);
+    // m_targetChooser.addOption(targetToString(Target.DISCARD), Target.DISCARD);
+    // m_targetChooser.setDefaultOption(targetToString(m_shooterTarget), m_shooterTarget);
+    // SmartDashboard.putData("SHOOTER Target", m_targetChooser);
   }
 
   // Update Dashboard (Called Periodically)
   public void updateDashboard(){
     // Read SmartDashboard PID Coefficients
-    double pMain = SmartDashboard.getNumber("MAIN P Gain", 0);
-    double iMain = SmartDashboard.getNumber("MAIN I Gain", 0);
-    double dMain = SmartDashboard.getNumber("MAIN D Gain", 0);
-    double izMain = SmartDashboard.getNumber("MAIN I Zone", 0);
-    double ffMain  = SmartDashboard.getNumber("MAIN Feed Forward", 0);
+    // double p1 = SmartDashboard.getNumber("MAIN P Gain", 0);
+    // double i1 = SmartDashboard.getNumber("MAIN I Gain", 0);
+    // double d1 = SmartDashboard.getNumber("MAIN D Gain", 0);
+    // double iz1 = SmartDashboard.getNumber("MAIN I Zone", 0);
+    // double ff1  = SmartDashboard.getNumber("MAIN Feed Forward", 0);
 
-    double pSec = SmartDashboard.getNumber("SECONDARY P Gain", 0);
-    double iSec = SmartDashboard.getNumber("SECONDARY I Gain", 0);
-    double dSec = SmartDashboard.getNumber("SECONDARY D Gain", 0);
-    double izSec = SmartDashboard.getNumber("SECONDARY I Zone", 0);
-    double ffSec = SmartDashboard.getNumber("SECONDARY Feed Forward", 0);
+    // double pSec = SmartDashboard.getNumber("SECONDARY P Gain", 0);
+    // double iSec = SmartDashboard.getNumber("SECONDARY I Gain", 0);
+    // double dSec = SmartDashboard.getNumber("SECONDARY D Gain", 0);
+    // double izSec = SmartDashboard.getNumber("SECONDARY I Zone", 0);
+    // double ffSec = SmartDashboard.getNumber("SECONDARY Feed Forward", 0);
 
-    double max = SmartDashboard.getNumber("Max Output", 0);
-    double min = SmartDashboard.getNumber("Min Output", 0);
+    // double max = SmartDashboard.getNumber("Max Output", 0);
+    // double min = SmartDashboard.getNumber("Min Output", 0);
 
     double input_main      = SmartDashboard.getNumber("Input Wheel RPM", 0);
     double input_secondary = SmartDashboard.getNumber("Input Back Spin RPM", 0);
-    
+
+    if((input_main != m_RPMInput1)) {m_RPMInput1 = input_main;}
+    if((input_secondary != m_RPMInput2)) {m_RPMInput2 = input_secondary;}
+
     // if PID coefficients on SmartDashboard have changed, write new values to controller
-    if((pMain != m_pMain))   { m_pidControllerMain.setP(pMain); m_pMain = pMain; }
-    if((iMain != m_iMain))   { m_pidControllerMain.setI(iMain); m_iMain = iMain; }
-    if((dMain != m_dMain))   { m_pidControllerMain.setD(dMain); m_dMain = dMain; }
-    if((izMain != m_izMain)) { m_pidControllerMain.setIZone(izMain); m_izMain = izMain; }
-    if((ffMain != m_ffMain)) { m_pidControllerMain.setFF(ffMain); m_ffMain = ffMain; }
+    // if((p1 != m_p))   { m_pidController1.setP(p1); m_p1 = p1; }
+    // if((i1 != m_i))   { m_pidController1.setI(i1); m_i1 = i1; }
+    // if((d1 != m_d1))   { m_pidController1.setD(d1); m_d1 = d1; }
+    // if((iz1 != m_iz1)) { m_pidController1.setIZone(iz1); m_iz1 = iz1; }
+    // if((ff1 != m_ff1)) { m_pidController1.setFF(ff1); m_ff1 = ff1; }
 
-    if((pSec != m_pSecondary))   { m_pidControllerSecondary.setP(pSec); m_pSecondary = pSec; }
-    if((iSec != m_iSecondary))   { m_pidControllerSecondary.setI(iSec); m_iSecondary = iSec; }
-    if((dSec != m_dSecondary))   { m_pidControllerSecondary.setD(dSec); m_dSecondary = dSec; }
-    if((izSec != m_izSecondary)) { m_pidControllerSecondary.setIZone(izSec); m_izSecondary = izSec; }
-    if((ffSec != m_ffSecondary)) { m_pidControllerSecondary.setFF(ffSec); m_ffSecondary = ffSec; }
+    // if((pSec != m_p2))   { m_pidController2.setP(pSec); m_p2 = pSec; }
+    // if((iSec != m_i2))   { m_pidController2.setI(iSec); m_i2 = iSec; }
+    // if((dSec != m_d2))   { m_pidController2.setD(dSec); m_d2 = dSec; }
+    // if((izSec != m_iz2)) { m_pidController2.setIZone(izSec); m_iz2 = izSec; }
+    // if((ffSec != m_ff2)) { m_pidController2.setFF(ffSec); m_ff2 = ffSec; }
 
-    if((max != m_maxOutput) || (min != m_minOutput)) { 
-      m_pidControllerMain.setOutputRange(min, max); 
-      m_pidControllerSecondary.setOutputRange(min, max); 
-      m_minOutput = min; 
-      m_maxOutput = max; 
-    }
+    // if((max != m_maxOutput) || (min != m_minOutput)) { 
+    //   m_pidController1.setOutputRange(min, max); 
+    //   m_pidController2.setOutputRange(min, max); 
+    //   m_minOutput = min; 
+    //   m_maxOutput = max; 
+    // }
 
-    Target target = m_targetChooser.getSelected();
-    if(target == Target.USER){
-      if(m_shooterTarget != Target.USER){
-        // Enterring in Custom mode
-        // Resel last Custom Values
-        // m_RPMInputMain      = 99999; // Dummy value to force update
-        // m_RPMInputSecondary = 99999; // Dummy value to force update
-        input_main          = m_RPMLastCustomMain;
-        input_secondary     = m_RPMLastCustomSecondary;
+    // Target target = m_targetChooser.getSelected();
+    // if(target == Target.USER){
+    //   if(m_shooterTarget != Target.USER){
+    //     // Enterring in Custom mode
+    //     // Resel last Custom Values
+    //     // m_RPMInput1      = 99999; // Dummy value to force update
+    //     // m_RPMInput2 = 99999; // Dummy value to force update
+    //     input_main          = m_RPMLastCustom1;
+    //     input_secondary     = m_RPMLastCustom2;
 
-        m_shooterTarget = Target.USER; 
-        m_targetChooser.setDefaultOption(targetToString(m_shooterTarget), m_shooterTarget);
-        SmartDashboard.putData("SHOOTER Target", m_targetChooser);
-      }
-      // Read User input for RPM and store them
-      if((input_main != m_RPMInputMain)) 
-      {
-        m_RPMInputMain = input_main;
-        if(m_activated){
-          m_RPMSetPointMain = m_RPMInputMain;
-        } else {
-          m_RPMLastActiveSetPointMain = m_RPMInputMain;
-        }
-        m_RPMLastCustomMain = m_RPMInputMain;
-        System.out.println("[SHOOTER] New Main RPM: " + m_RPMInputMain);
-      }
+    //     m_shooterTarget = Target.USER; 
+    //     m_targetChooser.setDefaultOption(targetToString(m_shooterTarget), m_shooterTarget);
+    //     SmartDashboard.putData("SHOOTER Target", m_targetChooser);
+    //   }
+    //   // Read User input for RPM and store them
+    //   if((input_main != m_RPMInput1)) 
+    //   {
+    //     m_RPMInput1 = input_main;
+    //     if(m_activated){
+    //       m_RPMSetPoint1 = m_RPMInput1;
+    //     } else {
+    //       m_RPMLastActiveSetPoint1 = m_RPMInput1;
+    //     }
+    //     m_RPMLastCustom1 = m_RPMInput1;
+    //     System.out.println("[SHOOTER] New Main RPM: " + m_RPMInput1);
+    //   }
       
-      if((input_secondary != m_RPMInputSecondary))
-      { 
-        m_RPMInputSecondary = input_secondary;
-        if(m_activated){
-          m_RPMSetPointSecondary = m_RPMInputSecondary;
-        } else {
-          m_RPMLastActiveSetPointSecondary = m_RPMInputSecondary;
-        }
-        m_RPMLastCustomSecondary = m_RPMInputSecondary;
+    //   if((input_secondary != m_RPMInput2))
+    //   { 
+    //     m_RPMInput2 = input_secondary;
+    //     if(m_activated){
+    //       m_RPMSetPoint2 = m_RPMInput2;
+    //     } else {
+    //       m_RPMLastActiveSetPoint2 = m_RPMInput2;
+    //     }
+    //     m_RPMLastCustom2 = m_RPMInput2;
 
-        System.out.println("[SHOOTER] New Back Spin RPM: " + m_RPMInputSecondary);
-      } 
+    //     System.out.println("[SHOOTER] New Back Spin RPM: " + m_RPMInput2);
+    //   } 
+    // } else {
+    //   // Predefined Values (LOW, HIGH, DISCARD)
+    //   if(target != m_shooterTarget){
+    //     m_shooterTarget = target;
+    //     setRPMTarget(m_shooterTarget);
+
+    //     // Adjust Input values for display on shuffleboard
+    //     if(m_activated){
+          // m_RPMInput1 = m_RPMSetPoint1;
+          // m_RPMInput2 = m_RPMSetPoint2;
+    //     } else {
+    //       m_RPMInput1 = m_RPMLastActiveSetPoint1;
+    //       m_RPMInput2 = m_RPMLastActiveSetPoint2;
+    //     }
+    //   }
+    // }
+    if(m_activated){
+      m_RPMSetPoint1  = m_RPMInput1;
+      m_RPMSetPoint2 = m_RPMInput2;
     } else {
-      // Predefined Values (LOW, HIGH, DISCARD)
-      if(target != m_shooterTarget){
-        m_shooterTarget = target;
-        setRPMTarget(m_shooterTarget);
-
-        // Adjust Input values for display on shuffleboard
-        if(m_activated){
-          m_RPMInputMain = m_RPMSetPointMain;
-          m_RPMInputSecondary = m_RPMSetPointSecondary;
-        } else {
-          m_RPMInputMain = m_RPMLastActiveSetPointMain;
-          m_RPMInputSecondary = m_RPMLastActiveSetPointSecondary;
-        }
-      }
+      m_RPMInput1 = m_RPMLastActiveSetPoint1;
+      m_RPMInput2 = m_RPMLastActiveSetPoint2;
     }
 
 
@@ -242,14 +310,14 @@ public class ShooterSubsystem extends SubsystemBase {
     SmartDashboard.putBoolean("SHOOTER", m_activated);
 
     // Update Speed values ( User, SetPoint, Actual)
-    SmartDashboard.putNumber("Input Wheel RPM", m_RPMInputMain);
-    SmartDashboard.putNumber("Input Back Spin RPM", m_RPMInputSecondary);
+    SmartDashboard.putNumber("Input Wheel RPM", m_RPMInput1);
+    SmartDashboard.putNumber("Input Back Spin RPM", m_RPMInput2);
 
-    SmartDashboard.putNumber("SetPoint Wheel RPM", m_RPMSetPointMain);
-    SmartDashboard.putNumber("SetPoint Back Spin RPM", m_RPMSetPointSecondary);
+    SmartDashboard.putNumber("SetPoint Wheel RPM", m_RPMSetPoint1);
+    SmartDashboard.putNumber("SetPoint Back Spin RPM", m_RPMSetPoint2);
 
-    SmartDashboard.putNumber("Actual Wheel RPM", m_encoderMain.getVelocity());
-    SmartDashboard.putNumber("Actual Back Spin RPM", m_encoderSecondary.getVelocity());
+    SmartDashboard.putNumber("Actual Wheel RPM", m_encoder.getVelocity());
+    SmartDashboard.putNumber("Actual Back Spin RPM", m_encoder3.getVelocity());
     
   //   SmartDashboard.putBoolean("SPEED OK ", this.isAtSpeed());
 
@@ -259,8 +327,8 @@ public class ShooterSubsystem extends SubsystemBase {
   @Override
   public void periodic(){
     // Keep Adjusting RPM Setpoint
-    m_pidControllerMain.setReference(m_RPMSetPointMain, CANSparkMax.ControlType.kVelocity);
-    m_pidControllerSecondary.setReference(m_RPMSetPointSecondary, CANSparkMax.ControlType.kVelocity);
+    m_pidController.setReference(m_RPMSetPoint1, CANSparkMax.ControlType.kVelocity);
+    m_pidController3.setReference(m_RPMSetPoint2, CANSparkMax.ControlType.kVelocity);
 
     // Check the delayed Stop timer
     if(m_delayedStopStarted && (m_delayedStopTimer.hasElapsed(m_delayedStopDuration))){
@@ -271,11 +339,11 @@ public class ShooterSubsystem extends SubsystemBase {
   }
 
   public void activate(){
-    m_RPMSetPointMain      = m_RPMLastActiveSetPointMain;
-    m_RPMSetPointSecondary = m_RPMLastActiveSetPointSecondary;
+    m_RPMSetPoint1      = m_RPMLastActiveSetPoint1;
+    m_RPMSetPoint2 = m_RPMLastActiveSetPoint2;
     
     m_activated = true;
-    System.out.println("[SHOOTER] Activated (" + m_RPMSetPointMain + ", " + m_RPMSetPointSecondary +")");
+    System.out.println("[SHOOTER] Activated (" + m_RPMSetPoint1 + ", " + m_RPMSetPoint2 +")");
 
   }
 
@@ -283,17 +351,17 @@ public class ShooterSubsystem extends SubsystemBase {
      m_activated = false;
     
     // Set new setpoint to 0 (controller setting in periodic)
-    m_RPMLastActiveSetPointMain = m_RPMSetPointMain;
-    m_RPMLastActiveSetPointSecondary = m_RPMSetPointSecondary;
-    m_RPMSetPointMain = 0;
-    m_RPMSetPointSecondary = 0;
+    m_RPMLastActiveSetPoint1 = m_RPMSetPoint1;
+    m_RPMLastActiveSetPoint2 = m_RPMSetPoint2;
+    m_RPMSetPoint1 = 0;
+    m_RPMSetPoint2 = 0;
 
     // Force Dashboard update to prevent endless restart
-    SmartDashboard.putNumber("SetPoint Wheel RPM", m_RPMSetPointMain);
-    SmartDashboard.putNumber("SetPoint Back Spin RPM", m_RPMSetPointSecondary);
+    SmartDashboard.putNumber("SetPoint Wheel RPM", m_RPMSetPoint1);
+    SmartDashboard.putNumber("SetPoint Back Spin RPM", m_RPMSetPoint2);
 
 
-    System.out.println("[SHOOTER] Deactivated (" + m_RPMSetPointMain + ", " + m_RPMSetPointSecondary + ")");
+    System.out.println("[SHOOTER] Deactivated (" + m_RPMSetPoint1 + ", " + m_RPMSetPoint2 + ")");
   }
 
 /**
@@ -317,8 +385,8 @@ public boolean isActive(){
 // // Shooter is spinning at target speed!
 public boolean isAtSpeed() {
   boolean retval = true; 
-  if( (Math.abs(m_encoderMain.getVelocity() - m_RPMSetPointMain) > Shooter.kRPMTolerance)
-    && (Math.abs(m_encoderSecondary.getVelocity() - m_RPMSetPointSecondary) <= Shooter.kRPMTolerance) ){
+  if( (Math.abs(m_encoder.getVelocity() - m_RPMSetPoint1) > Shooter.kRPMTolerance)
+    && (Math.abs(m_encoder3.getVelocity() - m_RPMSetPoint2) <= Shooter.kRPMTolerance) ){
     retval = false;
   }
   return retval;
@@ -345,45 +413,45 @@ public boolean isAtSpeed() {
   }
 
   public void setRPMTarget(Target target){ 
-    double newSetPointMain = 0;
-    double newSetPointSecondary = 0;
+    double newSetPoint1 = 0;
+    double newSetPoint2 = 0;
     
-    switch(target){
-      case LOW:
-        newSetPointMain = Shooter.kShooterMainRPM_LowGoal;
-        newSetPointSecondary = Shooter.kShooterSecondaryRPM_LowGoal;
-        break;
-      case HIGH:
-        newSetPointMain = Shooter.kShooterMainRPM_HighGoal;
-        newSetPointSecondary = Shooter.kShooterSecondaryRPM_HighGoal;
-        break;
-      case DISCARD:
-        newSetPointMain = Shooter.kShooterMainRPM_Discard;
-        newSetPointSecondary = Shooter.kShooterSecondaryRPM_Discard;
-       break;
-      case USER:
-        newSetPointMain      = m_RPMInputMain;
-        newSetPointSecondary = m_RPMInputSecondary;
-        break;
-    }
-    if((m_RPMSetPointMain != newSetPointMain) ||  (m_RPMSetPointSecondary != newSetPointSecondary) || (m_RPMLastActiveSetPointMain != newSetPointMain) || (m_RPMLastActiveSetPointSecondary != newSetPointSecondary)){
-      System.out.println("[SHOOTER] " + targetToString(target) + " (" + newSetPointMain + ", " + newSetPointSecondary +")");
-    }
+    // switch(target){
+    //   case LOW:
+    //     newSetPoint1 = Shooter.kShooter1RPM_LowGoal;
+    //     newSetPoint2 = Shooter.kShooter2RPM_LowGoal;
+    //     break;
+    //   case HIGH:
+    //     newSetPoint1 = Shooter.kShooter1RPM_HighGoal;
+    //     newSetPoint2 = Shooter.kShooter2RPM_HighGoal;
+    //     break;
+    //   case DISCARD:
+    //     newSetPoint1 = Shooter.kShooter1RPM_Discard;
+    //     newSetPoint2 = Shooter.kShooter2RPM_Discard;
+    //    break;
+    //   case USER:
+    //     newSetPoint1      = m_RPMInput1;
+    //     newSetPoint2 = m_RPMInput2;
+    //     break;
+    // }
+    // if((m_RPMSetPoint1 != newSetPoint1) ||  (m_RPMSetPoint2 != newSetPoint2) || (m_RPMLastActiveSetPoint1 != newSetPoint1) || (m_RPMLastActiveSetPoint2 != newSetPoint2)){
+    //   System.out.println("[SHOOTER] " + targetToString(target) + " (" + newSetPoint1 + ", " + newSetPoint2 +")");
+    // }
 
-    if(m_activated){
-      if((m_RPMSetPointMain != newSetPointMain) || (m_RPMSetPointSecondary != newSetPointSecondary)){
-        System.out.println("[SHOOTER] (Activated) New RPM (" + newSetPointMain + ", " + newSetPointSecondary + ")");
-      }
-      m_RPMSetPointMain      = newSetPointMain;
-      m_RPMSetPointSecondary = newSetPointSecondary;
-    } else {
-      m_RPMLastActiveSetPointMain    = newSetPointMain;
-      m_RPMLastActiveSetPointSecondary = newSetPointSecondary;
-      System.out.println("[SHOOTER] (Deactivated) Storing RPM (" + m_RPMLastActiveSetPointMain + ", " + m_RPMLastActiveSetPointSecondary +")");
-    }
+    // if(m_activated){
+    //   if((m_RPMSetPoint1 != newSetPoint1) || (m_RPMSetPoint2 != newSetPoint2)){
+    //     System.out.println("[SHOOTER] (Activated) New RPM (" + newSetPoint1 + ", " + newSetPoint2 + ")");
+    //   }
+    //   m_RPMSetPoint1      = newSetPoint1;
+    //   m_RPMSetPoint2 = newSetPoint2;
+    // } else {
+    //   m_RPMLastActiveSetPoint1    = newSetPoint1;
+    //   m_RPMLastActiveSetPoint2 = newSetPoint2;
+    //   System.out.println("[SHOOTER] (Deactivated) Storing RPM (" + m_RPMLastActiveSetPoint1 + ", " + m_RPMLastActiveSetPoint2 +")");
+    // }
   }
 
-  public Target getTarget(){
-    return m_shooterTarget;
-  }
+  // private Target getTarget(){
+  //   return m_shooterTarget;
+  // }
 }

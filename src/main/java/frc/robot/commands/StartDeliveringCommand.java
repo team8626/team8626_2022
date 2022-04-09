@@ -50,12 +50,12 @@ public class StartDeliveringCommand extends CommandBase {
   public void execute(){
     // Adjust Speed Based on Cargo Color
     if(!m_storage.getBackUnit().isEmpty()){
-      if(m_storage.getBackUnit().getCargoColor() != DriverStation.getAlliance()){
-        System.out.println("[StartDeliveringCommand] DISCARD Next Cargo");
-        m_shooter.setRPMTarget(Target.DISCARD);
-      } else {
-        m_shooter.setRPMTarget(m_shooter.getTarget());
-      }
+      // if(m_storage.getBackUnit().getCargoColor() != DriverStation.getAlliance()){
+      //   System.out.println("[StartDeliveringCommand] DISCARD Next Cargo");
+      //   m_shooter.setRPMTarget(Target.DISCARD);
+      // } else {
+      //   m_shooter.setRPMTarget(m_shooter.getTarget());
+      // }
 
       // If Shooter is at speed request delivery from the storage.
       if(m_shooter.isAtSpeed()){
