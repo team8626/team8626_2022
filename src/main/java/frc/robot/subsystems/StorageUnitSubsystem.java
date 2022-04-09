@@ -16,6 +16,7 @@ import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
 
 // Team8626 Libraries
 import frc.robot.Constants.Cargo;
+import frc.robot.Constants.Storage;
 
 /**
 ** Main class for handling Storage Unit Substystem 
@@ -60,8 +61,6 @@ public class StorageUnitSubsystem extends SubsystemBase {
     // Add Dummy Colors to improve our chance or reading the right colors
     m_colorMatcher.addColorMatch(Cargo.kDummyGreen);
     m_colorMatcher.addColorMatch(Cargo.kDummyYellow);
-
-    readLoadedColor();
 
     m_delayedStopTimer.reset();
   }  
@@ -113,7 +112,7 @@ public class StorageUnitSubsystem extends SubsystemBase {
    * Start conveying the Storage Unit
    */ 
   public void start(){
-    if(RobotBase.isSimulation()){ System.out.println("[STORAGE " + m_name + "] Started"); }
+    System.out.println("[STORAGE " + m_name + "] Started");
     m_activated = true;
     m_motor.set(1.0);
   }
@@ -122,7 +121,7 @@ public class StorageUnitSubsystem extends SubsystemBase {
    * Stop conveying the Storage Unit
    */
   public void stop(){
-    if(RobotBase.isSimulation()){ System.out.println("[STORAGE " + m_name + "] Stopped"); }
+    System.out.println("[STORAGE " + m_name + "] Stopped");
     m_motor.stopMotor();
     m_activated = false;
   }
@@ -143,15 +142,19 @@ public class StorageUnitSubsystem extends SubsystemBase {
   // Return Current Loaded Color
   private void readLoadedColor(){
     //Run the color match algorithm on our detected color
-    ColorMatchResult match = m_colorMatcher.matchClosestColor(m_colorSensor.getColor());
-    
-    if(match.color == Cargo.kRed){
-      m_loadedColor = Cargo.kRed;
-    } else if(match.color == Cargo.kBlue){
-      m_loadedColor = Cargo.kBlue;
-    } else {
-      m_loadedColor = null;
-    }
+    // if(Storage.kIsUsingColorSensors){
+      ColorMatchResult match = m_colorMatcher.matchClosestColor(m_colorSensor.getColor());
+
+      if(match.color == Cargo.kRed){
+        m_loadedColor = Cargo.kRed;
+      } else if(match.color == Cargo.kBlue){
+        m_loadedColor = Cargo.kBlue;
+      } else {
+        m_loadedColor = null;
+      }
+    // } else {
+    //   m_loadedColor = null;
+    // }
   }
 
   // Return Current Loaded Color

@@ -4,12 +4,10 @@
 
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj.RobotBase;
-import edu.wpi.first.wpilibj2.command.CommandBase;
-
 // Java Libraries
 
 // WPI Library dependencies
+import edu.wpi.first.wpilibj2.command.CommandBase;
 
 // Team8626 Libraries
 import frc.robot.subsystems.IntakeSubsystem;
@@ -36,11 +34,16 @@ public class StartCollectingCommand extends CommandBase {
   public StartCollectingCommand(IntakeSubsystem intake, StorageSubsystem storage) {
     m_intake = intake;
     m_storage = storage;
+
+    // addRequirements(m_intake);
+    // addRequirements(m_storage);
+    // addRequirements(m_storage.getFrontUnit());
+    // addRequirements(m_storage.getBackUnit());
   }
 
   @Override
   public void initialize(){
-    if(RobotBase.isSimulation()){ System.out.println("[StartCollectingCommand] Activate INTAKE"); }
+    System.out.println("[StartCollectingCommand] Activate INTAKE");
     m_intake.activate();
   }
 
@@ -64,7 +67,7 @@ public class StartCollectingCommand extends CommandBase {
   public void end(boolean interrupted) {
     // The Storage will stop by itself
     // Deactivate the Intake
-    if(RobotBase.isSimulation()){ System.out.println("[StartCollectingCommand] Deactivate INTAKE"); }
+    System.out.println("[StartCollectingCommand] Deactivate INTAKE");
     m_intake.deactivate();
   }
 }

@@ -35,6 +35,11 @@ public class StopCollectingCommand extends CommandBase {
   public StopCollectingCommand(IntakeSubsystem intake, StorageSubsystem storage) {
     m_intake = intake;
     m_storage = storage;
+
+    addRequirements(m_intake);
+    addRequirements(m_storage);
+    addRequirements(m_storage.getFrontUnit());
+    addRequirements(m_storage.getBackUnit());
   }
 
   @Override

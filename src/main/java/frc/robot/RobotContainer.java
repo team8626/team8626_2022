@@ -70,17 +70,17 @@ public class RobotContainer {
    */
   private void configureDefaultCommands(){
     // Always push Cargo Forward....
-    if(Storage.kIsUsingColorSensors){
-      m_storage.setDefaultCommand(        
-      new PushCargoCommand(
-        m_storage));
-    }
+    // if(Storage.kIsUsingColorSensors){
+    //   m_storage.setDefaultCommand(        
+    //   new PushCargoCommand(
+    //     m_storage));
+    // }
 
     // Always Read Joystick and control the drivetrain
     m_drivetrain.setDefaultCommand(    
     new ArcadeDriveCommand(
-      () -> m_flightJoystick.getX(), 
-      () -> -m_flightJoystick.getY(),
+      () -> -m_flightJoystick.getX(), 
+      () -> m_flightJoystick.getY(),
       // () -> m_gameController.getRightY(), 
       // () -> m_gameController.getRightX(),
       m_drivetrain));
@@ -97,12 +97,12 @@ public class RobotContainer {
     // Back Storage Controlled by Left Joystick on Gamepad (X Axis)
     m_storage.getFrontUnit().setDefaultCommand(        
       new ControlStorageUnitCommand(
-        () -> -m_gameController.getLeftX(),
+        () -> -m_gameController.getRightX(),
         m_storage.getFrontUnit()));
 
     m_storage.getBackUnit().setDefaultCommand(        
       new ControlStorageUnitCommand(
-        () -> -m_gameController.getRightX(),
+        () -> -m_gameController.getLeftX(),
         m_storage.getBackUnit()));
   }
 

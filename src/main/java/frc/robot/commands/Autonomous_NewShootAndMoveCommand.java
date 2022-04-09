@@ -39,8 +39,8 @@ public class Autonomous_NewShootAndMoveCommand extends CommandBase {
     m_shooter = shooter;
     m_storage = storage;
 
-    // addRequirements(drivetrain);
-    // addRequirements(storage);
+    addRequirements(drivetrain);
+    addRequirements(storage);
     addRequirements(shooter);
   }
 
@@ -60,7 +60,7 @@ public class Autonomous_NewShootAndMoveCommand extends CommandBase {
       m_storage.getBackUnit().stop(2.0);
     }
     if(!m_shooter.isActive()){
-      new TankDriveCommand(() -> m_driveSpeed, () -> m_driveSpeed, m_drivetrain)
+      new TankDriveCommand(() -> m_driveSpeed, () -> -m_driveSpeed, m_drivetrain)
               .withTimeout(1.0);
     }
   }

@@ -65,11 +65,10 @@ public class DriveStraightMetersCommand extends CommandBase {
   @Override
   public void execute()
   {
-      // SketchyPID();
       double powerLeft  = m_LeftController.calculate(m_drivetrain.getEncoderDistanceLeft());
       double powerRight = m_RightController.calculate(m_drivetrain.getEncoderDistanceRight());
       
-      m_drivetrain.tankDrive(powerLeft * m_powerRatio, powerRight * m_powerRatio);
+      m_drivetrain.tankDrive(powerLeft * m_powerRatio, -powerRight * m_powerRatio);
   }
 
   @Override

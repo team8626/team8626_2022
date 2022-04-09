@@ -53,7 +53,7 @@ public class StorageSubsystem extends SubsystemBase {
         // We are loading cargo 
         // Cargo detected in front unit, stop front unit
         if(!m_unitFront.isEmpty()){
-          if(RobotBase.isSimulation()){ System.out.println("[STORAGE] Status LOADING - Stopping FRONT (isLoaded)"); }
+          System.out.println("[STORAGE] Status LOADING - Stopping FRONT (isLoaded)");
           m_unitFront.stop();
           m_status = Status.IDLE;
         }
@@ -64,8 +64,8 @@ public class StorageSubsystem extends SubsystemBase {
         //  Stop front unit when cargo is not detected anymore
         //  Stop back unit when cargo is detected 
         if(m_unitFront.isEmpty() && !m_unitBack.isEmpty()){
-          if(RobotBase.isSimulation()){ System.out.println("[STORAGE] Status FORWARDING - Stopping FRONT (isEmpty) - DELAY"); }
-          if(RobotBase.isSimulation()){ System.out.println("[STORAGE] Status FORWARDING - Stopping BACK (isLoaded)"); }
+          System.out.println("[STORAGE] Status FORWARDING - Stopping FRONT (isEmpty) - DELAY");
+          System.out.println("[STORAGE] Status FORWARDING - Stopping BACK (isLoaded)");
           m_unitFront.stop(0.5 /* seconds delay*/);
           m_unitBack.stop();
           m_status = Status.IDLE;

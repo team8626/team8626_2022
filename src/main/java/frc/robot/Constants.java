@@ -92,7 +92,7 @@ public final class Constants {
         public static int kTimeoutStorageUnit= 5;
 
         // USing Color Sensors
-        public static boolean kIsUsingColorSensors = true;
+        public static boolean kIsUsingColorSensors = false;
     }
 
     // Cargo constants
@@ -129,8 +129,8 @@ public final class Constants {
          public static double kShooterMainRPM_LowGoal       = -1200;
          public static double kShooterSecondaryRPM_LowGoal  = 3000;
 
-         public static double kShooterMainRPM_HighGoal      = -1500;
-         public static double kShooterSecondaryRPM_HighGoal = 4000;
+         public static double kShooterMainRPM_HighGoal      = -1800;
+         public static double kShooterSecondaryRPM_HighGoal = 3500;
         
          public static double kShooterMainRPM_Discard       =  400;
          public static double kShooterSecondaryRPM_Discard  = -200;

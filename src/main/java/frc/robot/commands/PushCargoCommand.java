@@ -29,6 +29,8 @@ public class PushCargoCommand extends CommandBase {
     m_storage = storage;
 
     addRequirements(m_storage);
+    addRequirements(m_storage.getFrontUnit());
+    addRequirements(m_storage.getBackUnit());
   }
 
   // Called repeatedly when this Command is scheduled to run
@@ -45,9 +47,5 @@ public class PushCargoCommand extends CommandBase {
   // Called once after isFinished returns true
   @Override
   public void end(boolean interrupted) {
-    // Make sure to stop storage activity if command is interrupted
-    System.out.println("[PushCargoCommand] Stopping BOTH");
-    m_storage.getFrontUnit().stop();
-    m_storage.getBackUnit().stop();
   }
 }

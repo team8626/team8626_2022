@@ -4,8 +4,6 @@
 
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj.RobotBase;
-
 // Java Libraries
 // import java.util.function.DoubleSupplier;
 
@@ -18,7 +16,7 @@ import frc.robot.subsystems.StorageSubsystem;
 /**
  * Have the robot store cargo style. 
  * */
-public class StoreCargoCommand extends CommandBase {
+public class UNUSED_StoreCargoCommand extends CommandBase {
   private final StorageSubsystem m_storage;
 
   /**
@@ -27,9 +25,11 @@ public class StoreCargoCommand extends CommandBase {
    * 
    * @param storage The storage system to receive cargo from
    */
-  public StoreCargoCommand(StorageSubsystem storage) {
+  public UNUSED_StoreCargoCommand(StorageSubsystem storage) {
     m_storage = storage;
     addRequirements(m_storage);
+    addRequirements(m_storage.getFrontUnit());
+    addRequirements(m_storage.getBackUnit());
   }
 
   // Called Once when this Command is initialized
@@ -52,7 +52,7 @@ public class StoreCargoCommand extends CommandBase {
   public void end(boolean interrupted) {
     // Force stop of the storage units
     if(interrupted){
-      if(RobotBase.isSimulation()){ System.out.println("[StoreCargoCommand] Stopping BOTH (interrupted)"); }
+      System.out.println("[StoreCargoCommand] Stopping BOTH (interrupted)");
       m_storage.getFrontUnit().stop();
       m_storage.getBackUnit().stop();
     }

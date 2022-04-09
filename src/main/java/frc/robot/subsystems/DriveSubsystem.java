@@ -62,7 +62,7 @@ import frc.robot.Constants.DriveTrain;
         // Set initial Power for the drivetrain
         this.setHighSpeed();
 
-        // Disable motor Safety for Simulation (Avoid Watchdog timeopiut on motors)
+        // Disable motor Safety for Simulation (Avoid Watchdog timeout on motors)
         if(RobotBase.isSimulation()){
           m_drive.setSafetyEnabled(false);
         } 

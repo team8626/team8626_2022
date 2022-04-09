@@ -56,8 +56,8 @@ public class Autonomous {
             default: 
             case SHOOT_AND_MOVE:
                 // Shoot then move out of the tarmac
-                //startCommand = new Autonomous_ShootAndMoveCommand(m_drivetrain, m_storage, m_shooter);
-                startCommand = new Autonomous_NewShootAndMoveCommand(m_drivetrain, m_storage, m_shooter);
+                startCommand = new Autonomous_ShootAndMoveCommand(m_drivetrain, m_storage, m_shooter);
+                // startCommand = new Autonomous_NewShootAndMoveCommand(m_drivetrain, m_storage, m_shooter);
                 break;
 
             case SHOOT_AND_MOVE_METERS:

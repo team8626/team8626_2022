@@ -26,7 +26,7 @@ public class DriveMetersCommand extends PIDCommand {
    */
   
   public DriveMetersCommand(DoubleSupplier distanceMeters, DoubleSupplier power, DriveSubsystem drivetrain) {
-    super(new PIDController(4, 0, 0), drivetrain::getAverageEncoderDistance, distanceMeters, d -> drivetrain.tankDrive(d * power.getAsDouble(), d * power.getAsDouble()));
+    super(new PIDController(4, 0, 0), drivetrain::getAverageEncoderDistance, distanceMeters, d -> drivetrain.tankDrive(d * power.getAsDouble(), -d * power.getAsDouble()));
 
     System.out.println("[DRIVE_METERS] Start Driving "+ distanceMeters + "m");
 

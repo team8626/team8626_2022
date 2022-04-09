@@ -35,7 +35,7 @@ public class LoadStorageUnitCommand extends CommandBase {
   // Called Once when this Command is started
   @Override
   public void initialize() {
-    if(RobotBase.isSimulation()){ System.out.println("[LoadStorageUnitCommand] Starting " + m_storageUnit.getName()); }
+    System.out.println("[LoadStorageUnitCommand] Starting " + m_storageUnit.getName());
     m_storageUnit.start();
   }
 
@@ -51,7 +51,7 @@ public class LoadStorageUnitCommand extends CommandBase {
   // Called once after isFinished returns true
   @Override
   public void end(boolean interrupted) {
-    if(RobotBase.isSimulation()){ System.out.println("[LoadStorageUnit] Stopping " + m_storageUnit.getName()); }
+    System.out.println("[LoadStorageUnit] Stopping " + m_storageUnit.getName());
     m_storageUnit.stop();
   }
 }

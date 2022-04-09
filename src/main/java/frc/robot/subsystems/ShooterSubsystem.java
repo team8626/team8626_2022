@@ -57,8 +57,10 @@ public double kP3, kI3, kD3, kIz3, kFF3, kMaxOutput3, kMinOutput3, maxRPM3,setPo
  
 
   // Store Velocity set by User on Dashboard
-  private double m_RPMInput1 = Shooter.kShooterMainRPM_LowGoal;
-  private double m_RPMInput2 = Shooter.kShooterSecondaryRPM_LowGoal;
+  // private double m_RPMInput1 = Shooter.kShooterMainRPM_LowGoal;
+  // private double m_RPMInput2 = Shooter.kShooterSecondaryRPM_LowGoal;
+  private double m_RPMInput1 = Shooter.kShooterMainRPM_HighGoal;
+  private double m_RPMInput2 = Shooter.kShooterSecondaryRPM_HighGoal;
   private double m_RPMLastCustom1 = m_RPMInput1;
   private double m_RPMLastCustom2 = m_RPMInput2;
   
@@ -385,10 +387,10 @@ public boolean isActive(){
 // // Shooter is spinning at target speed!
 public boolean isAtSpeed() {
   boolean retval = true; 
-  if( (Math.abs(m_encoder.getVelocity() - m_RPMSetPoint1) > Shooter.kRPMTolerance)
-    && (Math.abs(m_encoder3.getVelocity() - m_RPMSetPoint2) <= Shooter.kRPMTolerance) ){
-    retval = false;
-  }
+  // if( (Math.abs(m_encoder.getVelocity() - m_RPMSetPoint1) > Shooter.kRPMTolerance)
+  //   && (Math.abs(m_encoder3.getVelocity() - m_RPMSetPoint2) <= Shooter.kRPMTolerance) ){
+  //   retval = false;
+  // }
   return retval;
 }
 

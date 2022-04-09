@@ -37,8 +37,11 @@ public class StartDeliveringCommand extends CommandBase {
     m_storage = storage;
     m_shooter = shooter;
 
-    // addRequirements(m_storage);
     // addRequirements(m_shooter);
+    // addRequirements(m_storage);
+    // addRequirements(m_storage.getFrontUnit());
+    // addRequirements(m_storage.getBackUnit());
+
   }
 
   @Override

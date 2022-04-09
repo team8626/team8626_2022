@@ -76,7 +76,7 @@ public class DashBoard {
         m_autonomousModeChooser.addOption("Shoot and Move Meters", AutoSelec.SHOOT_AND_MOVE_METERS);
         m_autonomousModeChooser.addOption("Collect and Shoot 2", AutoSelec.COLLECT_AND_SHOOT2);
         m_autonomousModeChooser.addOption("Exit Tarmac (Forward)", AutoSelec.EXIT);
-        m_autonomousModeChooser.addOption("Drive 1 meter)", AutoSelec.TEST_1M);
+        m_autonomousModeChooser.addOption("Drive 1m", AutoSelec.TEST_1M);
         m_autonomousModeChooser.addOption("Drive Straight 1m", AutoSelec.TEST_1M_STRAIGHT);
         m_autonomousModeChooser.addOption("Turn 180deg", AutoSelec.TEST_TURN180);
 
