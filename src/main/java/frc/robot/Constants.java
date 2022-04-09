@@ -164,4 +164,10 @@ public final class Constants {
         public static int kJoystickPort = 0;
         public static int kGamepadPort  = 1;
     }
+
+    // Bling Subsystem constants
+    public final static class Bling {
+        public static int kPWMPort1 = 4;
+        public static int kBufferSize = 120;
+    }
 }

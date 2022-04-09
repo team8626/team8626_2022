@@ -21,6 +21,7 @@ import frc.robot.subsystems.StorageSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.ClimberSubsystem;
+import frc.robot.subsystems.BlingSubsystem;
 
 import frc.robot.commands.PushCargoCommand;
 import frc.robot.commands.ArcadeDriveCommand;
@@ -46,6 +47,7 @@ public class RobotContainer {
   private final static IntakeSubsystem m_intake = new IntakeSubsystem();
   private final static ShooterSubsystem m_shooter = new ShooterSubsystem();
   private final static ClimberSubsystem m_climber = new ClimberSubsystem();
+  private final static BlingSubsystem m_bling = new BlingSubsystem();
 
   // private final ArcadeDriveCommand m_autoCommand = new ArcadeDriveCommand(m_DriveSubsystem);
  
@@ -143,6 +145,14 @@ public class RobotContainer {
     // Stop Manual Shooting
     (new JoystickButton(m_gameController, Button.kA.value))
     .whenPressed(new InstantCommand(m_shooter::deactivate, m_shooter));
+  }
+
+  /**
+   * Get reference to the Bling Subsystem.
+   * @return BlingSubsystem
+   */
+  public BlingSubsystem getBling() {
+    return m_bling;
   }
 
   /**
